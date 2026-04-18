@@ -33,6 +33,18 @@ Pick 3 sentences that:
 
 Then design a **practice sentence** in English that combines elements from all three lesson sentences. The model French answer should exercise the new grammar points.
 
+### Design the Everyday Practice sentence
+
+Every scene gets a **second** practice card — the "Everyday Practice" — in addition to the scene-themed translation. Its purpose is to drag one core grammar pattern out of the Harry Potter narrative and into daily French, so the learner produces it in contexts they'll actually use.
+
+Design it like this:
+
+1. **Pick ONE focal pattern** from the scene's new grammar. Prefer the most transferable one — something they'd use talking about family, routines, food, feelings, weather. Good candidates: *faire + infinitif*, *venir de + infinitif*, *se laisser + infinitif*, *avoir l'air + adjectif*, reflexives, *il faut que + subjonctif*, *même si*, *si + conditional*. Bad candidates: heavily literary patterns like *plus-que-parfait* in isolation, or scene-specific vocab (*le seuil, trahir*).
+2. **Write a daily-life English sentence** — 6–12 words, situationally concrete (parents, school, weekend, dishes, tired, hungry, late, music). Do NOT reuse Harry Potter vocabulary.
+3. **Write the model French answer** — should be at or slightly below the lesson's grammatical complexity. The focal pattern must be the core of the sentence.
+4. **Build a `CHECKS_2` array** with 3–5 checks: the focal pattern itself, the key vocab, and any tricky supporting elements (possessives, definite articles, time expressions).
+5. **Write a success message** that explicitly notes the pattern transferring out of the story.
+
 Flag formal/literary register with `<span class="formal-tag">formal</span>` when applicable (per the TEF/TCF register integration plan in CLAUDE.md).
 
 ## Step 4 — Write the lesson HTML
@@ -46,12 +58,25 @@ Copy the structure of the latest scene file and change **only** these parts:
 | Scene description (italic, 1–2 sentences) | `.scene-desc` div |
 | 3 sentence blocks | `<!-- SENTENCE N -->` cards |
 | Sentence numbers, French, English, pronunciation, vocab table, insight | Inside each card |
-| Practice English prompt | `.practice-english` div |
-| `MODEL_ANSWER` constant | `<script>` |
-| `ENGLISH` constant | `<script>` |
-| `CHECKS` array | `<script>` |
-| `scene:` value in the `saveMistake` call | `'Chapter N, Scene M'` |
-| Success message in `overall-feedback` fallback | `<script>` |
+| Main practice English prompt | `.practice-english` div (first card) |
+| `MODEL_ANSWER`, `ENGLISH`, `CHECKS` | `<script>` (main practice) |
+| `scene:` value in the first `saveMistake` | `'Chapter N, Scene M'` |
+| First success message in `overall-feedback` fallback | `<script>` |
+| Everyday Practice card | Below the main practice card, before `<script>` |
+| Everyday prompt (`Use <em>pattern</em> — translate into French`) | `.practice-prompt` of second card |
+| Everyday English sentence (daily-life) | `.practice-english` of second card |
+| `MODEL_ANSWER_2`, `ENGLISH_2`, `CHECKS_2` | `<script>` (everyday practice) |
+| `scene:` value in second `saveMistake` | `'Chapter N, Scene M (Everyday)'` |
+| Second success message | `<script>` |
+
+The Everyday Practice card uses the same CSS as the main practice card plus a `.practice-badge-daily` class that tints the badge green-mint. If that class is missing from the scene file (scenes predating this feature), add it to the `<style>` block:
+
+```css
+.practice-badge-daily{color:#6ecf9a;background:rgba(110,207,154,.12);border-color:rgba(110,207,154,.35);}
+.practice-prompt em{font-style:italic;color:rgba(255,255,255,.75);text-transform:none;letter-spacing:normal;font-family:'Playfair Display',serif;}
+```
+
+The Everyday card uses its own element IDs — `practiceInput2`, `submitBtn2`, `feedbackBlock2`, `loadingMsg2`, `feedbackContent2`, `yapBtn2`, `mapBtn2` — so it never collides with the main card. A standalone `checkAnswer2()` function (copy of `checkAnswer` with `_2` suffixes everywhere) handles it. Add a keydown listener on `practiceInput2` so Enter triggers `checkAnswer2()`.
 
 Do **not** touch: the CSS block (except the body background — see below), the voice-bar / key-entry / picker HTML, the `speak()` function, `fetchVoices`, `renderVoicePicker`, `loadMistakes`, `saveMistake`, `downloadMistakes`, or `norm()`.
 
@@ -130,9 +155,11 @@ Verify you did all of these:
 
 - [ ] Three lesson cards, sentence numbers continue from last scene
 - [ ] Each play button uses `data-tts="…"` (no inline onclick text)
-- [ ] All `explain` strings use double quotes
+- [ ] All `explain` strings use double quotes (both `CHECKS` and `CHECKS_2`)
 - [ ] `KEY_MISTAKES`, download filename, and scene tag all match the chapter number
-- [ ] `MODEL_ANSWER`, `ENGLISH`, `CHECKS` updated for the new practice sentence
+- [ ] Main practice card: `MODEL_ANSWER`, `ENGLISH`, `CHECKS` updated for the scene-themed sentence
+- [ ] Everyday practice card added: `MODEL_ANSWER_2`, `ENGLISH_2`, `CHECKS_2`, `checkAnswer2()`, keydown listener, `.practice-badge-daily` in CSS
+- [ ] Second `saveMistake` call uses scene label `'Chapter N, Scene M (Everyday)'`
 - [ ] Progress tracker got new vocab table + new grammar rules + footer date updated
 - [ ] Grammar rules numbered sequentially from previous highest
 
