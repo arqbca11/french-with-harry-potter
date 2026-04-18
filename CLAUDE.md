@@ -12,31 +12,45 @@ An interactive French learning app built around *Harry Potter et le Prince de Sa
 ## Where we are
 
 - **Chapter 1** — 9 scenes complete (Sentences 1–27)
-- **Chapter 2** — Scene 1 complete (Sentences 28–30), Scene 2 is next
+- **Chapter 2** — Scenes 1 and 2 complete (Sentences 28–33), Scene 3 is next
 - **Chapter 2 is:** *La Ruelle Sans Issue* (Spinner's End) — Narcissa and Bellatrix visiting Snape
 
 ---
+
+## Directory layout
+
+```
+chapter1/     Lesson HTMLs for Chapter 1 (scene 1–9)
+chapter2/     Lesson HTMLs for Chapter 2 (scene 1+)
+revisions/    Revision session HTMLs (every 6 scenes, global numbering)
+flashcards/   One flashcard deck HTML per chapter
+progress/     Vocab & grammar tracker markdowns, one per chapter
+mistakes/     Mistakes dashboard HTML + (gitignored) downloaded mistakes logs
+.claude/      Claude Code skills for generating scenes / revisions / flashcards
+CLAUDE.md     This file
+README.md     Public-facing docs for learners using the app
+```
 
 ## File naming conventions
 
 | File | Contents |
 |---|---|
-| `french_lesson_ch[N]_scene[N].html` | Lesson card — use template |
-| `french_revision_s[X]-[Y].html` | Revision session after every 6 scenes — X and Y are global scene numbers (counted across all chapters) |
-| `french_progress_ch[N].md` | Vocab & grammar tracker — one per chapter |
-| `french_mistakes_ch[N]_viewer.html` | Mistakes dashboard — one per chapter |
-| `french_flashcards_ch[N].html` | Flashcard app — one per chapter |
-| `prompt_history.md` | Feature changelog + learning plan |
-| `lesson_template.html` | Reusable lesson template — read this first |
-| `CLAUDE.md` | This file |
+| `chapter[N]/french_lesson_ch[N]_scene[M].html` | Lesson card |
+| `revisions/french_revision_s[X]-[Y].html` | Revision session after every 6 scenes — X and Y are global scene numbers (counted across all chapters) |
+| `progress/french_progress_ch[N].md` | Vocab & grammar tracker — one per chapter |
+| `mistakes/french_mistakes_ch[N]_viewer.html` | Mistakes dashboard — one per chapter |
+| `mistakes/french_mistakes_ch[N].md` | User's downloaded mistakes log — **gitignored** (personal learning history) |
+| `flashcards/french_flashcards_ch[N].html` | Flashcard app — one per chapter |
+| `prompt_history.md` | Feature changelog + learning plan — **gitignored** |
+| `lesson_template.html` | Legacy template — **gitignored**, superseded (skills now copy the latest scene) |
 
 ---
 
 ## How to generate a new lesson
 
-1. **Read `lesson_template.html`** first — it contains all boilerplate CSS, voice bar, TTS, mistakes storage, and answer checker
-2. Copy it and fill in the `%%PLACEHOLDER%%` variables (see table below)
-3. Use a Python script to do the substitution — do NOT regenerate the boilerplate from scratch
+1. **Invoke the `/generate-scene` skill** — it handles the full workflow end-to-end (state check, template copy, content design, progress-tracker update)
+2. If generating by hand: copy the **latest existing scene HTML file** from its `chapter[N]/` directory as the canonical template (not `lesson_template.html`, which is legacy) and only edit the content slots
+3. Do NOT regenerate the boilerplate from scratch
 
 ### Placeholder table
 
@@ -140,7 +154,7 @@ Flag formal vocabulary in lessons with `<span class="formal-tag">formal</span>`.
 
 ## Revision sessions
 
-Generate a revision session (`french_revision_s[X]-[Y].html`) after every 6 scenes. **Scene numbers X and Y are global** — counted sequentially across all chapters (Ch1 Scene 1 = 1 … Ch1 Scene 9 = 9, Ch2 Scene 1 = 10, etc.). Revision windows may therefore cross chapter boundaries. Each revision has:
+Generate a revision session (`revisions/french_revision_s[X]-[Y].html`) after every 6 scenes. **Scene numbers X and Y are global** — counted sequentially across all chapters (Ch1 Scene 1 = 1 … Ch1 Scene 9 = 9, Ch2 Scene 1 = 10, etc.). Revision windows may therefore cross chapter boundaries. Each revision has:
 - 4 new original sentences combining grammar/vocab from the specified scenes
 - Scene tags on each card showing which scenes the patterns come from (use the same `Chapter N · Scene M` or lesson-local scene label on the chip — global numbers only appear in the filename)
 - Teal/dark green background to visually distinguish from lessons
@@ -169,7 +183,8 @@ Global scene index so far:
 Sentences are numbered sequentially across all scenes and chapters:
 - Ch1 Scenes 1–9: Sentences 1–27
 - Ch2 Scene 1: Sentences 28–30
-- Ch2 Scene 2: starts at Sentence 31
+- Ch2 Scene 2: Sentences 31–33
+- Ch2 Scene 3: starts at Sentence 34
 
 ---
 
@@ -178,4 +193,5 @@ Sentences are numbered sequentially across all scenes and chapters:
 Rules are numbered sequentially across all chapters:
 - Ch1 covered rules 1–43
 - Ch2 Scene 1 added rules 44–47 (venir de, plus-que-parfait, mal + past participle, perception verbs)
-- Ch2 Scene 2 starts at rule 48
+- Ch2 Scene 2 added rules 48–53 (faire + inf., direct object pronouns, dialogue inversion, d'une voix + adj., se laisser + inf., superlatives)
+- Ch2 Scene 3 starts at rule 54

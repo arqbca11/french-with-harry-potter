@@ -15,17 +15,17 @@ Current mapping:
 
 | Global scene | Chapter · Scene | Lesson file |
 |---|---|---|
-| 1 | Ch1 · Scene 1 | `french_lesson_ch1_scene1.html` |
-| 2 | Ch1 · Scene 2 | `french_lesson_ch1_scene2.html` |
+| 1 | Ch1 · Scene 1 | `chapter1/french_lesson_ch1_scene1.html` |
+| 2 | Ch1 · Scene 2 | `chapter1/french_lesson_ch1_scene2.html` |
 | … | … | … |
-| 9 | Ch1 · Scene 9 | `french_lesson_ch1_scene9.html` |
-| 10 | Ch2 · Scene 1 | `french_lesson_ch2_scene1.html` |
-| 11 | Ch2 · Scene 2 | `french_lesson_ch2_scene2.html` |
+| 9 | Ch1 · Scene 9 | `chapter1/french_lesson_ch1_scene9.html` |
+| 10 | Ch2 · Scene 1 | `chapter2/french_lesson_ch2_scene1.html` |
+| 11 | Ch2 · Scene 2 | `chapter2/french_lesson_ch2_scene2.html` |
 
 Always list the existing lesson files in sort-version order and assign global indices from 1:
 
 ```
-ls french_lesson_ch*_scene*.html | sort -V
+ls chapter*/french_lesson_ch*_scene*.html | sort -V
 ```
 
 ## Step 1 — Determine the scene window
@@ -33,7 +33,7 @@ ls french_lesson_ch*_scene*.html | sort -V
 1. **Find the total scene count.** Count the lesson files above.
 2. **Find the next unrevised window.** Revisions cover `s1-6`, `s7-12`, `s13-18`, and so on — windows of 6, never overlapping, always starting at a multiple-of-6 boundary + 1.
 3. **Check the window is full.** If the user has only 11 scenes, the next window (`s7-12`) is not yet eligible — tell them they need N more scenes and stop. Do not generate early.
-4. **Filename:** `french_revision_s[X]-[Y].html` — e.g. `french_revision_s7-12.html`. **No chapter prefix.**
+4. **Filename:** `revisions/french_revision_s[X]-[Y].html` — e.g. `revisions/french_revision_s7-12.html`. **No chapter prefix in the filename.**
 5. **Resolve global → (chapter, scene)** for each scene in the window, so you know which lesson files to open.
 
 If the user explicitly names a window (e.g. "generate revision for scenes 7–12"), trust that and still verify the files exist.
@@ -42,9 +42,9 @@ If the user explicitly names a window (e.g. "generate revision for scenes 7–12
 
 Before writing anything, read:
 
-1. **The latest lesson HTML file** — this is the canonical runtime template (ElevenLabs + `data-tts`, correct storage key, modern `speak()`). Use it as the structural base. The existing `french_revision_s1-6.html` uses a pre-ElevenLabs pattern and is **not** the template — do not copy it.
+1. **The latest lesson HTML file** — this is the canonical runtime template (ElevenLabs + `data-tts`, correct storage key, modern `speak()`). Use it as the structural base. The existing `revisions/french_revision_s1-6.html` uses a pre-ElevenLabs pattern and is **not** the template — do not copy it.
 2. **All 6 scene HTML files in the window** — extract which grammar patterns and vocabulary were introduced in each. You will recombine these; never introduce new material.
-3. **Every progress tracker touched by the window** (`french_progress_ch1.md`, `french_progress_ch2.md`, …) — to confirm grammar rule coverage across the window.
+3. **Every progress tracker touched by the window** (`progress/french_progress_ch1.md`, `progress/french_progress_ch2.md`, …) — to confirm grammar rule coverage across the window.
 
 ## Step 3 — Design the 4 revision sentences
 
@@ -165,7 +165,7 @@ See the lesson-generation skill for the full reasoning if these rules need a ref
 
 ## Step 6 — Final checklist
 
-- [ ] Filename: `french_revision_s[X]-[Y].html` — no `ch[N]` segment
+- [ ] Filename: `revisions/french_revision_s[X]-[Y].html` — no `ch[N]` segment in the filename itself
 - [ ] X and Y are global scene numbers (count across chapters, window of exactly 6)
 - [ ] Page subtitle: `Revision — Scenes X–Y` (no chapter prefix)
 - [ ] 4 revision cards, each with scene-tag chips using per-chapter labels (`Ch1 S2`, `Ch2 S1`)

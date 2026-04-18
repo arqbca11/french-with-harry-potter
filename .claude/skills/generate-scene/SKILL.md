@@ -13,14 +13,14 @@ Before writing anything, establish:
 
 1. **Current chapter and next scene number.** Read `CLAUDE.md` (section "Where we are" and "Sentence numbering"). If the user specified a scene explicitly ("Chapter 2 Scene 3"), trust that.
 2. **Next sentence numbers (3 sequential).** Sentences are numbered sequentially across all chapters. Read the latest existing lesson file and take its highest sentence number + 1, + 2, + 3.
-3. **Next grammar rule number.** Read `french_progress_ch[N].md` and take the highest rule number + 1. Rules are sequential across all chapters.
+3. **Next grammar rule number.** Read `progress/french_progress_ch[N].md` and take the highest rule number + 1. Rules are sequential across all chapters.
 4. **What's already covered.** Skim the chapter's progress tracker so you don't reintroduce vocab or grammar the user already has. Build on — don't repeat.
 
 ## Step 2 — Read the canonical template
 
 The **latest existing scene HTML file** is the canonical template, not `lesson_template.html`. The latest file has all critical runtime fixes already baked in (the `data-tts` pattern, the voice-bar visibility, the `french_ch[N]_mistakes` storage key, etc.). Read it end-to-end before writing the new scene.
 
-To find it: `ls french_lesson_ch*_scene*.html | sort -V | tail -1`.
+To find it: `ls chapter*/french_lesson_ch*_scene*.html | sort -V | tail -1`. New scenes within an existing chapter go into the same `chapter[N]/` directory; new chapters start a fresh `chapter[N]/` directory at the repo root.
 
 ## Step 3 — Design the scene content
 
@@ -116,7 +116,7 @@ English prose (*don't*, *it's*, *we're*, *you'd*, *isn't*) destroys single-quote
 
 ## Step 6 — Update the progress tracker
 
-Append to `french_progress_ch[N].md`:
+Append to `progress/french_progress_ch[N].md`:
 
 1. A new `### Scene M` subheading under **📚 Vocabulary** with a vocab table (French / English / Note).
 2. Any new fixed-expression sets (body language, register alternatives, manner phrases) — group them in labeled mini-tables if there are 3+ of a kind.
@@ -141,5 +141,5 @@ Then tell the user: the new lesson filename, the new sentence numbers, the new g
 ## When NOT to use this skill
 
 - User wants to edit an *existing* scene — just edit it, don't treat it as generation.
-- User wants a revision session (`french_revision_ch[N]_s[X]-[Y].html`) — different format, 4 cards, scene tags, teal/green background. Different template.
+- User wants a revision session (`revisions/french_revision_s[X]-[Y].html`) — different format, 4 cards, scene tags, teal/green background. Different template.
 - User wants flashcards or a mistakes viewer — different files, different purpose.

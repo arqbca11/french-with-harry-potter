@@ -5,12 +5,12 @@ description: Create or update the vocabulary flashcard deck for a chapter. Use w
 
 # Update the chapter vocabulary flashcards
 
-Each chapter has one flashcard deck at `french_flashcards_ch[N].html`. Cards are vocabulary items pulled from the chapter's lessons — one per useful word, phrase, or grammar chunk. This skill either creates the file for a new chapter or appends cards for newly added scenes.
+Each chapter has one flashcard deck at `flashcards/french_flashcards_ch[N].html`. Cards are vocabulary items pulled from the chapter's lessons — one per useful word, phrase, or grammar chunk. This skill either creates the file for a new chapter or appends cards for newly added scenes.
 
 ## Step 1 — Decide: create or update
 
 ```
-ls french_flashcards_ch[N].html
+ls flashcards/french_flashcards_ch[N].html
 ```
 
 - **File does not exist → create mode** (Step 2A).
@@ -18,7 +18,7 @@ ls french_flashcards_ch[N].html
 
 ## Step 2A — Create mode (new chapter)
 
-1. **Copy the existing Ch1 deck as the structural template.** `french_flashcards_ch1.html` has the full CSS, flip mechanics, ElevenLabs integration, keyboard shortcuts, session summary, and filter dropdown. Replicate everything except the content.
+1. **Copy the existing Ch1 deck as the structural template.** `flashcards/french_flashcards_ch1.html` has the full CSS, flip mechanics, ElevenLabs integration, keyboard shortcuts, session summary, and filter dropdown. Replicate everything except the content.
 2. **Change the title** and `.page-subtitle` to the new chapter.
 3. **Empty the `CARDS` array** — you'll populate it in Step 3.
 4. **Update the filter dropdown** to match available scene groupings (see Step 4).
@@ -26,7 +26,7 @@ ls french_flashcards_ch[N].html
 ## Step 2B — Update mode (existing file)
 
 1. **Read the existing `CARDS` array** to see what's already covered. Do not duplicate — a card for the same `fr` term already in the deck should be skipped, even if the user ran `update-flashcards` twice.
-2. **Determine which scenes are new.** Compare existing scene tags (the `s:` fields in the CARDS array) against the scenes present in the chapter (`ls french_lesson_ch[N]_scene*.html`).
+2. **Determine which scenes are new.** Compare existing scene tags (the `s:` fields in the CARDS array) against the scenes present in the chapter (`ls chapter[N]/french_lesson_ch[N]_scene*.html`).
 3. **Append new cards** to the end of the `CARDS` array for the uncovered scenes.
 4. **Update the filter dropdown** if new scene groupings are needed (Step 4).
 
@@ -36,11 +36,11 @@ For **each scene** being covered, pull cards from two sources:
 
 ### Source A — The scene's vocab table (required)
 
-Open `french_lesson_ch[N]_scene[M].html` and extract every row from the three `<table>` blocks. Each row becomes a card candidate. Filter out duplicates across the three tables of the same scene.
+Open `chapter[N]/french_lesson_ch[N]_scene[M].html` and extract every row from the three `<table>` blocks. Each row becomes a card candidate. Filter out duplicates across the three tables of the same scene.
 
 ### Source B — The chapter's progress tracker (required)
 
-Open `french_progress_ch[N].md` and read the `### Scene M` vocab table and any grammar patterns worth turning into cards (e.g. `venir de + infinitif` deserves a card with an example; an entire multi-paragraph grammar rule does not).
+Open `progress/french_progress_ch[N].md` and read the `### Scene M` vocab table and any grammar patterns worth turning into cards (e.g. `venir de + infinitif` deserves a card with an example; an entire multi-paragraph grammar rule does not).
 
 ### Each card has 6 fields
 
@@ -148,4 +148,4 @@ Tell the user: filename, how many cards were added (or total in a new deck), the
 
 - The user wants to generate a lesson — use `generate-scene`.
 - The user wants a revision session — use `generate-revision`.
-- The user wants to view or review mistakes — different file (`french_mistakes_ch[N]_viewer.html`).
+- The user wants to view or review mistakes — different file (`mistakes/french_mistakes_ch[N]_viewer.html`).

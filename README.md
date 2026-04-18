@@ -19,23 +19,35 @@ A self-guided French learning app that teaches through original sentences inspir
 ## Quick start
 
 1. Clone or download this repo.
-2. Open any `french_flashcards_ch1.html` in your browser — a good warm-up of Chapter 1 vocabulary.
-3. Then open a lesson, e.g. `french_lesson_ch1_scene4.html`.
-4. Read the French sentence at the top, hover the vocab table, press ▶ to hear it spoken.
-5. Scroll to the Practice card at the bottom. Translate the English sentence into French and press **Check**. The app scores each grammatical element and tells you exactly what you got wrong and why.
-6. Repeat for Scene 5, Scene 6, … After every 6 scenes, open the revision session (`french_revision_s1-6.html`) to consolidate.
+2. Open `chapter1/french_lesson_ch1_scene1.html` in your browser.
+3. Read the French sentence at the top, hover the vocab table, press ▶ to hear it spoken.
+4. Scroll to the Practice card at the bottom. Translate the English sentence into French and press **Check**. The app scores each grammatical element and tells you exactly what you got wrong and why.
+5. Repeat for Scene 2, Scene 3, … After every 6 scenes, open the revision session (`revisions/french_revision_s1-6.html`) to consolidate.
+6. When you want a vocabulary warm-up or refresher, open `flashcards/french_flashcards_ch1.html`.
 
 ---
+
+## Directory layout
+
+```
+chapter1/     Lesson files for Chapter 1 (scenes 1–9)
+chapter2/     Lesson files for Chapter 2 (scenes 1+)
+revisions/    Revision sessions (one per 6 scenes)
+flashcards/   Vocabulary flashcard decks, one per chapter
+progress/     Running vocab & grammar trackers, one per chapter
+mistakes/     Mistakes dashboard; your downloaded mistakes log also lives here
+.claude/      Claude Code skills for generating new scenes/revisions/flashcards
+```
 
 ## File guide
 
 | Pattern | What it is |
 |---|---|
-| `french_lesson_ch[N]_scene[M].html` | A lesson. Three French sentences, each with a pronunciation guide, vocabulary table, and grammar insight. One translation practice at the bottom with per-element feedback. |
-| `french_revision_s[X]-[Y].html` | A revision session covering 6 consecutive scenes (counted globally across chapters). Four new sentences that recombine grammar and vocab you've already met, with scene tags showing where each pattern comes from. |
-| `french_flashcards_ch[N].html` | A full vocabulary flashcard deck for a chapter. Space to flip, 1/2 to mark still-learning / got-it, ← → to navigate, P to play the example sentence. |
-| `french_progress_ch[N].md` | A running catalogue of every word, grammar rule, and fixed expression introduced in that chapter. Updated after every scene. Useful as a reference and a table of contents. |
-| `french_mistakes_ch[N]_viewer.html` | A dashboard that reads your downloaded mistakes log and displays it. |
+| `chapter[N]/french_lesson_ch[N]_scene[M].html` | A lesson. Three French sentences, each with a pronunciation guide, vocabulary table, and grammar insight. One translation practice at the bottom with per-element feedback. |
+| `revisions/french_revision_s[X]-[Y].html` | A revision session covering 6 consecutive scenes (counted globally across chapters). Four new sentences that recombine grammar and vocab you've already met, with scene tags showing where each pattern comes from. |
+| `flashcards/french_flashcards_ch[N].html` | A full vocabulary flashcard deck for a chapter. Space to flip, 1/2 to mark still-learning / got-it, ← → to navigate, P to play the example sentence. |
+| `progress/french_progress_ch[N].md` | A running catalogue of every word, grammar rule, and fixed expression introduced in that chapter. Updated after every scene. Useful as a reference and a table of contents. |
+| `mistakes/french_mistakes_ch[N]_viewer.html` | A dashboard that reads your downloaded mistakes log and displays it. |
 | `CLAUDE.md` | Project context for [Claude Code](https://claude.com/claude-code), so an AI assistant can help you extend the app. Not needed if you just want to study. |
 | `.claude/skills/` | Custom Claude Code skills for generating new scenes, revisions, and flashcards. See "Extending" below. |
 
@@ -66,7 +78,7 @@ Your mistakes log lives in browser `localStorage`. It persists across sessions a
 ## What's included
 
 ### Chapter 1 — *The Other Minister*
-- Lesson files for Scenes 4–9 (scenes 1–3 were early prototypes; their content lives in the flashcards and the revision session)
+- All 9 scenes available as standalone lesson files (`chapter1/`)
 - Flashcard deck covering all 9 scenes — **80+ cards**
 - Revision session for scenes 1–6 in teal
 
@@ -75,14 +87,14 @@ Your mistakes log lives in browser `localStorage`. It persists across sessions a
 - Grammar introduced: *venir de* + infinitif, plus-que-parfait, *faire* + infinitif (causative), *se laisser* + infinitif, *d'une voix + adjectif*, superlatives
 
 ### Progress trackers
-Open `french_progress_ch1.md` and `french_progress_ch2.md` for a complete, human-readable catalogue of every word, grammar rule, and fixed expression covered.
+Open `progress/french_progress_ch1.md` and `progress/french_progress_ch2.md` for a complete, human-readable catalogue of every word, grammar rule, and fixed expression covered.
 
 ---
 
 ## Where to start depending on your level
 
-- **Absolute beginner (A1)** — start with the flashcard deck to learn the chapter's vocab, then open lessons in order. Expect 15–30 min per scene.
-- **A2–B1** — skim `french_progress_ch1.md`. If most of it looks familiar, jump to the revision session and the Chapter 2 scenes. The practice exercises will surface any gaps.
+- **Absolute beginner (A1)** — start with `chapter1/french_lesson_ch1_scene1.html` and go in order. Open the `flashcards/` deck alongside for vocab reinforcement. Expect 15–30 min per scene.
+- **A2–B1** — skim `progress/french_progress_ch1.md`. If most of it looks familiar, jump to the revision session and the Chapter 2 scenes. The practice exercises will surface any gaps.
 - **Preparing for TEF/TCF Canada** — the later scenes flag formal-register alternatives (`cela` vs `ça`, `cependant` vs `mais`, `bien que + subjonctif`) with a **formal** tag. This is built in deliberately — the lessons escalate from story French to exam-register French over the course of the chapters.
 
 ---
