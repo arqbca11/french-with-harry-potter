@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>French Revision — Chapter 1, Scenes 1–6</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1a2a3a; --parchment: #f5f0e8; --cream: #faf7f2;
+    --gold: #c9a84c; --gold-light: #e8d5a3; --muted: #7a7060;
+    --red: #8b2635; --blue: #2c4a7c; --dark: #162d4a;
+    --teal: #1a4a4a;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #1a3a3a;
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh; padding: 32px 16px;
+    background-image: radial-gradient(ellipse at top left, #1e5050 0%, #1a3a3a 55%, #122a2a 100%);
+  }
+
+  .page-title { text-align: center; color: var(--gold); font-family: 'Playfair Display', serif; font-size: 13px; letter-spacing: 4px; text-transform: uppercase; margin-bottom: 8px; opacity: 0.9; }
+  .page-subtitle { text-align: center; color: rgba(255,255,255,0.45); font-size: 12px; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 8px; }
+  .scene-desc { text-align: center; color: rgba(255,255,255,0.55); font-size: 13px; font-style: italic; font-family: 'Playfair Display', serif; margin-bottom: 24px; max-width: 520px; margin-left: auto; margin-right: auto; line-height: 1.7; }
+
+  /* Tags showing which scenes a sentence draws from */
+  .scene-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 8px; }
+  .scene-tag { font-size: 10px; letter-spacing: 1px; text-transform: uppercase; background: rgba(201,168,76,0.12); border: 1px solid rgba(201,168,76,0.3); color: var(--gold); border-radius: 4px; padding: 2px 7px; }
+
+  /* Voice picker */
+  .voice-picker { max-width: 700px; margin: 0 auto 28px; background: #122a2a; border-radius: 12px; border: 1px solid rgba(201,168,76,0.25); padding: 18px 24px; }
+  .voice-picker-label { font-size: 10px; letter-spacing: 2.5px; text-transform: uppercase; color: var(--gold); opacity: 0.85; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
+  .voice-picker-label::after { content: ''; flex: 1; height: 1px; background: rgba(201,168,76,0.2); }
+  .voice-list { display: flex; gap: 10px; flex-wrap: wrap; }
+  .voice-option { flex: 1; min-width: 180px; display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.03); cursor: pointer; transition: all 0.2s; }
+  .voice-option:hover { border-color: rgba(201,168,76,0.4); background: rgba(201,168,76,0.06); }
+  .voice-option.selected { border-color: var(--gold); background: rgba(201,168,76,0.1); }
+  .voice-radio { width: 16px; height: 16px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.25); flex-shrink: 0; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+  .voice-option.selected .voice-radio { border-color: var(--gold); background: var(--gold); }
+  .voice-option.selected .voice-radio::after { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--ink); }
+  .voice-info { flex: 1; }
+  .voice-name { font-size: 14px; color: rgba(255,255,255,0.85); font-weight: 500; margin-bottom: 2px; }
+  .voice-option.selected .voice-name { color: var(--gold); }
+  .voice-meta { font-size: 11px; color: rgba(255,255,255,0.35); }
+  .voice-preview-btn { width: 32px; height: 32px; border-radius: 50%; border: 1.5px solid rgba(255,255,255,0.2); background: transparent; color: rgba(255,255,255,0.5); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+  .voice-preview-btn:hover { border-color: var(--gold); color: var(--gold); }
+  .voice-preview-btn.playing { border-color: var(--gold); color: var(--gold); }
+  .voice-preview-btn svg { width: 11px; height: 11px; }
+  .no-voices-msg { color: rgba(255,255,255,0.4); font-size: 13px; font-style: italic; padding: 8px 0; }
+
+  /* Revision cards — slightly different header tint */
+  .lesson-card { background: var(--cream); border-radius: 12px; max-width: 700px; margin: 0 auto 28px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.35), 0 0 0 1px rgba(201,168,76,0.2); }
+  .card-header { background: #f0ece0; border-bottom: 1px solid var(--gold-light); padding: 20px 28px 16px; display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; }
+  .sentence-number { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); font-weight: 500; margin-bottom: 6px; }
+  .french-sentence { font-family: 'Playfair Display', serif; font-size: 22px; color: var(--ink); line-height: 1.3; font-style: italic; margin-bottom: 4px; }
+  .english-sentence { font-size: 14px; color: var(--muted); font-weight: 300; }
+  .play-btn { flex-shrink: 0; width: 44px; height: 44px; border-radius: 50%; border: 2px solid var(--gold); background: transparent; color: var(--gold); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; margin-top: 4px; }
+  .play-btn:hover { background: var(--gold); color: white; transform: scale(1.05); }
+  .play-btn.playing { background: var(--gold); color: white; }
+  .play-btn svg { width: 16px; height: 16px; }
+  .pronunciation-bar { background: #122a2a; padding: 10px 28px; display: flex; align-items: center; gap: 10px; }
+  .pronun-label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); opacity: 0.7; flex-shrink: 0; }
+  .pronun-text { font-size: 13px; color: rgba(255,255,255,0.75); font-style: italic; }
+  .card-body { padding: 20px 28px 24px; }
+
+  table { width: 100%; border-collapse: collapse; margin-bottom: 18px; }
+  thead tr { border-bottom: 1px solid var(--gold-light); }
+  thead th { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); padding: 0 0 8px; text-align: left; font-weight: 500; }
+  tbody tr { border-bottom: 1px solid rgba(0,0,0,0.06); }
+  tbody tr:last-child { border-bottom: none; }
+  td { padding: 9px 0; font-size: 14px; vertical-align: top; }
+  td:first-child { font-family: 'Playfair Display', serif; font-style: italic; color: var(--blue); width: 26%; font-size: 15px; }
+  td:nth-child(2) { color: var(--muted); font-size: 12px; font-style: italic; width: 22%; padding-right: 12px; }
+  td:nth-child(3) { font-weight: 500; color: var(--ink); width: 18%; }
+  td:nth-child(4) { color: #555; font-size: 13px; font-weight: 300; }
+
+  .insight { background: linear-gradient(135deg, #f5f2e8, #f0ece0); border-left: 3px solid var(--gold); border-radius: 0 8px 8px 0; padding: 12px 16px; font-size: 13.5px; color: var(--ink); line-height: 1.6; }
+  .insight strong { color: var(--red); }
+  .word-highlight { background: rgba(44,74,124,0.1); border-radius: 3px; padding: 1px 4px; font-style: italic; color: var(--blue); font-family: 'Playfair Display', serif; }
+  .formal-tag { display: inline-block; font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; background: rgba(139,38,53,0.12); border: 1px solid rgba(139,38,53,0.3); color: #c07070; border-radius: 4px; padding: 1px 6px; margin-left: 6px; vertical-align: middle; }
+
+  /* Practice card */
+  .practice-card { background: #122a2a; border-radius: 12px; max-width: 700px; margin: 0 auto 40px; overflow: hidden; border: 1px solid rgba(201,168,76,0.35); box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
+  .practice-header { padding: 18px 28px 14px; border-bottom: 1px solid rgba(201,168,76,0.2); }
+  .practice-badge { font-size: 10px; letter-spacing: 2.5px; text-transform: uppercase; color: var(--gold); font-weight: 500; background: rgba(201,168,76,0.12); border: 1px solid rgba(201,168,76,0.3); border-radius: 20px; padding: 3px 10px; }
+  .practice-body { padding: 22px 28px 26px; }
+  .practice-prompt { font-size: 13px; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 10px; }
+  .practice-english { font-family: 'Playfair Display', serif; font-size: 22px; color: white; font-style: italic; margin-bottom: 22px; line-height: 1.35; }
+  .input-row { display: flex; gap: 10px; align-items: stretch; }
+  .practice-input { flex: 1; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.15); border-radius: 8px; padding: 13px 16px; font-size: 16px; font-family: 'Playfair Display', serif; font-style: italic; color: white; outline: none; transition: border-color 0.2s; }
+  .practice-input::placeholder { color: rgba(255,255,255,0.25); font-style: italic; }
+  .practice-input:focus { border-color: var(--gold); }
+  .practice-input:disabled { opacity: 0.6; }
+  .submit-btn { background: var(--gold); border: none; color: var(--ink); font-family: 'DM Sans', sans-serif; font-size: 13px; letter-spacing: 1.5px; text-transform: uppercase; padding: 0 22px; border-radius: 8px; cursor: pointer; transition: all 0.2s; font-weight: 500; white-space: nowrap; }
+  .submit-btn:hover { background: #e0bb5a; }
+  .submit-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  .feedback-block { display: none; margin-top: 20px; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 20px; }
+  .feedback-block.visible { display: block; animation: fadeIn 0.3s ease; }
+  .feedback-loading { display: flex; align-items: center; gap: 10px; color: rgba(255,255,255,0.5); font-size: 14px; font-style: italic; }
+  .spinner { width: 18px; height: 18px; border-radius: 50%; border: 2px solid rgba(201,168,76,0.3); border-top-color: var(--gold); animation: spin 0.8s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .your-answer-block { margin-bottom: 16px; }
+  .your-answer-label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.35); margin-bottom: 6px; }
+  .your-answer-text { font-family: 'Playfair Display', serif; font-size: 18px; font-style: italic; color: rgba(255,255,255,0.75); line-height: 1.4; padding: 10px 14px; background: rgba(255,255,255,0.04); border-radius: 8px; border-left: 3px solid rgba(255,255,255,0.15); display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .your-answer-play { flex-shrink: 0; width: 30px; height: 30px; border-radius: 50%; border: 1.5px solid rgba(255,255,255,0.2); background: transparent; color: rgba(255,255,255,0.4); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+  .your-answer-play:hover, .your-answer-play.playing { border-color: var(--gold); color: var(--gold); }
+  .your-answer-play svg { width: 10px; height: 10px; }
+
+  .score-banner { display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-radius: 8px; margin-bottom: 16px; }
+  .score-banner.perfect { background: rgba(45,106,79,0.25); border: 1px solid rgba(45,106,79,0.5); }
+  .score-banner.mostly { background: rgba(201,168,76,0.15); border: 1px solid rgba(201,168,76,0.4); }
+  .score-banner.needs-work { background: rgba(139,38,53,0.2); border: 1px solid rgba(139,38,53,0.4); }
+  .score-icon { font-size: 20px; }
+  .score-text { font-size: 14px; font-weight: 500; }
+  .score-banner.perfect .score-text { color: #6ecf9a; }
+  .score-banner.mostly .score-text { color: var(--gold); }
+  .score-banner.needs-work .score-text { color: #e07f8a; }
+
+  .model-answer-block { margin-bottom: 16px; }
+  .model-label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.35); margin-bottom: 6px; }
+  .model-sentence { font-family: 'Playfair Display', serif; font-size: 20px; font-style: italic; color: var(--gold); display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .answer-play-btn { flex-shrink: 0; width: 34px; height: 34px; border-radius: 50%; border: 1.5px solid var(--gold); background: transparent; color: var(--gold); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+  .answer-play-btn:hover, .answer-play-btn.playing { background: var(--gold); color: var(--ink); }
+  .answer-play-btn svg { width: 12px; height: 12px; }
+
+  .mistakes-section { margin-top: 16px; }
+  .mistakes-label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.35); margin-bottom: 10px; }
+  .mistake-item { background: rgba(139,38,53,0.12); border: 1px solid rgba(139,38,53,0.3); border-radius: 8px; padding: 12px 14px; margin-bottom: 8px; }
+  .mistake-wrote { font-size: 13px; color: rgba(255,255,255,0.5); margin-bottom: 4px; }
+  .mistake-wrote span { font-family: 'Playfair Display', serif; font-style: italic; color: #e07f8a; text-decoration: line-through; }
+  .mistake-should { font-size: 13px; color: rgba(255,255,255,0.5); margin-bottom: 6px; }
+  .mistake-should span { font-family: 'Playfair Display', serif; font-style: italic; color: #6ecf9a; }
+  .mistake-explanation { font-size: 13px; color: rgba(255,255,255,0.7); line-height: 1.6; }
+  .overall-feedback { margin-top: 14px; padding: 12px 14px; background: rgba(255,255,255,0.04); border-radius: 8px; font-size: 13.5px; color: rgba(255,255,255,0.65); line-height: 1.6; font-style: italic; }
+
+  .download-btn { margin-top: 16px; background: transparent; border: 1px solid rgba(255,255,255,0.15); color: rgba(255,255,255,0.5); font-family: 'DM Sans', sans-serif; font-size: 12px; letter-spacing: 1px; text-transform: uppercase; padding: 8px 16px; border-radius: 6px; cursor: pointer; transition: all 0.2s; display: none; }
+  .download-btn:hover { border-color: var(--gold); color: var(--gold); }
+  .download-btn.visible { display: inline-block; }
+
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+</style>
+</head>
+<body>
+
+<div class="page-title">Harry Potter et le Prince de Sang-Mêlé</div>
+<div class="page-subtitle">Revision — Scenes 1–6</div>
+<div class="scene-desc">New sentences — same grammar and vocabulary you've already met, in fresh contexts. Each card shows which scenes the patterns come from.</div>
+
+<div class="voice-picker">
+  <div class="voice-picker-label">🎙 Choose a reading voice</div>
+  <div class="voice-list" id="voiceList"><div class="no-voices-msg">Loading voices…</div></div>
+</div>
+
+<!-- REVISION SENTENCE 1 -->
+<div class="lesson-card">
+  <div class="card-header">
+    <div>
+      <div class="scene-tags">
+        <span class="scene-tag">Scene 2 — reflexives</span>
+        <span class="scene-tag">Scene 4 — avoir peur</span>
+        <span class="scene-tag">Scene 4 — ce qui</span>
+      </div>
+      <div class="french-sentence">Elle se levait chaque nuit parce qu'elle avait peur de ce qui se passait dehors.</div>
+      <div class="english-sentence">"She got up every night because she was afraid of what was happening outside."</div>
+    </div>
+    <button class="play-btn" onclick="speak(this,'Elle se levait chaque nuit parce qu\'elle avait peur de ce qui se passait dehors.')">
+      <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>
+    </button>
+  </div>
+  <div class="pronunciation-bar"><span class="pronun-label">Say it</span><span class="pronun-text">ell suh luh-VEH — shak nwee — par-suh kell ah-VEH pur — duh suh kee suh pah-SEH — duh-OR</span></div>
+  <div class="card-body">
+    <table>
+      <thead><tr><th>French</th><th>Sounds like</th><th>Means</th><th>Note</th></tr></thead>
+      <tbody>
+        <tr><td>se levait</td><td>suh luh-VEH</td><td>was getting up</td><td>Reflexive <span class="word-highlight">se lever</span> in imperfect — repeated action in the past</td></tr>
+        <tr><td>chaque nuit</td><td>shak nwee</td><td>every night</td><td><span class="word-highlight">chaque</span> = each/every — always singular</td></tr>
+        <tr><td>parce qu'elle</td><td>par-suh kell</td><td>because she</td><td><span class="word-highlight">parce que</span> contracts before a vowel → <span class="word-highlight">parce qu'</span></td></tr>
+        <tr><td>avait peur de</td><td>ah-VEH pur duh</td><td>was afraid of</td><td>Imperfect of <span class="word-highlight">avoir peur</span> — ongoing fear, not a sudden reaction</td></tr>
+        <tr><td>dehors</td><td>duh-OR</td><td>outside</td><td>New word — useful to know</td></tr>
+      </tbody>
+    </table>
+    <div class="insight">💡 Notice how <strong>imperfect</strong> does all the heavy lifting here: <span class="word-highlight">se levait</span> (habitual action) + <span class="word-highlight">avait peur</span> (background emotional state) + <span class="word-highlight">se passait</span> (ongoing situation). Three imperfects in one sentence — this is classic French storytelling.</div>
+  </div>
+</div>
+
+<!-- REVISION SENTENCE 2 -->
+<div class="lesson-card">
+  <div class="card-header">
+    <div>
+      <div class="scene-tags">
+        <span class="scene-tag">Scene 4 — ne…plus</span>
+        <span class="scene-tag">Scene 6 — réussir à</span>
+        <span class="scene-tag">Scene 3 — avant de</span>
+        <span class="scene-tag">Scene 5 — cela</span>
+      </div>
+      <div class="french-sentence">Il ne réussissait plus à s'endormir avant de comprendre tout cela.</div>
+      <div class="english-sentence">"He could no longer manage to fall asleep before understanding all of this."</div>
+    </div>
+    <button class="play-btn" onclick="speak(this,'Il ne réussissait plus à s\'endormir avant de comprendre tout cela.')">
+      <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>
+    </button>
+  </div>
+  <div class="pronunciation-bar"><span class="pronun-label">Say it</span><span class="pronun-text">eel nuh ray-ü-see-SEH plü — ah san-dor-MEER — ah-VAHN duh kom-PRAHN-druh — too suh-LAH</span></div>
+  <div class="card-body">
+    <table>
+      <thead><tr><th>French</th><th>Sounds like</th><th>Means</th><th>Note</th></tr></thead>
+      <tbody>
+        <tr><td>ne réussissait plus</td><td>nuh ray-ü-see-SEH plü</td><td>could no longer manage</td><td><span class="word-highlight">ne…plus</span> sandwich around imperfect of <span class="word-highlight">réussir</span></td></tr>
+        <tr><td>à s'endormir</td><td>ah san-dor-MEER</td><td>to fall asleep</td><td>Reflexive infinitive <span class="word-highlight">s'endormir</span> — note the <span class="word-highlight">à</span> linking it to <span class="word-highlight">réussir</span></td></tr>
+        <tr><td>avant de comprendre</td><td>ah-VAHN duh kom-PRAHN-druh</td><td>before understanding</td><td><span class="word-highlight">avant de + infinitive</span> — same subject throughout</td></tr>
+        <tr><td>tout cela</td><td>too suh-LAH</td><td>all of this</td><td>Formal — TEF/TCF would prefer this over <span class="word-highlight">tout ça</span> <span class="formal-tag">formal</span></td></tr>
+      </tbody>
+    </table>
+    <div class="insight">💡 This sentence chains three patterns in sequence: <span class="word-highlight">ne…plus</span> + <span class="word-highlight">réussir à + infinitive</span> + <span class="word-highlight">avant de + infinitive</span>. Reading it aloud a few times will wire these together in your memory better than any drill.</div>
+  </div>
+</div>
+
+<!-- REVISION SENTENCE 3 -->
+<div class="lesson-card">
+  <div class="card-header">
+    <div>
+      <div class="scene-tags">
+        <span class="scene-tag">Scene 3 — avoir l'air</span>
+        <span class="scene-tag">Scene 5 — être de retour</span>
+        <span class="scene-tag">Scene 6 — être/avoir auxiliary</span>
+        <span class="scene-tag">Scene 5 — le nier</span>
+      </div>
+      <div class="french-sentence">Elle avait l'air surprise de le voir de retour, mais personne n'osait le nier.</div>
+      <div class="english-sentence">"She looked surprised to see him back, but no one dared deny it."</div>
+    </div>
+    <button class="play-btn" onclick="speak(this,'Elle avait l\'air surprise de le voir de retour, mais personne n\'osait le nier.')">
+      <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>
+    </button>
+  </div>
+  <div class="pronunciation-bar"><span class="pronun-label">Say it</span><span class="pronun-text">ell ah-VEH lehr sür-PREEZ — duh luh vwahr duh ruh-TOOR — meh per-SON noh-ZEH luh nyay</span></div>
+  <div class="card-body">
+    <table>
+      <thead><tr><th>French</th><th>Sounds like</th><th>Means</th><th>Note</th></tr></thead>
+      <tbody>
+        <tr><td>avait l'air surprise</td><td>ah-VEH lehr sür-PREEZ</td><td>looked surprised</td><td><span class="word-highlight">avoir l'air + adjective</span> — adjective agrees with subject here (<em>elle</em> → <em>surprise</em>)</td></tr>
+        <tr><td>de le voir</td><td>duh luh vwahr</td><td>to see him</td><td><span class="word-highlight">de + le voir</span> — object pronoun before infinitive</td></tr>
+        <tr><td>de retour</td><td>duh ruh-TOOR</td><td>back / returned</td><td><span class="word-highlight">être de retour</span> — fixed expression from Scene 5</td></tr>
+        <tr><td>personne n'osait</td><td>per-SON noh-ZEH</td><td>no one dared</td><td><span class="word-highlight">personne ne</span> = no one — another negation pair; <span class="word-highlight">oser</span> = to dare</td></tr>
+        <tr><td>le nier</td><td>luh nyay</td><td>to deny it</td><td>Object pronoun <span class="word-highlight">le</span> before infinitive <span class="word-highlight">nier</span></td></tr>
+      </tbody>
+    </table>
+    <div class="insight">💡 New pattern: <strong>personne ne</strong> = no one. Another negation pair like <span class="word-highlight">ne…plus</span> and <span class="word-highlight">ne…pas</span>. <span class="word-highlight">Personne</span> goes at the start, <span class="word-highlight">ne</span> still hugs the verb: <em>personne <strong>n'</strong>osait</em>. Also note <span class="word-highlight">oser + infinitive</span> = to dare to do something — very useful.</div>
+  </div>
+</div>
+
+<!-- REVISION SENTENCE 4 -->
+<div class="lesson-card">
+  <div class="card-header">
+    <div>
+      <div class="scene-tags">
+        <span class="scene-tag">Scene 6 — se sentir</span>
+        <span class="scene-tag">Scene 6 — responsable de</span>
+        <span class="scene-tag">Scene 6 — réussir à / cacher</span>
+        <span class="scene-tag">Scene 4 — ce qui</span>
+      </div>
+      <div class="french-sentence">Je me sens responsable de ce qui s'est passé, même si je n'ai pas réussi à tout cacher.</div>
+      <div class="english-sentence">"I feel responsible for what happened, even if I did not manage to hide everything."</div>
+    </div>
+    <button class="play-btn" onclick="speak(this,'Je me sens responsable de ce qui s\'est passé, même si je n\'ai pas réussi à tout cacher.')">
+      <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>
+    </button>
+  </div>
+  <div class="pronunciation-bar"><span class="pronun-label">Say it</span><span class="pronun-text">zhuh muh sahn res-pon-SABL — duh suh kee seh pah-SAY — mem see — zhuh nay pah ray-ü-SEE ah — too kah-SHAY</span></div>
+  <div class="card-body">
+    <table>
+      <thead><tr><th>French</th><th>Sounds like</th><th>Means</th><th>Note</th></tr></thead>
+      <tbody>
+        <tr><td>je me sens</td><td>zhuh muh sahn</td><td>I feel</td><td>Reflexive <span class="word-highlight">se sentir</span> — internal emotional state</td></tr>
+        <tr><td>responsable de</td><td>res-pon-SABL duh</td><td>responsible for</td><td>Always <span class="word-highlight">de</span>, never <span class="word-highlight">pour</span></td></tr>
+        <tr><td>même si</td><td>mem see</td><td>even if / even though</td><td>New phrase — extremely useful in formal arguments <span class="formal-tag">formal</span></td></tr>
+        <tr><td>n'ai pas réussi à</td><td>nay pah ray-ü-SEE ah</td><td>did not manage to</td><td>Negated passé composé — <span class="word-highlight">ne</span> contracts before vowel: <span class="word-highlight">n'ai</span></td></tr>
+        <tr><td>tout cacher</td><td>too kah-SHAY</td><td>to hide everything</td><td><span class="word-highlight">tout</span> = everything when used before an infinitive</td></tr>
+      </tbody>
+    </table>
+    <div class="insight">💡 <strong>même si</strong> (even if/though) is a high-frequency connector in TEF/TCF writing. It introduces a concession — acknowledging one thing while arguing another. <em>Même si c'est difficile, il faut essayer.</em> = Even if it's hard, one must try. <span class="formal-tag">formal</span></div>
+  </div>
+</div>
+
+<!-- PRACTICE -->
+<div class="practice-card">
+  <div class="practice-header"><span class="practice-badge">✦ Revision Practice</span></div>
+  <div class="practice-body">
+    <div class="practice-prompt">Translate into French</div>
+    <div class="practice-english">"She could no longer hide what was happening, even if she felt responsible for all of this."</div>
+    <div class="input-row">
+      <input class="practice-input" id="practiceInput" type="text" placeholder="Type your French translation…" />
+      <button class="submit-btn" id="submitBtn" onclick="checkAnswer()">Check</button>
+    </div>
+    <div class="feedback-block" id="feedbackBlock">
+      <div class="feedback-loading" id="loadingMsg">
+        <div class="spinner"></div> Checking your answer…
+      </div>
+      <div id="feedbackContent" style="display:none"></div>
+    </div>
+    <button class="download-btn" id="downloadBtn" onclick="downloadMistakes()">↓ Download mistakes log</button>
+  </div>
+</div>
+
+<script>
+// ── VOICES ──
+let selectedVoice = null, currentBtn = null;
+const PREVIEW = "Bonjour, je suis heureux de vous rencontrer aujourd'hui.";
+const TARGET = ['thomas','amelie','amélie'];
+
+function buildVoiceList() {
+  const all = window.speechSynthesis.getVoices();
+  const fr = all.filter(v => v.lang.startsWith('fr'));
+  const filtered = fr.filter(v => TARGET.some(t => v.name.toLowerCase().includes(t)));
+  const voices = filtered.length ? filtered : fr.slice(0,2);
+  const list = document.getElementById('voiceList');
+  if (!voices.length) { list.innerHTML = '<div class="no-voices-msg">No French voices found — try Chrome or Safari on Mac.</div>'; return; }
+  if (!selectedVoice) selectedVoice = voices.find(v => v.localService) || voices[0];
+  list.innerHTML = '';
+  voices.forEach(v => {
+    const sel = v === selectedVoice;
+    const langLabel = v.lang === 'fr-CA' ? 'French (Canada)' : 'French (France)';
+    const div = document.createElement('div');
+    div.className = 'voice-option' + (sel ? ' selected' : '');
+    div.innerHTML = `<div class="voice-radio"></div><div class="voice-info"><div class="voice-name">${v.name}</div><div class="voice-meta">${langLabel} · ${v.localService ? 'Local' : 'Network'}</div></div><button class="voice-preview-btn"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg></button>`;
+    const select = () => { selectedVoice = v; document.querySelectorAll('.voice-option').forEach(o => o.classList.remove('selected')); div.classList.add('selected'); };
+    div.querySelector('.voice-info').onclick = select;
+    div.querySelector('.voice-radio').onclick = select;
+    div.querySelector('.voice-preview-btn').onclick = e => { e.stopPropagation(); previewVoice(v, div.querySelector('.voice-preview-btn')); };
+    list.appendChild(div);
+  });
+}
+
+function previewVoice(v, btn) {
+  if (speechSynthesis.speaking) speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(PREVIEW);
+  u.lang = v.lang; u.voice = v; u.rate = 0.88;
+  btn.innerHTML = '<svg viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>';
+  btn.classList.add('playing');
+  u.onend = () => { btn.innerHTML = '<svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>'; btn.classList.remove('playing'); };
+  speechSynthesis.speak(u);
+}
+
+function speak(btn, text) {
+  if (speechSynthesis.speaking) {
+    speechSynthesis.cancel();
+    if (currentBtn) { currentBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>'; currentBtn.classList.remove('playing'); }
+    if (currentBtn === btn) { currentBtn = null; return; }
+  }
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = 'fr-FR'; if (selectedVoice) u.voice = selectedVoice;
+  u.rate = 0.88; u.pitch = 1.0;
+  btn.innerHTML = '<svg viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>';
+  btn.classList.add('playing'); currentBtn = btn;
+  u.onend = () => { btn.innerHTML = '<svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>'; btn.classList.remove('playing'); currentBtn = null; };
+  speechSynthesis.speak(u);
+}
+
+window.speechSynthesis.onvoiceschanged = buildVoiceList;
+buildVoiceList();
+
+// ── PERSISTENT MISTAKES ──
+const STORAGE_KEY = 'french_ch1_mistakes';
+function loadMistakes() { try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); } catch(e) { return []; } }
+function saveMistake(m) { const all = loadMistakes(); all.push(m); localStorage.setItem(STORAGE_KEY, JSON.stringify(all)); }
+
+// ── ANSWER CHECKING ──
+const MODEL_ANSWER = "Elle ne réussissait plus à cacher ce qui se passait, même si elle se sentait responsable de tout cela.";
+const ENGLISH = "She could no longer hide what was happening, even if she felt responsible for all of this.";
+
+const CHECKS = [
+  {
+    test: s => /\belle\b/.test(s),
+    wrote: s => s.match(/\b(il|ils|nous|on)\b/)?.[0] || '(wrong subject)',
+    should: 'Elle',
+    explain: '"She" = <em>elle</em>. The subject is female here — make sure to use <em>elle</em> not <em>il</em>.'
+  },
+  {
+    test: s => /ne?\s*reussissait\s*plus|n[e\']\s*reussissait\s*plus/.test(s),
+    wrote: s => s.match(/\b(ne\s*pouvait\s*plus|ne\s*pouvait\s*pas|reussissait\s*pas)\b/)?.[0] || '(wrong verb / missing ne…plus)',
+    should: "ne réussissait plus",
+    explain: '"Could no longer manage" = <em>ne réussissait plus</em> — imperfect of <em>réussir</em> with <em>ne…plus</em>. Note the imperfect tense here, not passé composé — it was an ongoing inability, not a single failed attempt.'
+  },
+  {
+    test: s => /reussissait\s*(plus\s*)?a\s*cacher|reussir\s*a\s*cacher/.test(s),
+    wrote: () => '(missing "à cacher")',
+    should: 'réussissait à cacher',
+    explain: '<em>Réussir</em> always connects to the next verb with <em>à</em>: <em>réussir <strong>à</strong> cacher</em>. The <em>à</em> is non-negotiable.'
+  },
+  {
+    test: s => /ce\s*qui\s*se\s*passait/.test(s),
+    wrote: s => s.match(/\b(ce\s*que|ce\s*qui\s*est\s*passe|ce\s*qui\s*s[' ]?est)\b/)?.[0] || '(wrong "what was happening")',
+    should: "ce qui se passait",
+    explain: '"What was happening" = <em>ce qui se passait</em>. Imperfect here because it was an ongoing background situation. <em>Ce qui s\'est passé</em> would mean "what happened" (a completed event).'
+  },
+  {
+    test: s => /meme\s*si/.test(s),
+    wrote: s => s.match(/\b(si|even|meme\s*que|quand\s*meme)\b/)?.[0] || '(missing "même si")',
+    should: 'même si',
+    explain: '"Even if / even though" = <em>même si</em>. This is a concession connector — very useful in formal writing and TEF/TCF essays.'
+  },
+  {
+    test: s => /elle\s*se\s*sentait/.test(s),
+    wrote: s => s.match(/\b(elle\s*etait|elle\s*est|elle\s*se\s*sens|she\s*felt)\b/)?.[0] || '(wrong "she felt")',
+    should: 'elle se sentait',
+    explain: '"She felt" (ongoing state) = <em>elle se sentait</em> — imperfect of reflexive <em>se sentir</em>. The <em>se</em> is essential for the emotional meaning.'
+  },
+  {
+    test: s => /responsable\s*de/.test(s),
+    wrote: s => s.match(/\b(responsable\s*pour|responsible)\b/)?.[0] || '(wrong preposition)',
+    should: 'responsable de',
+    explain: 'Always <em>responsable <strong>de</strong></em>, never <em>responsable pour</em>. French uses <em>de</em> where English says "for" with this adjective.'
+  },
+  {
+    test: s => /tout\s*cela|tout\s*[cç]a/.test(s),
+    wrote: s => s.match(/\b(tout\s*le|tout\s*ce|everything)\b/)?.[0] || '(missing "tout cela")',
+    should: 'tout cela',
+    explain: '"All of this" = <em>tout cela</em> (formal) or <em>tout ça</em> (casual). Both are correct here — great if you used either one.'
+  }
+];
+
+let sessionMistakes = [];
+
+function norm(s) {
+  return s.toLowerCase()
+    .replace(/[àâä]/g,'a').replace(/[éèêë]/g,'e').replace(/[îï]/g,'i')
+    .replace(/[ôö]/g,'o').replace(/[ùûü]/g,'u').replace(/ç/g,'c')
+    .replace(/['']/g,"'").replace(/\s+/g,' ').trim();
+}
+
+function checkAnswer() {
+  const input = document.getElementById('practiceInput');
+  const rawAnswer = input.value.trim();
+  if (!rawAnswer) return;
+
+  document.getElementById('submitBtn').disabled = true;
+  input.disabled = true;
+  const fb = document.getElementById('feedbackBlock');
+  fb.classList.add('visible');
+  document.getElementById('loadingMsg').style.display = 'flex';
+  document.getElementById('feedbackContent').style.display = 'none';
+
+  setTimeout(() => {
+    const n = norm(rawAnswer);
+    const mistakes = [];
+
+    CHECKS.forEach(c => {
+      if (!c.test(n)) {
+        const w = typeof c.wrote === 'function' ? (c.wrote(n) || '—') : c.wrote;
+        mistakes.push({ wrote: w, should: c.should, explain: c.explain });
+      }
+    });
+
+    mistakes.forEach(m => {
+      saveMistake({
+        scene: 'Chapter 1, Revision (Scenes 1–6)', english: ENGLISH,
+        wrote: m.wrote, should: m.should,
+        explain: m.explain.replace(/<[^>]+>/g,''),
+        date: new Date().toLocaleDateString()
+      });
+    });
+    if (mistakes.length > 0 || loadMistakes().length > 0) document.getElementById('downloadBtn').classList.add('visible');
+
+    const score = mistakes.length === 0 ? 'perfect' : mistakes.length <= 2 ? 'mostly' : 'needs-work';
+    const banners = {
+      perfect:      { cls:'perfect',    icon:'✓', text:'Excellent! All elements correct.' },
+      mostly:       { cls:'mostly',     icon:'◑', text:'Good effort — just a couple of things to refine.' },
+      'needs-work': { cls:'needs-work', icon:'✗', text:"Keep going — here's what to work on." }
+    };
+    const b = banners[score];
+
+    const safeAnswer = rawAnswer.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    const jsAnswer = rawAnswer.replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+
+    let html = `<div class="your-answer-block"><div class="your-answer-label">Your answer</div>
+      <div class="your-answer-text"><span>${safeAnswer}</span>
+        <button class="your-answer-play" onclick="speak(this,'${jsAnswer}')">
+          <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>
+        </button></div></div>`;
+
+    html += `<div class="score-banner ${b.cls}"><span class="score-icon">${b.icon}</span><span class="score-text">${b.text}</span></div>`;
+
+    html += `<div class="model-answer-block"><div class="model-label">Model answer</div>
+      <div class="model-sentence">${MODEL_ANSWER}
+        <button class="answer-play-btn" onclick="speak(this,'${MODEL_ANSWER}')">
+          <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>
+        </button></div></div>`;
+
+    if (mistakes.length > 0) {
+      html += `<div class="mistakes-section"><div class="mistakes-label">Things to review</div>`;
+      mistakes.forEach(m => {
+        html += `<div class="mistake-item">
+          <div class="mistake-wrote">You wrote: <span>${m.wrote}</span></div>
+          <div class="mistake-should">Should be: <span>${m.should}</span></div>
+          <div class="mistake-explanation">${m.explain}</div>
+        </div>`;
+      });
+      html += '</div>';
+    } else {
+      html += `<div class="overall-feedback">All eight elements correct across scenes 1–6 — that's strong. The fact that you're combining patterns from different scenes means they're starting to stick. Listen to the model and pay attention to the rhythm.</div>`;
+    }
+
+    document.getElementById('loadingMsg').style.display = 'none';
+    const fc = document.getElementById('feedbackContent');
+    fc.innerHTML = html; fc.style.display = 'block';
+  }, 500);
+}
+
+function downloadMistakes() {
+  const all = loadMistakes();
+  if (!all.length) return;
+  let md = '# 🔴 French Mistakes Log\n*Harry Potter et le Prince de Sang-Mêlé*\n\n---\n\n';
+  const byScene = {};
+  all.forEach(m => { (byScene[m.scene] = byScene[m.scene] || []).push(m); });
+  Object.entries(byScene).forEach(([scene, list]) => {
+    md += `## ${scene}\n\n`;
+    list.forEach((m, i) => {
+      md += `### Mistake ${i+1}\n**Sentence:** *${m.english}*\n\n`;
+      md += `| | French |\n|---|---|\n| ❌ You wrote | *${m.wrote}* |\n| ✅ Should be | *${m.should}* |\n\n`;
+      md += `**Why:** ${m.explain}\n\n---\n\n`;
+    });
+  });
+  md += `*Downloaded: ${new Date().toLocaleDateString()}*\n`;
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([md], {type:'text/markdown'}));
+  a.download = 'french_mistakes_ch1.md'; a.click();
+}
+
+document.getElementById('practiceInput').addEventListener('keydown', e => { if (e.key === 'Enter') checkAnswer(); });
+if (loadMistakes().length > 0) document.getElementById('downloadBtn').classList.add('visible');
+</script>
+</body>
+</html>

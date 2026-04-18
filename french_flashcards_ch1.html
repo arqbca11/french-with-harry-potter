@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>French Flashcards — Chapter 1</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink:#1a2a3a;--parchment:#f5f0e8;--cream:#faf7f2;
+    --gold:#c9a84c;--gold-light:#e8d5a3;--muted:#7a7060;
+    --red:#8b2635;--blue:#2c4a7c;--dark:#162d4a;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{background:#1e3a5f;font-family:'DM Sans',sans-serif;min-height:100vh;padding:24px 16px 48px;background-image:radial-gradient(ellipse at top left,#2a5080 0%,#1e3a5f 55%,#162d4a 100%);}
+  .page-title{text-align:center;color:var(--gold);font-family:'Playfair Display',serif;font-size:13px;letter-spacing:4px;text-transform:uppercase;margin-bottom:6px;opacity:.9;}
+  .page-subtitle{text-align:center;color:rgba(255,255,255,.4);font-size:11px;letter-spacing:2px;text-transform:uppercase;margin-bottom:22px;}
+  /* settings */
+  .sbar{max-width:680px;margin:0 auto 14px;background:var(--dark);border-radius:10px;border:1px solid rgba(201,168,76,.2);padding:11px 18px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;}
+  .sbar-left{display:flex;align-items:center;gap:8px;}
+  .dot{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.2);}
+  .dot.on{background:#6ecf9a;}
+  .sbar-text{font-size:12px;color:rgba(255,255,255,.5);}
+  .sbar-text strong{color:rgba(255,255,255,.8);font-weight:500;}
+  .sbar-link{font-size:11px;color:var(--gold);opacity:.7;cursor:pointer;background:none;border:none;font-family:inherit;text-decoration:underline;}
+  .sbar-link:hover{opacity:1;}
+  .kpanel{display:none;max-width:680px;margin:0 auto 14px;background:var(--dark);border-radius:12px;border:1px solid rgba(201,168,76,.3);padding:16px 20px;}
+  .kpanel.open{display:block;}
+  .klabel{font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:10px;}
+  .krow{display:flex;gap:8px;margin-bottom:6px;}
+  .kinput{flex:1;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.15);border-radius:8px;padding:9px 12px;font-size:13px;font-family:'DM Sans',sans-serif;color:white;outline:none;transition:border-color .2s;}
+  .kinput:focus{border-color:var(--gold);}
+  .kbtn{background:var(--gold);border:none;color:var(--ink);font-family:'DM Sans',sans-serif;font-size:12px;letter-spacing:1px;text-transform:uppercase;padding:0 16px;border-radius:8px;cursor:pointer;font-weight:500;}
+  .kbtn:hover{background:#e0bb5a;}
+  .kmsg{font-size:12px;min-height:16px;}
+  .kmsg.err{color:#e07f8a;} .kmsg.ok{color:#6ecf9a;}
+  /* controls */
+  .controls{max-width:680px;margin:0 auto 14px;display:flex;gap:10px;flex-wrap:wrap;align-items:center;}
+  .fsel{background:var(--dark);border:1px solid rgba(255,255,255,.15);color:rgba(255,255,255,.7);font-family:'DM Sans',sans-serif;font-size:13px;padding:8px 12px;border-radius:8px;outline:none;cursor:pointer;flex:1;min-width:160px;}
+  .cbtn{background:transparent;border:1.5px solid rgba(201,168,76,.4);color:var(--gold);font-family:'DM Sans',sans-serif;font-size:12px;letter-spacing:1px;text-transform:uppercase;padding:8px 16px;border-radius:8px;cursor:pointer;transition:all .2s;white-space:nowrap;}
+  .cbtn:hover{background:rgba(201,168,76,.1);}
+  .cbtn.active{background:rgba(201,168,76,.15);border-color:var(--gold);}
+  /* progress */
+  .pwrap{max-width:680px;margin:0 auto 16px;}
+  .prow{display:flex;justify-content:space-between;font-size:11px;color:rgba(255,255,255,.35);margin-bottom:6px;}
+  .pbar{height:3px;background:rgba(255,255,255,.08);border-radius:2px;overflow:hidden;}
+  .pfill{height:100%;background:var(--gold);border-radius:2px;transition:width .4s ease;}
+  /* card */
+  .cwrap{max-width:680px;margin:0 auto;perspective:1200px;}
+  .cinner{position:relative;width:100%;min-height:380px;transform-style:preserve-3d;transition:transform .5s cubic-bezier(.4,0,.2,1);cursor:pointer;}
+  .cinner.flipped{transform:rotateY(180deg);}
+  .cface{position:absolute;inset:0;min-height:380px;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:16px;box-shadow:0 24px 64px rgba(0,0,0,.35),0 0 0 1px rgba(201,168,76,.2);}
+  /* front */
+  .cfront{background:var(--cream);}
+  .cfront-body{padding:32px 36px 28px;display:flex;flex-direction:column;min-height:380px;}
+  .ctag{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);opacity:.7;margin-bottom:8px;}
+  .cfrench{font-family:'Playfair Display',serif;font-size:clamp(26px,5vw,42px);color:var(--ink);font-style:italic;line-height:1.2;flex:1;display:flex;align-items:center;justify-content:center;text-align:center;padding:16px 0;}
+  .chint{font-size:11px;color:var(--muted);letter-spacing:1px;text-align:center;opacity:.5;margin-top:auto;}
+  /* back */
+  .cback{background:var(--dark);transform:rotateY(180deg);}
+  .cback-body{padding:26px 30px 24px;display:flex;flex-direction:column;gap:14px;min-height:380px;}
+  .back-en{font-family:'Playfair Display',serif;font-size:26px;color:white;font-style:italic;line-height:1.3;}
+  .back-note{font-size:13px;color:rgba(255,255,255,.4);line-height:1.55;border-left:2px solid rgba(201,168,76,.25);padding-left:10px;}
+  .ebox{background:rgba(255,255,255,.05);border:1px solid rgba(201,168,76,.15);border-radius:10px;padding:14px 16px;flex:1;display:flex;flex-direction:column;gap:8px;}
+  .elabel{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.3);margin-bottom:2px;}
+  .efr-row{display:flex;align-items:flex-start;gap:10px;}
+  .efr-text{font-family:'Playfair Display',serif;font-size:17px;font-style:italic;color:var(--gold);line-height:1.4;flex:1;}
+  .pbtn{flex-shrink:0;width:34px;height:34px;border-radius:50%;border:1.5px solid rgba(201,168,76,.5);background:transparent;color:var(--gold);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;margin-top:1px;}
+  .pbtn:hover{background:rgba(201,168,76,.15);}
+  .pbtn.playing{background:var(--gold);color:var(--ink);border-color:var(--gold);}
+  .pbtn svg{width:12px;height:12px;}
+  .een-text{font-size:13px;color:rgba(255,255,255,.45);line-height:1.5;}
+  /* nav */
+  .navrow{max-width:680px;margin:14px auto 0;display:flex;align-items:center;justify-content:space-between;gap:12px;}
+  .nbtn{background:var(--dark);border:1px solid rgba(255,255,255,.12);color:rgba(255,255,255,.6);font-family:'DM Sans',sans-serif;font-size:13px;padding:10px 22px;border-radius:8px;cursor:pointer;transition:all .2s;}
+  .nbtn:hover:not(:disabled){border-color:var(--gold);color:var(--gold);}
+  .nbtn:disabled{opacity:.25;cursor:default;}
+  .nnum{font-size:13px;color:rgba(255,255,255,.3);}
+  /* known row */
+  .krow2{max-width:680px;margin:10px auto 0;display:none;gap:10px;}
+  .krow2.show{display:flex;}
+  .kbtn2{flex:1;padding:11px;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:13px;cursor:pointer;transition:all .2s;font-weight:500;}
+  .kbtn2.miss{background:rgba(139,38,53,.18);border:1px solid rgba(139,38,53,.4);color:#e07f8a;}
+  .kbtn2.miss:hover{background:rgba(139,38,53,.3);}
+  .kbtn2.know{background:rgba(45,106,79,.18);border:1px solid rgba(45,106,79,.4);color:#6ecf9a;}
+  .kbtn2.know:hover{background:rgba(45,106,79,.3);}
+  /* summary */
+  .sumwrap{display:none;max-width:680px;margin:0 auto;}
+  .sumwrap.show{display:block;animation:fadeIn .4s ease;}
+  .sumcard{background:var(--dark);border-radius:16px;border:1px solid rgba(201,168,76,.25);padding:36px;text-align:center;}
+  .sumtitle{font-family:'Playfair Display',serif;font-size:26px;color:var(--gold);margin-bottom:6px;}
+  .sumsub{font-size:13px;color:rgba(255,255,255,.4);margin-bottom:26px;}
+  .sumstats{display:flex;gap:14px;justify-content:center;margin-bottom:26px;flex-wrap:wrap;}
+  .statbox{background:rgba(255,255,255,.04);border-radius:10px;padding:14px 22px;}
+  .statn{font-family:'Playfair Display',serif;font-size:30px;color:white;}
+  .statn.g{color:#6ecf9a;} .statn.r{color:#e07f8a;}
+  .statl{font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.3);margin-top:2px;}
+  .sbtn{background:var(--gold);border:none;color:var(--ink);font-family:'DM Sans',sans-serif;font-size:12px;letter-spacing:1.5px;text-transform:uppercase;padding:11px 24px;border-radius:8px;cursor:pointer;font-weight:500;margin:4px;}
+  .sbtn:hover{background:#e0bb5a;}
+  .sbtn.sec{background:transparent;border:1.5px solid rgba(201,168,76,.4);color:var(--gold);}
+  .sbtn.sec:hover{background:rgba(201,168,76,.1);}
+  .kshortcuts{max-width:680px;margin:16px auto 0;text-align:center;font-size:11px;color:rgba(255,255,255,.2);letter-spacing:.5px;}
+  @keyframes spin{to{transform:rotate(360deg);}}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+</style>
+</head>
+<body>
+<div class="page-title">Harry Potter et le Prince de Sang-Mêlé</div>
+<div class="page-subtitle">Chapter 1 · Vocabulary Flashcards</div>
+
+<div class="sbar">
+  <div class="sbar-left"><div class="dot" id="dot"></div><span class="sbar-text" id="stText">ElevenLabs — not connected</span></div>
+  <button class="sbar-link" onclick="toggleKey()">Configure</button>
+</div>
+<div class="kpanel" id="kpanel">
+  <div class="klabel">ElevenLabs API Key</div>
+  <div class="krow"><input class="kinput" id="kinput" type="password" placeholder="Paste your API key…"/><button class="kbtn" onclick="saveKey()">Connect</button></div>
+  <div class="kmsg" id="kmsg"></div>
+</div>
+
+<div class="controls">
+  <select class="fsel" id="fsel" onchange="applyFilter()">
+    <option value="all">All scenes — Chapter 1</option>
+    <option value="s1">Scenes 1–3</option>
+    <option value="s2">Scenes 4–6</option>
+    <option value="s3">Scenes 7–9</option>
+  </select>
+  <button class="cbtn" id="shuffleBtn" onclick="toggleShuffle()">🔀 Shuffle</button>
+  <button class="cbtn" onclick="restart()">↺ Restart</button>
+</div>
+
+<div class="pwrap">
+  <div class="prow"><span id="ptext">Card 1 of 80</span><span id="ktext">0 known</span></div>
+  <div class="pbar"><div class="pfill" id="pfill" style="width:0%"></div></div>
+</div>
+
+<div class="cwrap" id="cwrap">
+  <div class="cinner" id="cinner" onclick="flip()">
+    <div class="cface cfront">
+      <div class="cfront-body">
+        <div class="ctag" id="ctag">Scene 1–2</div>
+        <div class="cfrench" id="cfrench">le bureau</div>
+        <div class="chint">tap to reveal →</div>
+      </div>
+    </div>
+    <div class="cface cback">
+      <div class="cback-body">
+        <div class="back-en" id="backEn">the office / desk</div>
+        <div class="back-note" id="backNote">Context tells you which</div>
+        <div class="ebox">
+          <div class="elabel">Example sentence</div>
+          <div class="efr-row">
+            <div class="efr-text" id="efrText">Il était seul dans son bureau.</div>
+            <button class="pbtn" id="playBtn" onclick="event.stopPropagation();playAudio()">
+              <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>
+            </button>
+          </div>
+          <div class="een-text" id="eenText">He was alone in his office.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="navrow">
+  <button class="nbtn" id="prevBtn" onclick="nav(-1)" disabled>← Prev</button>
+  <span class="nnum" id="nnum">1 / 80</span>
+  <button class="nbtn" id="nextBtn" onclick="nav(1)">Next →</button>
+</div>
+<div class="krow2" id="krow2">
+  <button class="kbtn2 miss" onclick="mark(false)">✗ Still learning</button>
+  <button class="kbtn2 know" onclick="mark(true)">✓ Got it</button>
+</div>
+
+<div class="sumwrap" id="sumwrap">
+  <div class="sumcard">
+    <div class="sumtitle">Round complete!</div>
+    <div class="sumsub">Here's how you did this session</div>
+    <div class="sumstats">
+      <div class="statbox"><div class="statn g" id="sK">0</div><div class="statl">Got it</div></div>
+      <div class="statbox"><div class="statn r" id="sM">0</div><div class="statl">Still learning</div></div>
+      <div class="statbox"><div class="statn" id="sT">0</div><div class="statl">Total</div></div>
+    </div>
+    <button class="sbtn" onclick="restart()">Restart all</button>
+    <button class="sbtn sec" onclick="restartMissed()">Only missed cards</button>
+  </div>
+</div>
+
+<div class="kshortcuts">Space = flip &nbsp;·&nbsp; ← → = navigate &nbsp;·&nbsp; 1 = still learning &nbsp;·&nbsp; 2 = got it &nbsp;·&nbsp; P = play audio</div>
+
+<script>
+const CARDS=[
+  {s:'Scene 1–2',fr:'il était',en:'he was',note:'Imperfect of être — sets the background mood, not a single moment',ex:'Il était seul dans son bureau ce soir-là.',exEn:'He was alone in his office that evening.'},
+  {s:'Scene 1–2',fr:'seul / seule',en:'alone',note:'Adjective — seul (masc), seule (fem)',ex:'Elle était seule dans la pièce.',exEn:'She was alone in the room.'},
+  {s:'Scene 1–2',fr:'le bureau',en:'the office / desk',note:'Context tells you which — same word for both meanings',ex:'Il travaillait tard dans son bureau.',exEn:'He was working late in his office.'},
+  {s:'Scene 1–2',fr:'ce soir-là',en:'that evening',note:'The -là makes it "that" instead of "this"',ex:'Ce soir-là, tout allait changer.',exEn:'That evening, everything was about to change.'},
+  {s:'Scene 1–2',fr:'quelqu\'un',en:'someone',note:'quelque chose = something; quelqu\'un = someone',ex:'Quelqu\'un allait arriver, il le savait.',exEn:'Someone was going to arrive — he knew it.'},
+  {s:'Scene 1–2',fr:'aller + infinitive',en:'going to do something',note:'Instant near future — je vais manger = I\'m going to eat',ex:'Elle va partir dans cinq minutes.',exEn:'She is going to leave in five minutes.'},
+  {s:'Scene 1–2',fr:'le tableau',en:'the painting / picture',note:'Also used in maths for table or chart',ex:'Le portrait dans le tableau se racla la gorge.',exEn:'The figure in the painting cleared his throat.'},
+  {s:'Scene 1–2',fr:'se lever',en:'to get up',note:'Reflexive — uses être in passé composé',ex:'Il se leva de sa chaise d\'un bond.',exEn:'He jumped up from his chair.'},
+  {s:'Scene 1–2',fr:'la gorge',en:'the throat',note:'Se racler la gorge = to clear one\'s throat',ex:'Elle se racla la gorge avant de commencer.',exEn:'She cleared her throat before beginning.'},
+  {s:'Scene 1–2',fr:'il faut que',en:'it is necessary / must',note:'Always triggers the subjunctive — learn as one chunk',ex:'Il faut que vous sachiez la vérité.',exEn:'You must know the truth.'},
+  {s:'Scene 1–2',fr:'ce soir',en:'this evening',note:'No -là = this evening; add -là = that evening',ex:'Il arrive ce soir sans prévenir.',exEn:'He is arriving this evening without warning.'},
+  {s:'Scene 1–2',fr:'sa chaise',en:'his / her chair',note:'Sa because chaise is feminine — noun gender controls possessive',ex:'Elle s\'assit sur sa chaise sans dire un mot.',exEn:'She sat down on her chair without saying a word.'},
+  {s:'Scene 1–2',fr:'d\'un bond',en:'in one leap',note:'Fixed idiom — literally "of one bound"',ex:'Il se leva d\'un bond quand on frappa à la porte.',exEn:'He leapt up when someone knocked at the door.'},
+  {s:'Scene 1–2',fr:'le portrait',en:'the portrait',note:'Masculine noun',ex:'Le portrait sur le mur le regardait en silence.',exEn:'The portrait on the wall watched him in silence.'},
+  {s:'Scene 3',fr:'les flammes',en:'the flames',note:'Feminine plural — les flammes vertes',ex:'Les flammes vertes jaillirent de la cheminée.',exEn:'Green flames burst from the fireplace.'},
+  {s:'Scene 3',fr:'vert / verte / verts / vertes',en:'green',note:'Four forms — adjective agrees in gender and number',ex:'Elle portait une robe verte et élégante.',exEn:'She was wearing an elegant green dress.'},
+  {s:'Scene 3',fr:'la cheminée',en:'the fireplace / chimney',note:'Same word for both — context decides',ex:'Il se réchauffa près de la cheminée.',exEn:'He warmed himself by the fireplace.'},
+  {s:'Scene 3',fr:'avoir l\'air + adj',en:'to look / seem',note:'Literally "to have the air of" — fixed expression',ex:'Tu as l\'air fatigué ce matin.',exEn:'You look tired this morning.'},
+  {s:'Scene 3',fr:'fatigué / fatiguée',en:'tired',note:'Add -e for feminine',ex:'Après la réunion, il avait l\'air vraiment fatigué.',exEn:'After the meeting, he really looked tired.'},
+  {s:'Scene 3',fr:'vieux / vieille',en:'old',note:'Irregular feminine — vieux (masc), vieille (fem)',ex:'Ce vieux bâtiment cachait bien des secrets.',exEn:'This old building was hiding many secrets.'},
+  {s:'Scene 3',fr:'je suis désolé(e)',en:'I\'m sorry',note:'Standard apology — désolé (masc), désolée (fem)',ex:'Je suis désolé de vous déranger si tard.',exEn:'I\'m sorry to disturb you so late.'},
+  {s:'Scene 3',fr:'déranger',en:'to disturb / bother',note:'Désolé de vous déranger = sorry to bother you',ex:'Elle ne voulait pas déranger ses collègues.',exEn:'She didn\'t want to bother her colleagues.'},
+  {s:'Scene 3',fr:'dit-il / dit-elle',en:'he said / she said',note:'Dialogue inversion — purely a written convention',ex:'Je reviendrai demain, dit-il calmement.',exEn:'"I will return tomorrow," he said calmly.'},
+  {s:'Scene 3',fr:'d\'une voix grave',en:'in a grave / deep voice',note:'Pattern: d\'un/une + noun + adjective',ex:'Il parla d\'une voix grave et lente.',exEn:'He spoke in a slow, deep voice.'},
+  {s:'Scene 4',fr:'une grande inspiration',en:'a deep breath',note:'Literally "a big breath-in" — grande goes before the noun here',ex:'Il prit une grande inspiration avant de répondre.',exEn:'He took a deep breath before answering.'},
+  {s:'Scene 4',fr:'avant de + infinitive',en:'before doing something',note:'Same subject in both clauses',ex:'Réfléchis bien avant de prendre une décision.',exEn:'Think carefully before making a decision.'},
+  {s:'Scene 4',fr:'il y a eu',en:'there was / there have been',note:'Passé composé of il y a',ex:'Il y a eu beaucoup d\'incidents cette semaine.',exEn:'There have been many incidents this week.'},
+  {s:'Scene 4',fr:'les gens',en:'people',note:'Always plural, always masculine',ex:'Les gens avaient peur de sortir le soir.',exEn:'People were afraid to go out in the evening.'},
+  {s:'Scene 4',fr:'avoir peur (de)',en:'to be afraid (of)',note:'Literally "to have fear" — avoir not être',ex:'Elle avait peur de ce qui se passait dehors.',exEn:'She was afraid of what was happening outside.'},
+  {s:'Scene 4',fr:'avoir faim',en:'to be hungry',note:'Literally "to have hunger"',ex:'Après six heures de travail, il avait très faim.',exEn:'After six hours of work, he was very hungry.'},
+  {s:'Scene 4',fr:'avoir froid',en:'to be cold',note:'Literally "to have cold"',ex:'Sans manteau, elle avait froid dans la rue.',exEn:'Without a coat, she was cold in the street.'},
+  {s:'Scene 4',fr:'avoir raison',en:'to be right',note:'Literally "to have reason"',ex:'Tu avais raison — il était bien de retour.',exEn:'You were right — he really was back.'},
+  {s:'Scene 4',fr:'ne … plus',en:'no longer / not anymore',note:'Negation sandwich — ne before verb, plus after',ex:'Nous ne pouvons plus ignorer ce qui se passe.',exEn:'We can no longer ignore what is happening.'},
+  {s:'Scene 4',fr:'pouvoir',en:'can / to be able to',note:'je peux, tu peux, il peut, nous pouvons',ex:'Il ne pouvait plus cacher la vérité.',exEn:'He could no longer hide the truth.'},
+  {s:'Scene 4',fr:'ce qui',en:'what / that which (subject)',note:'ce qui = subject; ce que = object',ex:'Il ne comprenait pas ce qui se passait.',exEn:'He didn\'t understand what was happening.'},
+  {s:'Scene 4',fr:'se passer',en:'to happen',note:'Reflexive — ce qui se passe = what is happening',ex:'Personne ne savait ce qui s\'était passé.',exEn:'Nobody knew what had happened.'},
+  {s:'Scene 5',fr:'être de retour',en:'to be back',note:'Fixed expression — je suis de retour = I\'m back',ex:'Il est de retour, et on ne peut plus le nier.',exEn:'He is back, and we can no longer deny it.'},
+  {s:'Scene 5',fr:'désormais',en:'now / from now on',note:'More formal than maintenant — implies a change of state',ex:'Désormais, tout allait être différent.',exEn:'From now on, everything was going to be different.'},
+  {s:'Scene 5',fr:'bouche bée',en:'open-mouthed / jaw dropped',note:'Frozen expression — never changes form',ex:'Il la regarda, bouche bée, incapable de parler.',exEn:'He stared at her, open-mouthed, unable to speak.'},
+  {s:'Scene 5',fr:'nier',en:'to deny',note:'le nier = to deny it — object pronoun before infinitive',ex:'Il est impossible de le nier désormais.',exEn:'It is impossible to deny it any longer.'},
+  {s:'Scene 5',fr:'incapable de + infinitive',en:'unable to',note:'Same pattern as désolé de, content de',ex:'Elle était incapable de comprendre sa décision.',exEn:'She was unable to understand his decision.'},
+  {s:'Scene 5',fr:'c\'est + adjective',en:'it\'s + adjective',note:'C\'est vrai, c\'est impossible, c\'est difficile',ex:'C\'est vrai, mais c\'est difficile à accepter.',exEn:'It\'s true, but it\'s difficult to accept.'},
+  {s:'Scene 5',fr:'essayer de',en:'to try to',note:'essayer de + infinitive',ex:'Ils avaient essayé de garder ça secret.',exEn:'They had tried to keep it secret.'},
+  {s:'Scene 5',fr:'cela',en:'this / that / it (formal)',note:'Formal form of ça — use in TEF/TCF writing',ex:'Je me sens responsable de tout cela.',exEn:'I feel responsible for all of this.'},
+  {s:'Scene 5',fr:'même si',en:'even if / even though',note:'Concession connector — very useful in TEF/TCF writing',ex:'Même si c\'est difficile, il faut continuer.',exEn:'Even if it is difficult, one must continue.'},
+  {s:'Scene 6',fr:'réussir à',en:'to manage to / succeed in',note:'réussir à + infinitive — the à is non-negotiable',ex:'Ils n\'ont pas réussi à cacher ce qui s\'était passé.',exEn:'They did not manage to hide what had happened.'},
+  {s:'Scene 6',fr:'cacher',en:'to hide',note:'Regular -er verb; dissimuler = more formal equivalent',ex:'Elle essayait de cacher ses émotions.',exEn:'She was trying to hide her emotions.'},
+  {s:'Scene 6',fr:'dissimuler',en:'to conceal',note:'More formal than cacher — TEF/TCF writing register',ex:'Il ne pouvait plus dissimuler la vérité.',exEn:'He could no longer conceal the truth.'},
+  {s:'Scene 6',fr:'s\'effondrer',en:'to collapse',note:'Reflexive — uses être as auxiliary in passé composé',ex:'Des ponts se sont effondrés pendant la nuit.',exEn:'Bridges collapsed during the night.'},
+  {s:'Scene 6',fr:'disparaître',en:'to disappear',note:'Past participle: disparu; uses avoir as auxiliary',ex:'Des gens ont disparu sans laisser de traces.',exEn:'People disappeared without leaving a trace.'},
+  {s:'Scene 6',fr:'se sentir',en:'to feel (an emotion)',note:'Reflexive — je me sens; do not confuse with je sens (I smell)',ex:'Je me sens responsable de ce qui s\'est passé.',exEn:'I feel responsible for what happened.'},
+  {s:'Scene 6',fr:'responsable de',en:'responsible for',note:'Always de, never pour — same family as capable de',ex:'Il se sentait responsable de tout cela.',exEn:'He felt responsible for all of this.'},
+  {s:'Scene 6',fr:'sans + infinitive',en:'without doing something',note:'sans frapper = without knocking; sans parler = without speaking',ex:'Elle entra sans frapper et sans dire un mot.',exEn:'She entered without knocking and without saying a word.'},
+  {s:'Scene 7',fr:'s\'appeler',en:'to be called',note:'Reflexive — je m\'appelle… = my name is…',ex:'Mon successeur s\'appelle Scrimgeour.',exEn:'My successor is called Scrimgeour.'},
+  {s:'Scene 7',fr:'sévère',en:'stern / strict',note:'Same form masculine and feminine',ex:'C\'est un homme sévère, mais efficace.',exEn:'He is a stern man, but effective.'},
+  {s:'Scene 7',fr:'efficace',en:'effective / efficient',note:'Formal adjective — same form masc/fem',ex:'Nous cherchons une solution plus efficace.',exEn:'We are looking for a more effective solution.'},
+  {s:'Scene 7',fr:'brusquement',en:'abruptly',note:'brusque + -ment — adverbs built from the feminine adjective',ex:'La porte s\'ouvrit brusquement.',exEn:'The door opened abruptly.'},
+  {s:'Scene 7',fr:'imposant / imposante',en:'imposing',note:'Agrees with noun — à l\'allure imposante',ex:'Un homme à l\'allure imposante entra sans frapper.',exEn:'A man with an imposing bearing entered without knocking.'},
+  {s:'Scene 7',fr:'frapper',en:'to knock / to strike',note:'Sans frapper = without knocking',ex:'Il entra sans frapper, comme s\'il possédait les lieux.',exEn:'He entered without knocking, as if he owned the place.'},
+  {s:'Scene 7',fr:'on',en:'they / one / people (impersonal)',note:'Also replaces nous in spoken French — on y va = we\'re going',ex:'On m\'a demandé de partir immédiatement.',exEn:'They asked me to leave immediately.'},
+  {s:'Scene 7',fr:'demander de + infinitive',en:'to ask to do',note:'On lui a demandé d\'entrer = they asked him to enter',ex:'On lui a demandé d\'attendre dans le couloir.',exEn:'They asked him to wait in the corridor.'},
+  {s:'Scene 7',fr:'lui (indirect object)',en:'to him / to her',note:'Goes before the verb — works for both genders',ex:'Je lui ai dit la vérité sans hésiter.',exEn:'I told him the truth without hesitating.'},
+  {s:'Scene 7',fr:'enfin',en:'finally / at last',note:'Also a spoken filler meaning "well…" or "I mean…"',ex:'Il se rendit compte enfin qu\'il n\'avait pas le choix.',exEn:'He finally realised he had no choice.'},
+  {s:'Scene 8',fr:'les yeux',en:'the eyes',note:'Irregular plural — singular is l\'œil',ex:'Il la regarda droit dans les yeux sans dire un mot.',exEn:'He looked her straight in the eyes without saying a word.'},
+  {s:'Scene 8',fr:'le choix',en:'the choice',note:'Masculine — avoir le choix = to have a choice',ex:'Il hocha la tête, bien qu\'il n\'eût pas vraiment le choix.',exEn:'He nodded, even though he didn\'t really have a choice.'},
+  {s:'Scene 8',fr:'le temps',en:'time / weather',note:'Context tells which — le temps passe / il fait beau temps',ex:'Nous avons besoin de temps pour réfléchir.',exEn:'We need time to think.'},
+  {s:'Scene 8',fr:'devoir',en:'must / to have to',note:'Essential modal — je dois, tu dois, il doit, nous devons',ex:'Vous devez comprendre la gravité de la situation.',exEn:'You must understand the seriousness of the situation.'},
+  {s:'Scene 8',fr:'comprendre',en:'to understand',note:'Irregular — same family as prendre',ex:'Il mit du temps à comprendre ce qu\'on lui demandait.',exEn:'It took him a while to understand what was being asked of him.'},
+  {s:'Scene 8',fr:'hocher la tête',en:'to nod',note:'Fixed expression',ex:'Elle hocha lentement la tête en signe d\'accord.',exEn:'She slowly nodded her head in agreement.'},
+  {s:'Scene 8',fr:'lentement',en:'slowly',note:'lent/lente + -ment',ex:'Il se retourna lentement pour lui faire face.',exEn:'He turned around slowly to face him.'},
+  {s:'Scene 8',fr:'vraiment',en:'really / truly',note:'vrai + -ment',ex:'Il ne comprenait vraiment pas ce qui se passait.',exEn:'He really didn\'t understand what was happening.'},
+  {s:'Scene 8',fr:'avoir besoin de',en:'to need',note:'avoir besoin de + noun or infinitive — de is non-negotiable',ex:'Nous avons besoin de votre coopération immédiatement.',exEn:'We need your cooperation immediately.'},
+  {s:'Scene 8',fr:'bien que + subjunctive',en:'even though / although',note:'Formal — triggers the subjunctive; great for TEF/TCF writing',ex:'Bien que ce soit difficile, il faut agir maintenant.',exEn:'Even though it is difficult, we must act now.'},
+  {s:'Scene 9',fr:'refuser de',en:'to refuse to',note:'refuser de + infinitive — de is non-negotiable',ex:'Elle refusait de coopérer sans explication.',exEn:'She refused to cooperate without an explanation.'},
+  {s:'Scene 9',fr:'les conséquences',en:'the consequences',note:'Feminine plural',ex:'Si vous refusez, les conséquences pourraient être graves.',exEn:'If you refuse, the consequences could be serious.'},
+  {s:'Scene 9',fr:'coopérer',en:'to cooperate',note:'Formal — TEF/TCF register',ex:'Il n\'avait pas d\'autre option que de coopérer.',exEn:'He had no other option but to cooperate.'},
+  {s:'Scene 9',fr:'se rendre compte (que)',en:'to realise',note:'Reflexive fixed expression — uses être in passé composé',ex:'Il se rendit compte enfin qu\'il n\'avait pas le choix.',exEn:'He finally realised he had no choice.'},
+  {s:'Scene 9',fr:'d\'autre',en:'any other',note:'After negation: une autre option → pas d\'autre option',ex:'Il n\'avait pas d\'autre solution possible.',exEn:'He had no other possible solution.'},
+  {s:'Scene 9',fr:'très bien',en:'very well / alright',note:'Concession phrase — used when reluctantly agreeing',ex:'Très bien, dit-il enfin. Faites ce que vous avez à faire.',exEn:'"Very well," he said at last. "Do what you have to do."'},
+  {s:'Scene 9',fr:'pourrait / pourraient',en:'could / might',note:'Conditional of pouvoir — recognised by -rait/-raient ending',ex:'Cela pourrait être dangereux pour tout le monde.',exEn:'That could be dangerous for everyone.'},
+  {s:'Scene 9',fr:'si + présent → conditionnel',en:'if… then… (conditional)',note:'Never use future after si — very common English-speaker mistake',ex:'Si tu pars maintenant, il serait trop tard.',exEn:'If you left now, it would be too late.'},
+  {s:'Scene 9',fr:'avoir à + infinitive',en:'to have to / need to',note:'Softer than devoir — ce que vous avez à faire',ex:'J\'ai encore beaucoup de choses à faire aujourd\'hui.',exEn:'I still have a lot of things to do today.'},
+  {s:'Scene 9',fr:'Faites ! / Venez !',en:'Do it! / Come! (imperative)',note:'Drop the subject, use the verb directly — Partez! Attendez!',ex:'Faites ce que vous avez à faire et partez.',exEn:'Do what you have to do and leave.'},
+];
+
+const K_API='elevenlabs_api_key',K_VOICE='elevenlabs_voice_id';
+let deck=[],cur=0,flipped=false,knownMap={},shuffleOn=false,activeAudio=null;
+const PLAY='<svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>';
+const PAUSE='<svg viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>';
+const SPINSVG='<svg viewBox="0 0 24 24" fill="currentColor" style="animation:spin .8s linear infinite"><path d="M12 2a10 10 0 1 0 10 10" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>';
+const CARD_COLORS=['#faf7f2','#fdeee3','#e8efdd','#e0ebf3','#ece2f0','#faf3d8','#f6e3e8','#dff0e7','#fce4d6','#dde4f2','#ebe5d8','#e9dde9'];
+function cardColor(fr){let h=0;for(let i=0;i<fr.length;i++)h=((h<<5)-h+fr.charCodeAt(i))|0;return CARD_COLORS[Math.abs(h)%CARD_COLORS.length];}
+
+window.addEventListener('load',()=>{
+  const k=localStorage.getItem(K_API);
+  if(k){document.getElementById('dot').classList.add('on');document.getElementById('stText').innerHTML='ElevenLabs <strong>connected</strong>';document.getElementById('kinput').value=k;}
+  applyFilter();
+});
+
+function toggleKey(){document.getElementById('kpanel').classList.toggle('open');}
+
+async function saveKey(){
+  const key=document.getElementById('kinput').value.trim().replace(/[\u200B-\u200D\uFEFF]/g,'');
+  const msg=document.getElementById('kmsg');
+  if(!key)return;
+  msg.className='kmsg';msg.textContent='Connecting…';
+  try{
+    const r=await fetch('https://api.elevenlabs.io/v1/voices',{headers:{'xi-api-key':key}});
+    if(!r.ok)throw new Error(r.status);
+    const d=await r.json();
+    localStorage.setItem(K_API,key);
+    if(!localStorage.getItem(K_VOICE)&&d.voices?.length)localStorage.setItem(K_VOICE,d.voices[0].voice_id);
+    document.getElementById('dot').classList.add('on');
+    document.getElementById('stText').innerHTML='ElevenLabs <strong>connected</strong>';
+    msg.className='kmsg ok';msg.textContent=`✓ Connected — ${d.voices?.length||0} voices`;
+    document.getElementById('kpanel').classList.remove('open');
+  }catch(e){msg.className='kmsg err';msg.textContent=`Failed (${e.message}) — check your key`;}
+}
+
+function applyFilter(){
+  const f=document.getElementById('fsel').value;
+  const m={s1:['Scene 1–2','Scene 3'],s2:['Scene 4','Scene 5','Scene 6'],s3:['Scene 7','Scene 8','Scene 9']};
+  deck=f==='all'?[...CARDS]:CARDS.filter(c=>m[f].includes(c.s));
+  knownMap={};cur=0;flipped=false;
+  if(shuffleOn)doShuffle();
+  renderCard();updateProgress();
+  document.getElementById('sumwrap').classList.remove('show');
+  document.getElementById('cwrap').style.display='block';
+  document.querySelector('.navrow').style.display='flex';
+  document.getElementById('krow2').classList.remove('show');
+}
+
+function doShuffle(){for(let i=deck.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[deck[i],deck[j]]=[deck[j],deck[i]];}}
+function toggleShuffle(){shuffleOn=!shuffleOn;document.getElementById('shuffleBtn').classList.toggle('active',shuffleOn);applyFilter();}
+function restart(){document.getElementById('sumwrap').classList.remove('show');document.getElementById('cwrap').style.display='block';document.querySelector('.navrow').style.display='flex';applyFilter();}
+function restartMissed(){const m=deck.filter((_,i)=>!knownMap[i]);if(!m.length){restart();return;}deck=m;knownMap={};cur=0;flipped=false;document.getElementById('sumwrap').classList.remove('show');document.getElementById('cwrap').style.display='block';document.querySelector('.navrow').style.display='flex';renderCard();updateProgress();}
+
+function renderCard(){
+  if(cur>=deck.length){showSummary();return;}
+  const c=deck[cur];
+  stopAudio();
+  const el=document.getElementById('cinner');
+  el.style.transition='none';el.classList.remove('flipped');flipped=false;
+  document.getElementById('krow2').classList.remove('show');
+  requestAnimationFrame(()=>{el.style.transition='';});
+  document.getElementById('ctag').textContent=c.s;
+  document.getElementById('cfrench').textContent=c.fr;
+  document.querySelector('.cfront').style.backgroundColor=cardColor(c.fr);
+  document.getElementById('backEn').textContent=c.en;
+  document.getElementById('backNote').textContent=c.note;
+  document.getElementById('efrText').textContent=c.ex;
+  document.getElementById('eenText').textContent=c.exEn;
+  document.getElementById('playBtn').innerHTML=PLAY;
+  document.getElementById('playBtn').classList.remove('playing');
+  document.getElementById('prevBtn').disabled=cur===0;
+  document.getElementById('nextBtn').disabled=cur===deck.length-1;
+  document.getElementById('nnum').textContent=`${cur+1} / ${deck.length}`;
+  updateProgress();
+}
+
+function flip(){if(flipped)return;flipped=true;document.getElementById('cinner').classList.add('flipped');document.getElementById('krow2').classList.add('show');}
+function nav(d){if(d===-1&&cur>0){cur--;renderCard();}else if(d===1&&cur<deck.length-1){cur++;renderCard();}}
+function mark(k){knownMap[cur]=k;updateProgress();if(cur<deck.length-1){cur++;renderCard();}else showSummary();}
+
+function updateProgress(){
+  const t=deck.length,seen=Object.keys(knownMap).length,k=Object.values(knownMap).filter(Boolean).length;
+  document.getElementById('ptext').textContent=`Card ${Math.min(cur+1,t)} of ${t}`;
+  document.getElementById('ktext').textContent=`${k} known`;
+  document.getElementById('pfill').style.width=(t?seen/t*100:0)+'%';
+}
+
+function showSummary(){
+  stopAudio();
+  document.getElementById('cwrap').style.display='none';
+  document.querySelector('.navrow').style.display='none';
+  document.getElementById('krow2').classList.remove('show');
+  const t=deck.length,k=Object.values(knownMap).filter(Boolean).length;
+  document.getElementById('sK').textContent=k;
+  document.getElementById('sM').textContent=t-k;
+  document.getElementById('sT').textContent=t;
+  document.getElementById('sumwrap').classList.add('show');
+}
+
+function stopAudio(){
+  if(activeAudio){activeAudio.pause();activeAudio=null;}
+  if(speechSynthesis.speaking)speechSynthesis.cancel();
+  const b=document.getElementById('playBtn');
+  if(b){b.innerHTML=PLAY;b.classList.remove('playing');}
+}
+
+async function playAudio(){
+  const btn=document.getElementById('playBtn');
+  const text=document.getElementById('efrText').textContent;
+  if(!text)return;
+  if(activeAudio||speechSynthesis.speaking){stopAudio();return;}
+  const apiKey=localStorage.getItem(K_API),voiceId=localStorage.getItem(K_VOICE);
+  if(apiKey&&voiceId){
+    btn.innerHTML=SPINSVG;
+    try{
+      const res=await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`,{method:'POST',headers:{'xi-api-key':apiKey,'Content-Type':'application/json'},body:JSON.stringify({text,model_id:'eleven_multilingual_v2',voice_settings:{stability:.5,similarity_boost:.75}})});
+      if(!res.ok)throw new Error(res.status);
+      const url=URL.createObjectURL(await res.blob());
+      const audio=new Audio(url);activeAudio=audio;
+      btn.innerHTML=PAUSE;btn.classList.add('playing');
+      audio.play();
+      audio.onended=()=>{btn.innerHTML=PLAY;btn.classList.remove('playing');activeAudio=null;URL.revokeObjectURL(url);};
+      return;
+    }catch(e){btn.innerHTML=PLAY;btn.classList.remove('playing');}
+  }
+  const voices=speechSynthesis.getVoices();
+  const fr=voices.find(v=>v.lang.startsWith('fr')&&v.localService)||voices.find(v=>v.lang.startsWith('fr'));
+  const u=new SpeechSynthesisUtterance(text);u.lang='fr-FR';if(fr)u.voice=fr;u.rate=.88;
+  btn.innerHTML=PAUSE;btn.classList.add('playing');
+  u.onend=()=>{btn.innerHTML=PLAY;btn.classList.remove('playing');};
+  speechSynthesis.speak(u);
+}
+
+document.addEventListener('keydown',e=>{
+  if(e.key===' '){e.preventDefault();if(!flipped)flip();}
+  else if(e.key==='ArrowRight')nav(1);
+  else if(e.key==='ArrowLeft')nav(-1);
+  else if(e.key==='1'&&flipped)mark(false);
+  else if(e.key==='2'&&flipped)mark(true);
+  else if((e.key==='p'||e.key==='P')&&flipped)playAudio();
+});
+</script>
+</body>
+</html>

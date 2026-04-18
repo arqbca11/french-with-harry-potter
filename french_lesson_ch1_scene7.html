@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>French Lesson — Chapter 1, Scene 7</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1a2a3a; --parchment: #f5f0e8; --cream: #faf7f2;
+    --gold: #c9a84c; --gold-light: #e8d5a3; --muted: #7a7060;
+    --red: #8b2635; --blue: #2c4a7c; --dark: #162d4a;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #1e3a5f; font-family: 'DM Sans', sans-serif;
+    min-height: 100vh; padding: 32px 16px;
+    background-image: radial-gradient(ellipse at top left, #2a5080 0%, #1e3a5f 55%, #162d4a 100%);
+  }
+  .page-title { text-align: center; color: var(--gold); font-family: 'Playfair Display', serif; font-size: 13px; letter-spacing: 4px; text-transform: uppercase; margin-bottom: 8px; opacity: 0.9; }
+  .page-subtitle { text-align: center; color: rgba(255,255,255,0.45); font-size: 12px; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 8px; }
+  .scene-desc { text-align: center; color: rgba(255,255,255,0.55); font-size: 13px; font-style: italic; font-family: 'Playfair Display', serif; margin-bottom: 24px; max-width: 500px; margin-left: auto; margin-right: auto; line-height: 1.6; }
+
+  /* ── ELEVENLABS SETTINGS PANEL ── */
+  .settings-panel {
+    max-width: 700px; margin: 0 auto 28px;
+    background: var(--dark); border-radius: 12px;
+    border: 1px solid rgba(201,168,76,0.3); overflow: hidden;
+  }
+  .settings-header {
+    padding: 14px 24px; display: flex; align-items: center;
+    justify-content: space-between; cursor: pointer;
+    border-bottom: 1px solid transparent; transition: border-color 0.2s;
+  }
+  .settings-header.open { border-bottom-color: rgba(201,168,76,0.2); }
+  .settings-title {
+    font-size: 10px; letter-spacing: 2.5px; text-transform: uppercase;
+    color: var(--gold); opacity: 0.85; display: flex; align-items: center; gap: 8px;
+  }
+  .settings-status {
+    font-size: 11px; color: rgba(255,255,255,0.35); letter-spacing: 0.5px;
+  }
+  .settings-status.connected { color: #6ecf9a; }
+  .settings-chevron { color: rgba(255,255,255,0.3); transition: transform 0.2s; font-size: 12px; }
+  .settings-header.open .settings-chevron { transform: rotate(180deg); }
+
+  .settings-body { display: none; padding: 20px 24px 24px; }
+  .settings-body.open { display: block; animation: fadeIn 0.2s ease; }
+
+  .settings-row { margin-bottom: 16px; }
+  .settings-label { font-size: 11px; letter-spacing: 1px; text-transform: uppercase; color: rgba(255,255,255,0.4); margin-bottom: 7px; }
+  .settings-input-row { display: flex; gap: 8px; }
+  .settings-input {
+    flex: 1; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 8px; padding: 10px 14px; font-size: 14px;
+    font-family: 'DM Sans', sans-serif; color: white; outline: none;
+    transition: border-color 0.2s; letter-spacing: 0.3px;
+  }
+  .settings-input::placeholder { color: rgba(255,255,255,0.2); }
+  .settings-input:focus { border-color: var(--gold); }
+  .settings-btn {
+    background: var(--gold); border: none; color: var(--ink);
+    font-family: 'DM Sans', sans-serif; font-size: 12px; letter-spacing: 1.5px;
+    text-transform: uppercase; padding: 0 18px; border-radius: 8px;
+    cursor: pointer; transition: all 0.2s; font-weight: 500; white-space: nowrap;
+  }
+  .settings-btn:hover { background: #e0bb5a; }
+  .settings-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+  .settings-btn.secondary {
+    background: transparent; border: 1.5px solid rgba(255,255,255,0.2);
+    color: rgba(255,255,255,0.5);
+  }
+  .settings-btn.secondary:hover { border-color: var(--gold); color: var(--gold); background: transparent; }
+
+  .voice-grid { display: flex; flex-direction: column; gap: 8px; max-height: 220px; overflow-y: auto; padding-right: 4px; }
+  .voice-grid::-webkit-scrollbar { width: 4px; }
+  .voice-grid::-webkit-scrollbar-track { background: rgba(255,255,255,0.05); border-radius: 2px; }
+  .voice-grid::-webkit-scrollbar-thumb { background: rgba(201,168,76,0.3); border-radius: 2px; }
+
+  .voice-row {
+    display: flex; align-items: center; gap: 10px; padding: 9px 12px;
+    border-radius: 8px; border: 1px solid rgba(255,255,255,0.07);
+    background: rgba(255,255,255,0.03); cursor: pointer; transition: all 0.15s;
+  }
+  .voice-row:hover { border-color: rgba(201,168,76,0.35); background: rgba(201,168,76,0.05); }
+  .voice-row.selected { border-color: var(--gold); background: rgba(201,168,76,0.1); }
+  .voice-dot { width: 14px; height: 14px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.2); flex-shrink: 0; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+  .voice-row.selected .voice-dot { border-color: var(--gold); background: var(--gold); }
+  .voice-row.selected .voice-dot::after { content: ''; width: 5px; height: 5px; border-radius: 50%; background: var(--ink); }
+  .voice-row-info { flex: 1; }
+  .voice-row-name { font-size: 13px; color: rgba(255,255,255,0.8); font-weight: 500; }
+  .voice-row.selected .voice-row-name { color: var(--gold); }
+  .voice-row-desc { font-size: 11px; color: rgba(255,255,255,0.3); margin-top: 1px; }
+  .voice-preview-btn { width: 28px; height: 28px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.15); background: transparent; color: rgba(255,255,255,0.4); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+  .voice-preview-btn:hover { border-color: var(--gold); color: var(--gold); }
+  .voice-preview-btn.playing { border-color: var(--gold); color: var(--gold); background: rgba(201,168,76,0.1); }
+  .voice-preview-btn svg { width: 10px; height: 10px; }
+
+  .settings-msg { font-size: 12px; margin-top: 8px; min-height: 18px; }
+  .settings-msg.ok { color: #6ecf9a; }
+  .settings-msg.err { color: #e07f8a; }
+  .settings-msg.info { color: rgba(255,255,255,0.4); font-style: italic; }
+
+  /* ── LESSON CARDS ── */
+  .lesson-card { background: var(--cream); border-radius: 12px; max-width: 700px; margin: 0 auto 28px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.3), 0 0 0 1px rgba(201,168,76,0.2); }
+  .card-header { background: var(--parchment); border-bottom: 1px solid var(--gold-light); padding: 20px 28px 16px; display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; }
+  .sentence-number { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); font-weight: 500; margin-bottom: 6px; }
+  .french-sentence { font-family: 'Playfair Display', serif; font-size: 22px; color: var(--ink); line-height: 1.3; font-style: italic; margin-bottom: 4px; }
+  .english-sentence { font-size: 14px; color: var(--muted); font-weight: 300; }
+  .play-btn { flex-shrink: 0; width: 44px; height: 44px; border-radius: 50%; border: 2px solid var(--gold); background: transparent; color: var(--gold); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; margin-top: 4px; }
+  .play-btn:hover { background: var(--gold); color: white; transform: scale(1.05); }
+  .play-btn.playing { background: var(--gold); color: white; }
+  .play-btn.loading { opacity: 0.6; cursor: wait; }
+  .play-btn svg { width: 16px; height: 16px; }
+  .pronunciation-bar { background: var(--dark); padding: 10px 28px; display: flex; align-items: center; gap: 10px; }
+  .pronun-label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); opacity: 0.7; flex-shrink: 0; }
+  .pronun-text { font-size: 13px; color: rgba(255,255,255,0.75); font-style: italic; }
+  .card-body { padding: 20px 28px 24px; }
+  table { width: 100%; border-collapse: collapse; margin-bottom: 18px; }
+  thead tr { border-bottom: 1px solid var(--gold-light); }
+  thead th { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); padding: 0 0 8px; text-align: left; font-weight: 500; }
+  tbody tr { border-bottom: 1px solid rgba(0,0,0,0.06); }
+  tbody tr:last-child { border-bottom: none; }
+  td { padding: 9px 0; font-size: 14px; vertical-align: top; }
+  td:first-child { font-family: 'Playfair Display', serif; font-style: italic; color: var(--blue); width: 26%; font-size: 15px; }
+  td:nth-child(2) { color: var(--muted); font-size: 12px; font-style: italic; width: 22%; padding-right: 12px; }
+  td:nth-child(3) { font-weight: 500; color: var(--ink); width: 18%; }
+  td:nth-child(4) { color: #555; font-size: 13px; font-weight: 300; }
+  .insight { background: linear-gradient(135deg, #fffbf0, #fff8e8); border-left: 3px solid var(--gold); border-radius: 0 8px 8px 0; padding: 12px 16px; font-size: 13.5px; color: var(--ink); line-height: 1.6; }
+  .insight strong { color: var(--red); }
+  .word-highlight { background: rgba(44,74,124,0.1); border-radius: 3px; padding: 1px 4px; font-style: italic; color: var(--blue); font-family: 'Playfair Display', serif; }
+  .formal-tag { display: inline-block; font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; background: rgba(139,38,53,0.12); border: 1px solid rgba(139,38,53,0.3); color: #c07070; border-radius: 4px; padding: 1px 6px; margin-left: 6px; vertical-align: middle; }
+
+  /* ── PRACTICE ── */
+  .practice-card { background: var(--dark); border-radius: 12px; max-width: 700px; margin: 0 auto 40px; overflow: hidden; border: 1px solid rgba(201,168,76,0.35); box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
+  .practice-header { padding: 18px 28px 14px; border-bottom: 1px solid rgba(201,168,76,0.2); }
+  .practice-badge { font-size: 10px; letter-spacing: 2.5px; text-transform: uppercase; color: var(--gold); font-weight: 500; background: rgba(201,168,76,0.12); border: 1px solid rgba(201,168,76,0.3); border-radius: 20px; padding: 3px 10px; }
+  .practice-body { padding: 22px 28px 26px; }
+  .practice-prompt { font-size: 13px; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 10px; }
+  .practice-english { font-family: 'Playfair Display', serif; font-size: 22px; color: white; font-style: italic; margin-bottom: 22px; line-height: 1.35; }
+  .input-row { display: flex; gap: 10px; align-items: stretch; }
+  .practice-input { flex: 1; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.15); border-radius: 8px; padding: 13px 16px; font-size: 16px; font-family: 'Playfair Display', serif; font-style: italic; color: white; outline: none; transition: border-color 0.2s; }
+  .practice-input::placeholder { color: rgba(255,255,255,0.25); font-style: italic; }
+  .practice-input:focus { border-color: var(--gold); }
+  .practice-input:disabled { opacity: 0.6; }
+  .submit-btn { background: var(--gold); border: none; color: var(--ink); font-family: 'DM Sans', sans-serif; font-size: 13px; letter-spacing: 1.5px; text-transform: uppercase; padding: 0 22px; border-radius: 8px; cursor: pointer; transition: all 0.2s; font-weight: 500; white-space: nowrap; }
+  .submit-btn:hover { background: #e0bb5a; }
+  .submit-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  .feedback-block { display: none; margin-top: 20px; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 20px; }
+  .feedback-block.visible { display: block; animation: fadeIn 0.3s ease; }
+  .feedback-loading { display: flex; align-items: center; gap: 10px; color: rgba(255,255,255,0.5); font-size: 14px; font-style: italic; }
+  .spinner { width: 18px; height: 18px; border-radius: 50%; border: 2px solid rgba(201,168,76,0.3); border-top-color: var(--gold); animation: spin 0.8s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .your-answer-block { margin-bottom: 16px; }
+  .your-answer-label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.35); margin-bottom: 6px; }
+  .your-answer-text { font-family: 'Playfair Display', serif; font-size: 18px; font-style: italic; color: rgba(255,255,255,0.75); line-height: 1.4; padding: 10px 14px; background: rgba(255,255,255,0.04); border-radius: 8px; border-left: 3px solid rgba(255,255,255,0.15); display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .your-answer-play { flex-shrink: 0; width: 30px; height: 30px; border-radius: 50%; border: 1.5px solid rgba(255,255,255,0.2); background: transparent; color: rgba(255,255,255,0.4); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+  .your-answer-play:hover, .your-answer-play.playing { border-color: var(--gold); color: var(--gold); }
+  .your-answer-play svg { width: 10px; height: 10px; }
+
+  .score-banner { display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-radius: 8px; margin-bottom: 16px; }
+  .score-banner.perfect { background: rgba(45,106,79,0.25); border: 1px solid rgba(45,106,79,0.5); }
+  .score-banner.mostly { background: rgba(201,168,76,0.15); border: 1px solid rgba(201,168,76,0.4); }
+  .score-banner.needs-work { background: rgba(139,38,53,0.2); border: 1px solid rgba(139,38,53,0.4); }
+  .score-icon { font-size: 20px; }
+  .score-text { font-size: 14px; font-weight: 500; }
+  .score-banner.perfect .score-text { color: #6ecf9a; }
+  .score-banner.mostly .score-text { color: var(--gold); }
+  .score-banner.needs-work .score-text { color: #e07f8a; }
+
+  .model-answer-block { margin-bottom: 16px; }
+  .model-label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.35); margin-bottom: 6px; }
+  .model-sentence { font-family: 'Playfair Display', serif; font-size: 20px; font-style: italic; color: var(--gold); display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .answer-play-btn { flex-shrink: 0; width: 34px; height: 34px; border-radius: 50%; border: 1.5px solid var(--gold); background: transparent; color: var(--gold); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+  .answer-play-btn:hover, .answer-play-btn.playing { background: var(--gold); color: var(--ink); }
+  .answer-play-btn svg { width: 12px; height: 12px; }
+
+  .mistakes-section { margin-top: 16px; }
+  .mistakes-label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.35); margin-bottom: 10px; }
+  .mistake-item { background: rgba(139,38,53,0.12); border: 1px solid rgba(139,38,53,0.3); border-radius: 8px; padding: 12px 14px; margin-bottom: 8px; }
+  .mistake-wrote { font-size: 13px; color: rgba(255,255,255,0.5); margin-bottom: 4px; }
+  .mistake-wrote span { font-family: 'Playfair Display', serif; font-style: italic; color: #e07f8a; text-decoration: line-through; }
+  .mistake-should { font-size: 13px; color: rgba(255,255,255,0.5); margin-bottom: 6px; }
+  .mistake-should span { font-family: 'Playfair Display', serif; font-style: italic; color: #6ecf9a; }
+  .mistake-explanation { font-size: 13px; color: rgba(255,255,255,0.7); line-height: 1.6; }
+  .overall-feedback { margin-top: 14px; padding: 12px 14px; background: rgba(255,255,255,0.04); border-radius: 8px; font-size: 13.5px; color: rgba(255,255,255,0.65); line-height: 1.6; font-style: italic; }
+
+  .download-btn { margin-top: 16px; background: transparent; border: 1px solid rgba(255,255,255,0.15); color: rgba(255,255,255,0.5); font-family: 'DM Sans', sans-serif; font-size: 12px; letter-spacing: 1px; text-transform: uppercase; padding: 8px 16px; border-radius: 6px; cursor: pointer; transition: all 0.2s; display: none; }
+  .download-btn:hover { border-color: var(--gold); color: var(--gold); }
+  .download-btn.visible { display: inline-block; }
+
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+</style>
+</head>
+<body>
+
+<div class="page-title">Harry Potter et le Prince de Sang-Mêlé</div>
+<div class="page-subtitle">Chapter 1 · Scene 7</div>
+<div class="scene-desc">Fudge's time is up. He confesses he has been replaced — and a new, harder man is about to enter the Prime Minister's office for the first time.</div>
+
+<!-- ── ELEVENLABS SETTINGS ── -->
+<div class="settings-panel" id="settingsPanel">
+  <div class="settings-header" id="settingsHeader" onclick="toggleSettings()">
+    <span class="settings-title">🎙 Voice settings — ElevenLabs</span>
+    <div style="display:flex;align-items:center;gap:12px">
+      <span class="settings-status" id="settingsStatus">Not connected</span>
+      <span class="settings-chevron">▾</span>
+    </div>
+  </div>
+  <div class="settings-body" id="settingsBody">
+    <div class="settings-row">
+      <div class="settings-label">ElevenLabs API Key</div>
+      <div class="settings-input-row">
+        <input class="settings-input" id="apiKeyInput" type="password" placeholder="sk_..." autocomplete="off" />
+        <button class="settings-btn" id="loadVoicesBtn" onclick="loadVoices()">Load voices</button>
+        <button class="settings-btn secondary" onclick="clearKey()">Clear</button>
+      </div>
+      <div class="settings-msg info" id="settingsMsg">Enter your API key and click "Load voices" to see available voices.</div>
+      <div id="corsHint" style="display:none;margin-top:12px;padding:12px 14px;background:rgba(201,168,76,0.08);border:1px solid rgba(201,168,76,0.25);border-radius:8px;font-size:12px;color:rgba(255,255,255,0.6);line-height:1.7">
+        <strong style="color:var(--gold)">Quick fix:</strong> Your browser is blocking API calls from local files.<br>
+        Open Terminal and run: <code style="background:rgba(0,0,0,0.3);padding:2px 6px;border-radius:3px;color:#a0c0ff">python3 -m http.server 8080</code><br>
+        Then open: <code style="background:rgba(0,0,0,0.3);padding:2px 6px;border-radius:3px;color:#a0c0ff">http://localhost:8080/french_lesson_ch1_scene7.html</code>
+      </div>
+    </div>
+    <div class="settings-row" id="voicePickerRow" style="display:none">
+      <div class="settings-label">Select a voice</div>
+      <div class="voice-grid" id="voiceGrid"></div>
+    </div>
+  </div>
+</div>
+
+<!-- SENTENCE 19 -->
+<div class="lesson-card">
+  <div class="card-header">
+    <div>
+      <div class="sentence-number">Sentence 19</div>
+      <div class="french-sentence">Je ne suis plus ministre, murmura Fudge. On m'a demandé de partir.</div>
+      <div class="english-sentence">"I am no longer minister, murmured Fudge. They asked me to leave."</div>
+    </div>
+    <button class="play-btn" id="btn19" onclick="speak('btn19', 'Je ne suis plus ministre. On m\'a demandé de partir.')">
+      <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>
+    </button>
+  </div>
+  <div class="pronunciation-bar"><span class="pronun-label">Say it</span><span class="pronun-text">zhuh nuh swee plü mee-NEESTR — on mah duh-mahn-DAY duh par-TEER</span></div>
+  <div class="card-body">
+    <table>
+      <thead><tr><th>French</th><th>Sounds like</th><th>Means</th><th>Note</th></tr></thead>
+      <tbody>
+        <tr><td>ne suis plus</td><td>nuh swee plü</td><td>am no longer</td><td><span class="word-highlight">ne…plus</span> with <span class="word-highlight">être</span> — revisiting Scene 4</td></tr>
+        <tr><td>on</td><td>on</td><td>they / one / people</td><td>Impersonal pronoun — avoids saying who exactly did something</td></tr>
+        <tr><td>on m'a demandé</td><td>on mah duh-mahn-DAY</td><td>they asked me</td><td>Passé composé — <span class="word-highlight">on</span> + <span class="word-highlight">a</span> (avoir) + past participle</td></tr>
+        <tr><td>de partir</td><td>duh par-TEER</td><td>to leave</td><td><span class="word-highlight">demander de + infinitive</span> = to ask to do something</td></tr>
+      </tbody>
+    </table>
+    <div class="insight">💡 <strong>On</strong> is one of the most versatile pronouns in French. It means "they/someone/people" when you don't want to specify. <span class="word-highlight">On m'a dit que</span> = I was told that. <span class="word-highlight">On parle français ici</span> = French is spoken here. In spoken French, <span class="word-highlight">on</span> also replaces <span class="word-highlight">nous</span> constantly: <span class="word-highlight">on y va</span> = we're going.</div>
+  </div>
+</div>
+
+<!-- SENTENCE 20 -->
+<div class="lesson-card">
+  <div class="card-header">
+    <div>
+      <div class="sentence-number">Sentence 20</div>
+      <div class="french-sentence">Mon successeur s'appelle Rufus Scrimgeour. C'est un homme sévère, mais efficace.</div>
+      <div class="english-sentence">"My successor is called Rufus Scrimgeour. He is a stern man, but effective."</div>
+    </div>
+    <button class="play-btn" id="btn20" onclick="speak('btn20', 'Mon successeur s\'appelle Rufus Scrimgeour. C\'est un homme sévère, mais efficace.')">
+      <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>
+    </button>
+  </div>
+  <div class="pronunciation-bar"><span class="pronun-label">Say it</span><span class="pronun-text">mon sük-seh-SUR — sah-PELL roofüs skrim-ZHUR — seh tun om seh-VEHR — meh eh-fee-KASS</span></div>
+  <div class="card-body">
+    <table>
+      <thead><tr><th>French</th><th>Sounds like</th><th>Means</th><th>Note</th></tr></thead>
+      <tbody>
+        <tr><td>mon successeur</td><td>mon sük-seh-SUR</td><td>my successor</td><td>Masculine noun — <span class="word-highlight">mon</span> even if the person is female (noun gender wins)</td></tr>
+        <tr><td>s'appelle</td><td>sah-PELL</td><td>is called</td><td>Reflexive <span class="word-highlight">s'appeler</span> — how you introduce names in French</td></tr>
+        <tr><td>sévère</td><td>seh-VEHR</td><td>stern / strict</td><td>Same form for masculine and feminine</td></tr>
+        <tr><td>mais efficace</td><td>meh eh-fee-KASS</td><td>but effective</td><td><span class="word-highlight">efficace</span> = efficient/effective — TEF/TCF-worthy adjective <span class="formal-tag">formal</span></td></tr>
+      </tbody>
+    </table>
+    <div class="insight">💡 <strong>s'appeler</strong> is the reflexive verb for names — essential in French. <span class="word-highlight">Je m'appelle…</span> = My name is… <span class="word-highlight">Il s'appelle…</span> = His name is… <span class="word-highlight">Comment vous appelez-vous ?</span> = What is your name? (formal). You'll use this in every introduction.</div>
+  </div>
+</div>
+
+<!-- SENTENCE 21 -->
+<div class="lesson-card">
+  <div class="card-header">
+    <div>
+      <div class="sentence-number">Sentence 21</div>
+      <div class="french-sentence">La porte s'ouvrit brusquement et un homme à l'allure imposante entra sans frapper.</div>
+      <div class="english-sentence">"The door opened abruptly and a man with an imposing bearing entered without knocking."</div>
+    </div>
+    <button class="play-btn" id="btn21" onclick="speak('btn21', 'La porte s\'ouvrit brusquement et un homme à l\'allure imposante entra sans frapper.')">
+      <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>
+    </button>
+  </div>
+  <div class="pronunciation-bar"><span class="pronun-label">Say it</span><span class="pronun-text">lah port soo-VREE — brüsk-MAHN — ay un om ah lah-LUR an-poh-ZAHNT — ahn-TRAH sahn frah-PAY</span></div>
+  <div class="card-body">
+    <table>
+      <thead><tr><th>French</th><th>Sounds like</th><th>Means</th><th>Note</th></tr></thead>
+      <tbody>
+        <tr><td>s'ouvrit</td><td>soo-VREE</td><td>opened</td><td>Passé simple of reflexive <span class="word-highlight">s'ouvrir</span> — the door "opened itself"</td></tr>
+        <tr><td>brusquement</td><td>brüsk-MAHN</td><td>abruptly / suddenly</td><td>Most French adverbs end in <span class="word-highlight">-ment</span> — like English <em>-ly</em></td></tr>
+        <tr><td>à l'allure imposante</td><td>ah lah-LUR an-poh-ZAHNT</td><td>with an imposing bearing</td><td><span class="word-highlight">à + l'allure + adjective</span> = a person who has the appearance of</td></tr>
+        <tr><td>sans frapper</td><td>sahn frah-PAY</td><td>without knocking</td><td><span class="word-highlight">sans + infinitive</span> — same pattern as Scene 6</td></tr>
+      </tbody>
+    </table>
+    <div class="insight">💡 <strong>French adverbs in -ment</strong> are formed from the feminine adjective + <em>-ment</em>. <span class="word-highlight">brusque</span> → <span class="word-highlight">brusquement</span>. <span class="word-highlight">lent/lente</span> → <span class="word-highlight">lentement</span> (slowly). <span class="word-highlight">doux/douce</span> → <span class="word-highlight">doucement</span> (gently). It's the most systematic pattern in French — once you know it, you can form hundreds of adverbs instantly.</div>
+  </div>
+</div>
+
+<!-- PRACTICE -->
+<div class="practice-card">
+  <div class="practice-header"><span class="practice-badge">✦ Practice</span></div>
+  <div class="practice-body">
+    <div class="practice-prompt">Translate into French</div>
+    <div class="practice-english">"My successor is called Thomas. They asked him to enter without knocking."</div>
+    <div class="input-row">
+      <input class="practice-input" id="practiceInput" type="text" placeholder="Type your French translation…" />
+      <button class="submit-btn" id="submitBtn" onclick="checkAnswer()">Check</button>
+    </div>
+    <div class="feedback-block" id="feedbackBlock">
+      <div class="feedback-loading" id="loadingMsg"><div class="spinner"></div> Checking…</div>
+      <div id="feedbackContent" style="display:none"></div>
+    </div>
+    <button class="download-btn" id="downloadBtn" onclick="downloadMistakes()">↓ Download mistakes log</button>
+  </div>
+</div>
+
+<script>
+// ── STORAGE KEYS ──
+const KEY_APIKEY   = 'elevenlabs_api_key';
+const KEY_VOICE    = 'elevenlabs_voice_id';
+const KEY_MISTAKES = 'french_ch1_mistakes';
+
+// ── SETTINGS PANEL ──
+let settingsOpen = false;
+
+function toggleSettings() {
+  settingsOpen = !settingsOpen;
+  document.getElementById('settingsHeader').classList.toggle('open', settingsOpen);
+  document.getElementById('settingsBody').classList.toggle('open', settingsOpen);
+}
+
+function setMsg(text, type = 'info') {
+  const el = document.getElementById('settingsMsg');
+  el.textContent = text; el.className = 'settings-msg ' + type;
+}
+
+function clearKey() {
+  localStorage.removeItem(KEY_APIKEY);
+  localStorage.removeItem(KEY_VOICE);
+  document.getElementById('apiKeyInput').value = '';
+  document.getElementById('voicePickerRow').style.display = 'none';
+  document.getElementById('settingsStatus').textContent = 'Not connected';
+  document.getElementById('settingsStatus').className = 'settings-status';
+  setMsg('API key cleared.', 'info');
+}
+
+async function loadVoices() {
+  const raw = document.getElementById('apiKeyInput').value;
+  const key = raw.trim().replace(/[\u200B-\u200D\uFEFF]/g, ''); // strip spaces + invisible chars
+  if (!key) { setMsg('Please enter your API key first.', 'err'); return; }
+
+  const btn = document.getElementById('loadVoicesBtn');
+  btn.disabled = true; btn.textContent = 'Loading…';
+  setMsg('Fetching your voices…', 'info');
+
+  try {
+    const res = await fetch('https://api.elevenlabs.io/v1/voices', {
+      headers: {
+        'xi-api-key': key,
+        'Content-Type': 'application/json'
+      }
+    });
+
+    if (res.status === 401) {
+      setMsg('API key rejected (401) — double-check you copied the full key with no extra spaces.', 'err');
+      return;
+    }
+    if (res.status === 403) {
+      setMsg('Access denied (403) — your key may not have voice access. Check your ElevenLabs plan.', 'err');
+      return;
+    }
+    if (!res.ok) {
+      setMsg(`Request failed (HTTP ${res.status}) — try again or check your key.`, 'err');
+      return;
+    }
+
+    const data = await res.json();
+    const voices = data.voices || [];
+
+    localStorage.setItem(KEY_APIKEY, key);
+    document.getElementById('settingsStatus').textContent = '✓ Connected';
+    document.getElementById('settingsStatus').className = 'settings-status connected';
+    setMsg(`${voices.length} voices loaded. Select one below.`, 'ok');
+
+    renderVoices(voices);
+    document.getElementById('voicePickerRow').style.display = 'block';
+  } catch(e) {
+    // CORS or network error — likely opening as file://
+    const isFileProcotol = window.location.protocol === 'file:';
+    if (isFileProcotol) {
+      setMsg('CORS error: open this file via a browser server, not directly from your filesystem. See tip below.', 'err');
+      document.getElementById('corsHint').style.display = 'block';
+    } else {
+      setMsg(`Network error: ${e.message}. Check your internet connection and try again.`, 'err');
+    }
+  } finally {
+    btn.disabled = false; btn.textContent = 'Load voices';
+  }
+}
+
+function renderVoices(voices) {
+  const grid = document.getElementById('voiceGrid');
+  const savedId = localStorage.getItem(KEY_VOICE);
+  grid.innerHTML = '';
+
+  voices.forEach(v => {
+    const sel = v.voice_id === savedId;
+    const div = document.createElement('div');
+    div.className = 'voice-row' + (sel ? ' selected' : '');
+    const desc = v.labels ? Object.values(v.labels).slice(0,2).join(' · ') : (v.description || '');
+    div.innerHTML = `
+      <div class="voice-dot"></div>
+      <div class="voice-row-info">
+        <div class="voice-row-name">${v.name}</div>
+        ${desc ? `<div class="voice-row-desc">${desc.slice(0,60)}</div>` : ''}
+      </div>
+      <button class="voice-preview-btn" title="Preview">
+        <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>
+      </button>`;
+    div.querySelector('.voice-row-info').onclick = () => {
+      localStorage.setItem(KEY_VOICE, v.voice_id);
+      document.querySelectorAll('.voice-row').forEach(r => r.classList.remove('selected'));
+      div.classList.add('selected');
+      setMsg(`Voice set to "${v.name}".`, 'ok');
+    };
+    div.querySelector('.voice-dot').onclick = () => div.querySelector('.voice-row-info').click();
+    div.querySelector('.voice-preview-btn').onclick = async e => {
+      e.stopPropagation();
+      const btn = div.querySelector('.voice-preview-btn');
+      await speakElevenLabs(btn, "Bonjour, je m'appelle Claude. Je suis ravi de vous rencontrer.", v.voice_id);
+    };
+    grid.appendChild(div);
+  });
+}
+
+// Auto-load on page open if key already saved
+window.addEventListener('load', () => {
+  const saved = localStorage.getItem(KEY_APIKEY);
+  if (saved) {
+    document.getElementById('apiKeyInput').value = saved;
+    document.getElementById('settingsStatus').textContent = '✓ Connected';
+    document.getElementById('settingsStatus').className = 'settings-status connected';
+    loadVoices();
+    settingsOpen = false;
+  } else {
+    // Auto-open settings if no key yet
+    toggleSettings();
+  }
+  if (loadMistakes().length > 0) document.getElementById('downloadBtn').classList.add('visible');
+});
+
+// ── TTS ──
+let currentAudio = null;
+let currentBtn = null;
+
+const PLAY_ICON = '<svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>';
+const PAUSE_ICON = '<svg viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>';
+const SPIN_ICON = '<svg viewBox="0 0 24 24" fill="currentColor" style="animation:spin 0.8s linear infinite"><path d="M12 2a10 10 0 1 0 10 10" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>';
+
+function stopCurrent() {
+  if (currentAudio) { currentAudio.pause(); currentAudio = null; }
+  if (currentBtn) {
+    const el = document.getElementById(currentBtn);
+    if (el) { el.innerHTML = PLAY_ICON; el.classList.remove('playing','loading'); }
+    currentBtn = null;
+  }
+}
+
+async function speakElevenLabs(btn, text, overrideVoiceId) {
+  const apiKey = localStorage.getItem(KEY_APIKEY);
+  const voiceId = overrideVoiceId || localStorage.getItem(KEY_VOICE) || 'EXAVITQu4vr4xnSDxMaL';
+  if (!apiKey) return false;
+
+  btn.innerHTML = SPIN_ICON; btn.classList.add('loading');
+
+  try {
+    const res = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`, {
+      method: 'POST',
+      headers: { 'xi-api-key': apiKey, 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        text,
+        model_id: 'eleven_multilingual_v2',
+        voice_settings: { stability: 0.5, similarity_boost: 0.75 }
+      })
+    });
+    if (!res.ok) throw new Error('TTS failed');
+    const blob = await res.blob();
+    const url = URL.createObjectURL(blob);
+    const audio = new Audio(url);
+    currentAudio = audio;
+    btn.innerHTML = PAUSE_ICON; btn.classList.remove('loading'); btn.classList.add('playing');
+    audio.play();
+    audio.onended = () => { btn.innerHTML = PLAY_ICON; btn.classList.remove('playing'); URL.revokeObjectURL(url); };
+    return true;
+  } catch(e) {
+    btn.innerHTML = PLAY_ICON; btn.classList.remove('loading','playing');
+    return false;
+  }
+}
+
+function speakFallback(btn, text) {
+  if (speechSynthesis.speaking) speechSynthesis.cancel();
+  const voices = speechSynthesis.getVoices();
+  const fr = voices.find(v => v.lang.startsWith('fr') && v.localService) || voices.find(v => v.lang.startsWith('fr'));
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = 'fr-FR'; if (fr) u.voice = fr; u.rate = 0.88;
+  btn.innerHTML = PAUSE_ICON; btn.classList.add('playing');
+  u.onend = () => { btn.innerHTML = PLAY_ICON; btn.classList.remove('playing'); currentBtn = null; };
+  speechSynthesis.speak(u);
+}
+
+async function speak(btnId, text) {
+  const btn = document.getElementById(btnId);
+  // If already playing this one, stop
+  if (currentBtn === btnId) { stopCurrent(); return; }
+  // Stop anything else playing
+  stopCurrent();
+  currentBtn = btnId;
+
+  const apiKey = localStorage.getItem(KEY_APIKEY);
+  if (apiKey) {
+    const ok = await speakElevenLabs(btn, text);
+    if (!ok) speakFallback(btn, text); // fallback if ElevenLabs fails
+  } else {
+    speakFallback(btn, text);
+  }
+}
+
+// ── PERSISTENT MISTAKES ──
+function loadMistakes() { try { return JSON.parse(localStorage.getItem(KEY_MISTAKES) || '[]'); } catch(e) { return []; } }
+function saveMistake(m) { const all = loadMistakes(); all.push(m); localStorage.setItem(KEY_MISTAKES, JSON.stringify(all)); }
+
+// ── ANSWER CHECKING ──
+const MODEL_ANSWER = "Mon successeur s'appelle Thomas. On lui a demandé d'entrer sans frapper.";
+const ENGLISH = "My successor is called Thomas. They asked him to enter without knocking.";
+
+const CHECKS = [
+  {
+    test: s => /mon\s*successeur/.test(s),
+    wrote: () => '(missing "mon successeur")',
+    should: 'mon successeur',
+    explain: '"My successor" = <em>mon successeur</em>. Note that <em>successeur</em> is masculine in French, so you use <em>mon</em> even if the successor is female — the noun\'s gender controls the possessive.'
+  },
+  {
+    test: s => /s[' ]?appelle/.test(s),
+    wrote: s => s.match(/\b(est\s*appele|est\s*nomme|se\s*nome|se\s*nomme|is\s*called)\b/)?.[0] || '(wrong "is called")',
+    should: "s'appelle",
+    explain: '"Is called" = <em>s\'appelle</em> — reflexive verb <em>s\'appeler</em>. This is the standard way to give names in French. <em>Je m\'appelle</em>, <em>il s\'appelle</em>, <em>elle s\'appelle</em>.'
+  },
+  {
+    test: s => /\bon\b/.test(s),
+    wrote: s => s.match(/\b(ils|elles|they|on\s*leur)\b/)?.[0] || '(missing "on")',
+    should: 'on',
+    explain: '"They" (unspecified) = <em>on</em>. Using <em>ils</em> would imply a specific known group. <em>On</em> is the right choice when "they" means "someone/people in general".'
+  },
+  {
+    test: s => /on\s*lui\s*a|on\s*l[' ]?a/.test(s),
+    wrote: s => s.match(/\b(on\s*a\s*demande\s*lui|on\s*a\s*demande\s*le|they\s*asked)\b/)?.[0] || '(wrong object pronoun)',
+    should: 'on lui a demandé',
+    explain: '"They asked him" = <em>on lui a demandé</em>. The indirect object pronoun <em>lui</em> (to him/her) goes before the auxiliary verb <em>a</em>. <em>Lui</em> is used for both masculine and feminine indirect objects.'
+  },
+  {
+    test: s => /d[' ]?entrer|de\s*entrer/.test(s),
+    wrote: s => s.match(/\b(pour\s*entrer|entrer\s*de|a\s*entrer)\b/)?.[0] || '(missing "d\'entrer")',
+    should: "d'entrer",
+    explain: '<em>Demander de + infinitive</em> = to ask to do something. The <em>de</em> contracts before a vowel: <em>demander <strong>d\'</strong>entrer</em>. Don\'t use <em>à</em> here — <em>demander à</em> means something different (to ask someone).'
+  },
+  {
+    test: s => /sans\s*frapper/.test(s),
+    wrote: s => s.match(/\b(without|sans\s*knock|sans\s*toquer)\b/)?.[0] || '(missing "sans frapper")',
+    should: 'sans frapper',
+    explain: '"Without knocking" = <em>sans frapper</em>. The pattern <em>sans + infinitive</em> was in Scene 6 — great chance to see it reappear in a new context.'
+  }
+];
+
+function norm(s) {
+  return s.toLowerCase()
+    .replace(/[àâä]/g,'a').replace(/[éèêë]/g,'e').replace(/[îï]/g,'i')
+    .replace(/[ôö]/g,'o').replace(/[ùûü]/g,'u').replace(/ç/g,'c')
+    .replace(/['']/g,"'").replace(/\s+/g,' ').trim();
+}
+
+function checkAnswer() {
+  const input = document.getElementById('practiceInput');
+  const rawAnswer = input.value.trim();
+  if (!rawAnswer) return;
+
+  document.getElementById('submitBtn').disabled = true;
+  input.disabled = true;
+  const fb = document.getElementById('feedbackBlock');
+  fb.classList.add('visible');
+  document.getElementById('loadingMsg').style.display = 'flex';
+  document.getElementById('feedbackContent').style.display = 'none';
+
+  setTimeout(() => {
+    const n = norm(rawAnswer);
+    const mistakes = [];
+    CHECKS.forEach(c => {
+      if (!c.test(n)) {
+        const w = typeof c.wrote === 'function' ? (c.wrote(n) || '—') : c.wrote;
+        mistakes.push({ wrote: w, should: c.should, explain: c.explain });
+      }
+    });
+
+    mistakes.forEach(m => saveMistake({
+      scene: 'Chapter 1, Scene 7', english: ENGLISH,
+      wrote: m.wrote, should: m.should,
+      explain: m.explain.replace(/<[^>]+>/g,''),
+      date: new Date().toLocaleDateString()
+    }));
+    if (mistakes.length > 0 || loadMistakes().length > 0) document.getElementById('downloadBtn').classList.add('visible');
+
+    const score = mistakes.length === 0 ? 'perfect' : mistakes.length <= 2 ? 'mostly' : 'needs-work';
+    const banners = {
+      perfect:     { cls:'perfect',    icon:'✓', text:'Excellent! All elements correct.' },
+      mostly:      { cls:'mostly',     icon:'◑', text:'Good effort — just a couple of things to refine.' },
+      'needs-work':{ cls:'needs-work', icon:'✗', text:"Keep going — here's what to work on." }
+    };
+    const b = banners[score];
+    const safeAnswer = rawAnswer.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+
+    let html = `<div class="your-answer-block"><div class="your-answer-label">Your answer</div>
+      <div class="your-answer-text"><span>${safeAnswer}</span>
+        <button class="your-answer-play" onclick="speak('answerPlayBtn','${rawAnswer.replace(/'/g,"\\'")}'); this.id='answerPlayBtn'">
+          <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>
+        </button></div></div>`;
+
+    html += `<div class="score-banner ${b.cls}"><span class="score-icon">${b.icon}</span><span class="score-text">${b.text}</span></div>`;
+    html += `<div class="model-answer-block"><div class="model-label">Model answer</div>
+      <div class="model-sentence">${MODEL_ANSWER}
+        <button class="answer-play-btn" id="modelPlayBtn" onclick="speak('modelPlayBtn','${MODEL_ANSWER}')">
+          <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>
+        </button></div></div>`;
+
+    if (mistakes.length > 0) {
+      html += `<div class="mistakes-section"><div class="mistakes-label">Things to review</div>`;
+      mistakes.forEach(m => {
+        html += `<div class="mistake-item">
+          <div class="mistake-wrote">You wrote: <span>${m.wrote}</span></div>
+          <div class="mistake-should">Should be: <span>${m.should}</span></div>
+          <div class="mistake-explanation">${m.explain}</div>
+        </div>`;
+      });
+      html += '</div>';
+    } else {
+      html += `<div class="overall-feedback">All six elements correct — well done. Listen to the model answer and pay attention to how <em>on lui a demandé</em> flows together.</div>`;
+    }
+
+    document.getElementById('loadingMsg').style.display = 'none';
+    const fc = document.getElementById('feedbackContent');
+    fc.innerHTML = html; fc.style.display = 'block';
+  }, 400);
+}
+
+function downloadMistakes() {
+  const all = loadMistakes();
+  if (!all.length) return;
+  let md = '# 🔴 French Mistakes Log\n*Harry Potter et le Prince de Sang-Mêlé*\n\n---\n\n';
+  const byScene = {};
+  all.forEach(m => { (byScene[m.scene] = byScene[m.scene] || []).push(m); });
+  Object.entries(byScene).forEach(([scene, list]) => {
+    md += `## ${scene}\n\n`;
+    list.forEach((m, i) => {
+      md += `### Mistake ${i+1}\n**Sentence:** *${m.english}*\n\n`;
+      md += `| | French |\n|---|---|\n| ❌ You wrote | *${m.wrote}* |\n| ✅ Should be | *${m.should}* |\n\n`;
+      md += `**Why:** ${m.explain}\n\n---\n\n`;
+    });
+  });
+  md += `*Downloaded: ${new Date().toLocaleDateString()}*\n`;
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([md], {type:'text/markdown'}));
+  a.download = 'french_mistakes_ch1.md'; a.click();
+}
+
+document.getElementById('practiceInput').addEventListener('keydown', e => { if (e.key === 'Enter') checkAnswer(); });
+</script>
+</body>
+</html>

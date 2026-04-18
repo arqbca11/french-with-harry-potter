@@ -1,0 +1,9 @@
+# Personal learning history — stays local
+french_mistakes_ch*.md
+
+# Internal scaffolding & build notes
+prompt_history.md
+lesson_template.html
+
+# macOS
+.DS_Store

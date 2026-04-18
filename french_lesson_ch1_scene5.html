@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>French Lesson — Chapter 1, Scene 5</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1a2a3a; --parchment: #f5f0e8; --cream: #faf7f2;
+    --gold: #c9a84c; --gold-light: #e8d5a3; --muted: #7a7060;
+    --red: #8b2635; --blue: #2c4a7c; --dark: #162d4a;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #1e3a5f; font-family: 'DM Sans', sans-serif;
+    min-height: 100vh; padding: 32px 16px;
+    background-image: radial-gradient(ellipse at top left, #2a5080 0%, #1e3a5f 55%, #162d4a 100%);
+  }
+  .page-title { text-align: center; color: var(--gold); font-family: 'Playfair Display', serif; font-size: 13px; letter-spacing: 4px; text-transform: uppercase; margin-bottom: 8px; opacity: 0.9; }
+  .page-subtitle { text-align: center; color: rgba(255,255,255,0.45); font-size: 12px; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 8px; }
+  .scene-desc { text-align: center; color: rgba(255,255,255,0.55); font-size: 13px; font-style: italic; font-family: 'Playfair Display', serif; margin-bottom: 24px; max-width: 500px; margin-left: auto; margin-right: auto; line-height: 1.6; }
+
+  .voice-picker { max-width: 700px; margin: 0 auto 28px; background: var(--dark); border-radius: 12px; border: 1px solid rgba(201,168,76,0.3); padding: 18px 24px; }
+  .voice-picker-label { font-size: 10px; letter-spacing: 2.5px; text-transform: uppercase; color: var(--gold); opacity: 0.85; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
+  .voice-picker-label::after { content: ''; flex: 1; height: 1px; background: rgba(201,168,76,0.2); }
+  .voice-list { display: flex; gap: 10px; flex-wrap: wrap; }
+  .voice-option { flex: 1; min-width: 180px; display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.03); cursor: pointer; transition: all 0.2s; }
+  .voice-option:hover { border-color: rgba(201,168,76,0.4); background: rgba(201,168,76,0.06); }
+  .voice-option.selected { border-color: var(--gold); background: rgba(201,168,76,0.1); }
+  .voice-radio { width: 16px; height: 16px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.25); flex-shrink: 0; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+  .voice-option.selected .voice-radio { border-color: var(--gold); background: var(--gold); }
+  .voice-option.selected .voice-radio::after { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--ink); }
+  .voice-info { flex: 1; }
+  .voice-name { font-size: 14px; color: rgba(255,255,255,0.85); font-weight: 500; margin-bottom: 2px; }
+  .voice-option.selected .voice-name { color: var(--gold); }
+  .voice-meta { font-size: 11px; color: rgba(255,255,255,0.35); }
+  .voice-preview-btn { width: 32px; height: 32px; border-radius: 50%; border: 1.5px solid rgba(255,255,255,0.2); background: transparent; color: rgba(255,255,255,0.5); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+  .voice-preview-btn:hover { border-color: var(--gold); color: var(--gold); }
+  .voice-preview-btn.playing { border-color: var(--gold); color: var(--gold); background: rgba(201,168,76,0.1); }
+  .voice-preview-btn svg { width: 11px; height: 11px; }
+  .no-voices-msg { color: rgba(255,255,255,0.4); font-size: 13px; font-style: italic; padding: 8px 0; }
+
+  .lesson-card { background: var(--cream); border-radius: 12px; max-width: 700px; margin: 0 auto 28px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.3), 0 0 0 1px rgba(201,168,76,0.2); }
+  .card-header { background: var(--parchment); border-bottom: 1px solid var(--gold-light); padding: 20px 28px 16px; display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; }
+  .sentence-number { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); font-weight: 500; margin-bottom: 6px; }
+  .french-sentence { font-family: 'Playfair Display', serif; font-size: 22px; color: var(--ink); line-height: 1.3; font-style: italic; margin-bottom: 4px; }
+  .english-sentence { font-size: 14px; color: var(--muted); font-weight: 300; }
+  .play-btn { flex-shrink: 0; width: 44px; height: 44px; border-radius: 50%; border: 2px solid var(--gold); background: transparent; color: var(--gold); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; margin-top: 4px; }
+  .play-btn:hover { background: var(--gold); color: white; transform: scale(1.05); }
+  .play-btn.playing { background: var(--gold); color: white; }
+  .play-btn svg { width: 16px; height: 16px; }
+  .pronunciation-bar { background: var(--dark); padding: 10px 28px; display: flex; align-items: center; gap: 10px; }
+  .pronun-label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); opacity: 0.7; flex-shrink: 0; }
+  .pronun-text { font-size: 13px; color: rgba(255,255,255,0.75); font-style: italic; }
+  .card-body { padding: 20px 28px 24px; }
+  table { width: 100%; border-collapse: collapse; margin-bottom: 18px; }
+  thead tr { border-bottom: 1px solid var(--gold-light); }
+  thead th { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); padding: 0 0 8px; text-align: left; font-weight: 500; }
+  tbody tr { border-bottom: 1px solid rgba(0,0,0,0.06); }
+  tbody tr:last-child { border-bottom: none; }
+  td { padding: 9px 0; font-size: 14px; vertical-align: top; }
+  td:first-child { font-family: 'Playfair Display', serif; font-style: italic; color: var(--blue); width: 26%; font-size: 15px; }
+  td:nth-child(2) { color: var(--muted); font-size: 12px; font-style: italic; width: 22%; padding-right: 12px; }
+  td:nth-child(3) { font-weight: 500; color: var(--ink); width: 18%; }
+  td:nth-child(4) { color: #555; font-size: 13px; font-weight: 300; }
+  .insight { background: linear-gradient(135deg, #fffbf0, #fff8e8); border-left: 3px solid var(--gold); border-radius: 0 8px 8px 0; padding: 12px 16px; font-size: 13.5px; color: var(--ink); line-height: 1.6; }
+  .insight strong { color: var(--red); }
+  .word-highlight { background: rgba(44,74,124,0.1); border-radius: 3px; padding: 1px 4px; font-style: italic; color: var(--blue); font-family: 'Playfair Display', serif; }
+
+  /* PRACTICE */
+  .practice-card { background: var(--dark); border-radius: 12px; max-width: 700px; margin: 0 auto 40px; overflow: hidden; border: 1px solid rgba(201,168,76,0.35); box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
+  .practice-header { padding: 18px 28px 14px; border-bottom: 1px solid rgba(201,168,76,0.2); }
+  .practice-badge { font-size: 10px; letter-spacing: 2.5px; text-transform: uppercase; color: var(--gold); font-weight: 500; background: rgba(201,168,76,0.12); border: 1px solid rgba(201,168,76,0.3); border-radius: 20px; padding: 3px 10px; }
+  .practice-body { padding: 22px 28px 26px; }
+  .practice-prompt { font-size: 13px; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 10px; }
+  .practice-english { font-family: 'Playfair Display', serif; font-size: 22px; color: white; font-style: italic; margin-bottom: 22px; line-height: 1.35; }
+  .input-row { display: flex; gap: 10px; align-items: stretch; }
+  .practice-input { flex: 1; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.15); border-radius: 8px; padding: 13px 16px; font-size: 16px; font-family: 'Playfair Display', serif; font-style: italic; color: white; outline: none; transition: border-color 0.2s; }
+  .practice-input::placeholder { color: rgba(255,255,255,0.25); font-style: italic; }
+  .practice-input:focus { border-color: var(--gold); }
+  .practice-input:disabled { opacity: 0.6; }
+  .submit-btn { background: var(--gold); border: none; color: var(--ink); font-family: 'DM Sans', sans-serif; font-size: 13px; letter-spacing: 1.5px; text-transform: uppercase; padding: 0 22px; border-radius: 8px; cursor: pointer; transition: all 0.2s; font-weight: 500; white-space: nowrap; }
+  .submit-btn:hover { background: #e0bb5a; }
+  .submit-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  .feedback-block { display: none; margin-top: 20px; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 20px; }
+  .feedback-block.visible { display: block; animation: fadeIn 0.3s ease; }
+  .feedback-loading { display: flex; align-items: center; gap: 10px; color: rgba(255,255,255,0.5); font-size: 14px; font-style: italic; }
+  .spinner { width: 18px; height: 18px; border-radius: 50%; border: 2px solid rgba(201,168,76,0.3); border-top-color: var(--gold); animation: spin 0.8s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* Your answer display */
+  .your-answer-block { margin-bottom: 16px; }
+  .your-answer-label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.35); margin-bottom: 6px; }
+  .your-answer-text { font-family: 'Playfair Display', serif; font-size: 18px; font-style: italic; color: rgba(255,255,255,0.75); line-height: 1.4; padding: 10px 14px; background: rgba(255,255,255,0.04); border-radius: 8px; border-left: 3px solid rgba(255,255,255,0.15); display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .your-answer-play { flex-shrink: 0; width: 30px; height: 30px; border-radius: 50%; border: 1.5px solid rgba(255,255,255,0.2); background: transparent; color: rgba(255,255,255,0.4); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+  .your-answer-play:hover { border-color: var(--gold); color: var(--gold); }
+  .your-answer-play.playing { border-color: var(--gold); color: var(--gold); }
+  .your-answer-play svg { width: 10px; height: 10px; }
+
+  .score-banner { display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-radius: 8px; margin-bottom: 16px; }
+  .score-banner.perfect { background: rgba(45,106,79,0.25); border: 1px solid rgba(45,106,79,0.5); }
+  .score-banner.mostly { background: rgba(201,168,76,0.15); border: 1px solid rgba(201,168,76,0.4); }
+  .score-banner.needs-work { background: rgba(139,38,53,0.2); border: 1px solid rgba(139,38,53,0.4); }
+  .score-icon { font-size: 20px; }
+  .score-text { font-size: 14px; font-weight: 500; }
+  .score-banner.perfect .score-text { color: #6ecf9a; }
+  .score-banner.mostly .score-text { color: var(--gold); }
+  .score-banner.needs-work .score-text { color: #e07f8a; }
+
+  .model-answer-block { margin-bottom: 16px; }
+  .model-label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.35); margin-bottom: 6px; }
+  .model-sentence { font-family: 'Playfair Display', serif; font-size: 20px; font-style: italic; color: var(--gold); display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .answer-play-btn { flex-shrink: 0; width: 34px; height: 34px; border-radius: 50%; border: 1.5px solid var(--gold); background: transparent; color: var(--gold); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+  .answer-play-btn:hover { background: var(--gold); color: var(--ink); }
+  .answer-play-btn.playing { background: var(--gold); color: var(--ink); }
+  .answer-play-btn svg { width: 12px; height: 12px; }
+
+  .mistakes-section { margin-top: 16px; }
+  .mistakes-label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.35); margin-bottom: 10px; }
+  .mistake-item { background: rgba(139,38,53,0.12); border: 1px solid rgba(139,38,53,0.3); border-radius: 8px; padding: 12px 14px; margin-bottom: 8px; }
+  .mistake-wrote { font-size: 13px; color: rgba(255,255,255,0.5); margin-bottom: 4px; }
+  .mistake-wrote span { font-family: 'Playfair Display', serif; font-style: italic; color: #e07f8a; text-decoration: line-through; }
+  .mistake-should { font-size: 13px; color: rgba(255,255,255,0.5); margin-bottom: 6px; }
+  .mistake-should span { font-family: 'Playfair Display', serif; font-style: italic; color: #6ecf9a; }
+  .mistake-explanation { font-size: 13px; color: rgba(255,255,255,0.7); line-height: 1.6; }
+  .overall-feedback { margin-top: 14px; padding: 12px 14px; background: rgba(255,255,255,0.04); border-radius: 8px; font-size: 13.5px; color: rgba(255,255,255,0.65); line-height: 1.6; font-style: italic; }
+
+  .download-btn { margin-top: 16px; background: transparent; border: 1px solid rgba(255,255,255,0.15); color: rgba(255,255,255,0.5); font-family: 'DM Sans', sans-serif; font-size: 12px; letter-spacing: 1px; text-transform: uppercase; padding: 8px 16px; border-radius: 6px; cursor: pointer; transition: all 0.2s; display: none; }
+  .download-btn:hover { border-color: var(--gold); color: var(--gold); }
+  .download-btn.visible { display: inline-block; }
+
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+</style>
+</head>
+<body>
+
+<div class="page-title">Harry Potter et le Prince de Sang-Mêlé</div>
+<div class="page-subtitle">Chapter 1 · Scene 5</div>
+<div class="scene-desc">Fudge confesses the worst. He names what the Prime Minister feared — and reveals that the Ministry of Magic has been struggling to contain a darkness that is spreading beyond their world.</div>
+
+<div class="voice-picker">
+  <div class="voice-picker-label">🎙 Choose a reading voice</div>
+  <div class="voice-list" id="voiceList"><div class="no-voices-msg">Loading voices…</div></div>
+</div>
+
+<!-- SENTENCE 13 -->
+<div class="lesson-card">
+  <div class="card-header">
+    <div>
+      <div class="sentence-number">Sentence 13</div>
+      <div class="french-sentence">Il est de retour, murmura Fudge. Nous ne pouvons plus le nier.</div>
+      <div class="english-sentence">"He is back, murmured Fudge. We can no longer deny it."</div>
+    </div>
+    <button class="play-btn" onclick="speak(this,'Il est de retour, murmura Fudge. Nous ne pouvons plus le nier.')">
+      <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>
+    </button>
+  </div>
+  <div class="pronunciation-bar"><span class="pronun-label">Say it</span><span class="pronun-text">eel eh duh ruh-TOOR — mür-mü-RAH fudj — noo nuh poo-VON plü luh nyay</span></div>
+  <div class="card-body">
+    <table>
+      <thead><tr><th>French</th><th>Sounds like</th><th>Means</th><th>Note</th></tr></thead>
+      <tbody>
+        <tr><td>de retour</td><td>duh ruh-TOOR</td><td>back / returned</td><td>Fixed expression — <span class="word-highlight">être de retour</span> = to be back</td></tr>
+        <tr><td>murmura</td><td>mür-mü-RAH</td><td>murmured</td><td>Passé simple of <span class="word-highlight">murmurer</span> — inverted speech tag</td></tr>
+        <tr><td>le nier</td><td>luh nyay</td><td>to deny it</td><td><span class="word-highlight">le</span> = it (object pronoun before the verb/infinitive)</td></tr>
+        <tr><td>ne … plus</td><td>nuh … plü</td><td>no longer</td><td>Same negation sandwich from Scene 4</td></tr>
+      </tbody>
+    </table>
+    <div class="insight">💡 <strong>être de retour</strong> is the natural French way to say "to be back." <span class="word-highlight">Je suis de retour</span> = I'm back. <span class="word-highlight">Il est de retour</span> = He's back. You'll use this constantly in conversation.</div>
+  </div>
+</div>
+
+<!-- SENTENCE 14 -->
+<div class="lesson-card">
+  <div class="card-header">
+    <div>
+      <div class="sentence-number">Sentence 14</div>
+      <div class="french-sentence">Le ministre le dévisagea, bouche bée, incapable de parler.</div>
+      <div class="english-sentence">"The minister stared at him, open-mouthed, unable to speak."</div>
+    </div>
+    <button class="play-btn" onclick="speak(this,'Le ministre le dévisagea, bouche bée, incapable de parler.')">
+      <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>
+    </button>
+  </div>
+  <div class="pronunciation-bar"><span class="pronun-label">Say it</span><span class="pronun-text">luh mee-NEESTR luh day-vee-zah-ZHAY — boosh BAY — an-kah-PABL duh par-LAY</span></div>
+  <div class="card-body">
+    <table>
+      <thead><tr><th>French</th><th>Sounds like</th><th>Means</th><th>Note</th></tr></thead>
+      <tbody>
+        <tr><td>le dévisagea</td><td>luh day-vee-zah-ZHAY</td><td>stared at him</td><td><span class="word-highlight">dévisager</span> = to stare at; <span class="word-highlight">le</span> = him (before verb)</td></tr>
+        <tr><td>bouche bée</td><td>boosh BAY</td><td>open-mouthed / jaw dropped</td><td>Frozen expression — literally "gaping mouth"; always <span class="word-highlight">bée</span> never changes</td></tr>
+        <tr><td>incapable de</td><td>an-kah-PABL duh</td><td>unable to</td><td><span class="word-highlight">incapable de + infinitive</span> — same pattern as <span class="word-highlight">désolé de</span></td></tr>
+        <tr><td>parler</td><td>par-LAY</td><td>to speak</td><td>Infinitive after <span class="word-highlight">de</span></td></tr>
+      </tbody>
+    </table>
+    <div class="insight">💡 <strong>bouche bée</strong> is a fixed expression — one of many vivid idioms French uses for physical reactions. Others: <span class="word-highlight">les bras croisés</span> (arms crossed) · <span class="word-highlight">les yeux écarquillés</span> (eyes wide open) · <span class="word-highlight">les larmes aux yeux</span> (tears in one's eyes). These never change form.</div>
+  </div>
+</div>
+
+<!-- SENTENCE 15 -->
+<div class="lesson-card">
+  <div class="card-header">
+    <div>
+      <div class="sentence-number">Sentence 15</div>
+      <div class="french-sentence">Nous avons essayé de garder ça secret, mais c'est impossible désormais.</div>
+      <div class="english-sentence">"We tried to keep it secret, but it's impossible now."</div>
+    </div>
+    <button class="play-btn" onclick="speak(this,'Nous avons essayé de garder ça secret, mais c\'est impossible désormais.')">
+      <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>
+    </button>
+  </div>
+  <div class="pronunciation-bar"><span class="pronun-label">Say it</span><span class="pronun-text">noo zah-VON ess-ay-YAY — duh gar-DAY sah suh-KREH — meh seh tan-poh-SEEB — day-zor-MEH</span></div>
+  <div class="card-body">
+    <table>
+      <thead><tr><th>French</th><th>Sounds like</th><th>Means</th><th>Note</th></tr></thead>
+      <tbody>
+        <tr><td>avons essayé</td><td>ah-VON ess-ay-YAY</td><td>tried</td><td>Passé composé — <span class="word-highlight">avoir</span> + past participle <span class="word-highlight">essayé</span></td></tr>
+        <tr><td>garder ça secret</td><td>gar-DAY sah suh-KREH</td><td>keep it secret</td><td><span class="word-highlight">ça</span> = it/that (informal); <span class="word-highlight">cela</span> is the formal form</td></tr>
+        <tr><td>mais</td><td>meh</td><td>but</td><td>One of the most essential connectors</td></tr>
+        <tr><td>c'est impossible</td><td>seh tan-poh-SEEB</td><td>it's impossible</td><td><span class="word-highlight">c'est + adjective</span> = it's + adjective — extremely common</td></tr>
+        <tr><td>désormais</td><td>day-zor-MEH</td><td>now / from now on</td><td>More formal than <span class="word-highlight">maintenant</span>; implies a change has occurred</td></tr>
+      </tbody>
+    </table>
+    <div class="insight">💡 <strong>c'est + adjective</strong> is one of the most used structures in French. <span class="word-highlight">C'est vrai</span> = it's true · <span class="word-highlight">C'est incroyable</span> = it's incredible · <span class="word-highlight">C'est difficile</span> = it's difficult. You'll use this every single day.</div>
+  </div>
+</div>
+
+<!-- PRACTICE -->
+<div class="practice-card">
+  <div class="practice-header"><span class="practice-badge">✦ Practice</span></div>
+  <div class="practice-body">
+    <div class="practice-prompt">Translate into French</div>
+    <div class="practice-english">"He is back, and it's impossible to deny it any longer."</div>
+    <div class="input-row">
+      <input class="practice-input" id="practiceInput" type="text" placeholder="Type your French translation…" />
+      <button class="submit-btn" id="submitBtn" onclick="checkAnswer()">Check</button>
+    </div>
+    <div class="feedback-block" id="feedbackBlock">
+      <div class="feedback-loading" id="loadingMsg">
+        <div class="spinner"></div> Checking your answer…
+      </div>
+      <div id="feedbackContent" style="display:none"></div>
+    </div>
+    <button class="download-btn" id="downloadBtn" onclick="downloadMistakes()">↓ Download mistakes log</button>
+  </div>
+</div>
+
+<script>
+// ── VOICES ──
+let selectedVoice = null, currentBtn = null;
+const PREVIEW = "Bonjour, je suis heureux de vous rencontrer aujourd'hui.";
+const TARGET = ['thomas','amelie','amélie'];
+
+function buildVoiceList() {
+  const all = window.speechSynthesis.getVoices();
+  const fr = all.filter(v => v.lang.startsWith('fr'));
+  const filtered = fr.filter(v => TARGET.some(t => v.name.toLowerCase().includes(t)));
+  const voices = filtered.length ? filtered : fr.slice(0,2);
+  const list = document.getElementById('voiceList');
+  if (!voices.length) { list.innerHTML = '<div class="no-voices-msg">No French voices found — try Chrome or Safari on Mac.</div>'; return; }
+  if (!selectedVoice) selectedVoice = voices.find(v => v.localService) || voices[0];
+  list.innerHTML = '';
+  voices.forEach(v => {
+    const sel = v === selectedVoice;
+    const langLabel = v.lang === 'fr-CA' ? 'French (Canada)' : 'French (France)';
+    const div = document.createElement('div');
+    div.className = 'voice-option' + (sel ? ' selected' : '');
+    div.innerHTML = `<div class="voice-radio"></div><div class="voice-info"><div class="voice-name">${v.name}</div><div class="voice-meta">${langLabel} · ${v.localService ? 'Local' : 'Network'}</div></div><button class="voice-preview-btn"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg></button>`;
+    const select = () => { selectedVoice = v; document.querySelectorAll('.voice-option').forEach(o => o.classList.remove('selected')); div.classList.add('selected'); };
+    div.querySelector('.voice-info').onclick = select;
+    div.querySelector('.voice-radio').onclick = select;
+    div.querySelector('.voice-preview-btn').onclick = e => { e.stopPropagation(); previewVoice(v, div.querySelector('.voice-preview-btn')); };
+    list.appendChild(div);
+  });
+}
+
+function previewVoice(v, btn) {
+  if (speechSynthesis.speaking) speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(PREVIEW);
+  u.lang = v.lang; u.voice = v; u.rate = 0.88;
+  btn.innerHTML = '<svg viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>';
+  btn.classList.add('playing');
+  u.onend = () => { btn.innerHTML = '<svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>'; btn.classList.remove('playing'); };
+  speechSynthesis.speak(u);
+}
+
+function speak(btn, text) {
+  if (speechSynthesis.speaking) {
+    speechSynthesis.cancel();
+    if (currentBtn) { currentBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>'; currentBtn.classList.remove('playing'); }
+    if (currentBtn === btn) { currentBtn = null; return; }
+  }
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = 'fr-FR'; if (selectedVoice) u.voice = selectedVoice;
+  u.rate = 0.88; u.pitch = 1.0;
+  btn.innerHTML = '<svg viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>';
+  btn.classList.add('playing'); currentBtn = btn;
+  u.onend = () => { btn.innerHTML = '<svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>'; btn.classList.remove('playing'); currentBtn = null; };
+  speechSynthesis.speak(u);
+}
+
+window.speechSynthesis.onvoiceschanged = buildVoiceList;
+buildVoiceList();
+
+// ── ANSWER CHECKING ──
+const MODEL_ANSWER = "Il est de retour, et c'est impossible de le nier désormais.";
+
+const CHECKS = [
+  {
+    test: s => /il\s*est\s*de\s*retour/.test(s),
+    wrote: s => s.match(/\b(il\s*est\s*retourne|il\s*est\s*revenu|he\s*is\s*back|il\s*revient)\b/)?.[0] || '(missing "il est de retour")',
+    should: 'il est de retour',
+    explain: '"He is back" = <em>il est de retour</em>. This is a fixed expression — <em>être de retour</em>. Avoid translating literally; <em>il est revenu</em> also works but <em>de retour</em> is more natural and common.'
+  },
+  {
+    test: s => /\bet\b/.test(s),
+    wrote: () => '(missing "et")',
+    should: 'et',
+    explain: '"And" = <em>et</em>. Simple but easy to drop when you\'re focused on harder parts of the sentence.'
+  },
+  {
+    test: s => /c[' ]?est\s*impossible|il\s*est\s*impossible/.test(s),
+    wrote: s => s.match(/\b(impossible\b(?!\s*de))\b/)?.[0] || '(wrong "it\'s impossible")',
+    should: "c'est impossible",
+    explain: '"It\'s impossible" = <em>c\'est impossible</em>. The <em>c\'est</em> (contraction of <em>ce est</em>) is essential — you can\'t just say <em>impossible</em> alone as a full statement.'
+  },
+  {
+    test: s => /\bde\b/.test(s),
+    wrote: () => '(missing "de")',
+    should: 'impossible de + infinitive',
+    explain: 'After <em>impossible</em>, use <em>de + infinitive</em>: <em>impossible de le nier</em>. This is the same <em>adjective + de + infinitive</em> pattern as <em>incapable de parler</em> from this scene.'
+  },
+  {
+    test: s => /\b(nier|refuser|démentir|nega)/.test(s),
+    wrote: s => s.match(/\b(deny|ignorer|oublier)\b/)?.[0] || '(missing "to deny")',
+    should: 'nier',
+    explain: '"To deny" = <em>nier</em>. A clean, useful verb. <em>Démentir</em> also works (to deny/refute) but <em>nier</em> is more common in this context.'
+  },
+  {
+    test: s => /\b(le\s+nier|nier\s+[cç]a|nier\s+cela)/.test(s),
+    wrote: s => s.match(/\b(nier\s*il|deny\s*it|nier\s*le)\b/)?.[0] || '(missing object pronoun "le")',
+    should: 'le nier',
+    explain: '"Deny it" = <em>le nier</em>. In French, the object pronoun <em>le</em> (it) comes directly before the infinitive. <em>Nier le</em> is wrong order — it must be <em>le nier</em>.'
+  },
+  {
+    test: s => /\b(plus|desormais|désormais|maintenant|davantage)/.test(s),
+    wrote: s => s.match(/\b(anymore|longer|plus\s+longtemps)\b/)?.[0] || '(missing "no longer" or "anymore")',
+    should: 'ne … plus  or  désormais',
+    explain: '"Any longer / no longer" can be expressed with <em>ne … plus</em> (negation sandwich around the verb) or by adding <em>désormais</em> (from now on). Both are natural here.'
+  }
+];
+
+// ── PERSISTENT MISTAKES (localStorage) ──
+const STORAGE_KEY = 'french_ch1_mistakes';
+
+function loadMistakes() {
+  try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); }
+  catch(e) { return []; }
+}
+
+function saveMistake(m) {
+  const all = loadMistakes();
+  all.push(m);
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(all));
+}
+
+function getMistakeCount() {
+  return loadMistakes().length;
+}
+
+function norm(s) {
+  return s.toLowerCase()
+    .replace(/[àâä]/g,'a').replace(/[éèêë]/g,'e').replace(/[îï]/g,'i')
+    .replace(/[ôö]/g,'o').replace(/[ùûü]/g,'u').replace(/ç/g,'c')
+    .replace(/['']/g,"'").replace(/\s+/g,' ').trim();
+}
+
+function checkAnswer() {
+  const input = document.getElementById('practiceInput');
+  const rawAnswer = input.value.trim();
+  if (!rawAnswer) return;
+
+  document.getElementById('submitBtn').disabled = true;
+  input.disabled = true;
+  const fb = document.getElementById('feedbackBlock');
+  fb.classList.add('visible');
+  document.getElementById('loadingMsg').style.display = 'flex';
+  document.getElementById('feedbackContent').style.display = 'none';
+
+  setTimeout(() => {
+    const n = norm(rawAnswer);
+    const mistakes = [];
+
+    CHECKS.forEach(c => {
+      if (!c.test(n)) {
+        const w = typeof c.wrote === 'function' ? (c.wrote(n) || '—') : c.wrote;
+        mistakes.push({ wrote: w, should: c.should, explain: c.explain });
+      }
+    });
+
+    mistakes.forEach(m => {
+      saveMistake({
+        scene: 'Chapter 1, Scene 5',
+        english: 'He is back, and it\'s impossible to deny it any longer.',
+        wrote: m.wrote, should: m.should,
+        explain: m.explain.replace(/<[^>]+>/g,''),
+        date: new Date().toLocaleDateString()
+      });
+    });
+    if (mistakes.length > 0) document.getElementById('downloadBtn').classList.add('visible');
+
+    const score = mistakes.length === 0 ? 'perfect' : mistakes.length <= 2 ? 'mostly' : 'needs-work';
+    const banners = {
+      perfect:     { cls:'perfect',    icon:'✓', text:'Excellent! All the key elements are correct.' },
+      mostly:      { cls:'mostly',     icon:'◑', text:'Good effort — just a couple of things to refine.' },
+      'needs-work':{ cls:'needs-work', icon:'✗', text:"Keep going — here's what to work on." }
+    };
+    const b = banners[score];
+
+    // Escape the raw answer for safe HTML display
+    const safeAnswer = rawAnswer.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    // Escape for use in JS string inside onclick
+    const escapedForJS = rawAnswer.replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+
+    let html = '';
+
+    // ── YOUR ANSWER BLOCK ──
+    html += `<div class="your-answer-block">
+      <div class="your-answer-label">Your answer</div>
+      <div class="your-answer-text">
+        <span>${safeAnswer}</span>
+        <button class="your-answer-play" onclick="speak(this,'${escapedForJS}')">
+          <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>
+        </button>
+      </div>
+    </div>`;
+
+    html += `<div class="score-banner ${b.cls}"><span class="score-icon">${b.icon}</span><span class="score-text">${b.text}</span></div>`;
+
+    html += `<div class="model-answer-block">
+      <div class="model-label">Model answer</div>
+      <div class="model-sentence">${MODEL_ANSWER}
+        <button class="answer-play-btn" onclick="speak(this,'${MODEL_ANSWER}')">
+          <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>
+        </button>
+      </div>
+    </div>`;
+
+    if (mistakes.length > 0) {
+      html += `<div class="mistakes-section"><div class="mistakes-label">Things to review</div>`;
+      mistakes.forEach(m => {
+        html += `<div class="mistake-item">
+          <div class="mistake-wrote">You wrote: <span>${m.wrote}</span></div>
+          <div class="mistake-should">Should be: <span>${m.should}</span></div>
+          <div class="mistake-explanation">${m.explain}</div>
+        </div>`;
+      });
+      html += '</div>';
+    } else {
+      html += `<div class="overall-feedback">All elements correct — well done! Compare your answer to the model above and listen for the rhythm.</div>`;
+    }
+
+    document.getElementById('loadingMsg').style.display = 'none';
+    const fc = document.getElementById('feedbackContent');
+    fc.innerHTML = html; fc.style.display = 'block';
+  }, 500);
+}
+
+function downloadMistakes() {
+  const sessionMistakes = loadMistakes();
+  if (!sessionMistakes.length) return;
+  let md = '# 🔴 French Mistakes Log\n*Harry Potter et le Prince de Sang-Mêlé*\n\n---\n\n';
+  const byScene = {};
+  sessionMistakes.forEach(m => { (byScene[m.scene] = byScene[m.scene] || []).push(m); });
+  Object.entries(byScene).forEach(([scene, list]) => {
+    md += `## ${scene}\n\n`;
+    list.forEach((m, i) => {
+      md += `### Mistake ${i+1}\n**Sentence:** *${m.english}*\n\n`;
+      md += `| | French |\n|---|---|\n| ❌ You wrote | *${m.wrote}* |\n| ✅ Should be | *${m.should}* |\n\n`;
+      md += `**Why:** ${m.explain}\n\n---\n\n`;
+    });
+  });
+  md += `*Downloaded: ${new Date().toLocaleDateString()}*\n`;
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([md], {type:'text/markdown'}));
+  a.download = 'french_mistakes_ch1.md';
+  a.click();
+}
+
+document.getElementById('practiceInput').addEventListener('keydown', e => { if (e.key === 'Enter') checkAnswer(); });
+
+// Show download button on load if there are already stored mistakes
+if (loadMistakes().length > 0) document.getElementById('downloadBtn').classList.add('visible');
+</script>
+</body>
+</html>

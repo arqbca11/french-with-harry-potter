@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>French Mistakes Log — Chapter 1</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1a2a3a; --parchment: #f5f0e8; --cream: #faf7f2;
+    --gold: #c9a84c; --gold-light: #e8d5a3; --muted: #7a7060;
+    --red: #8b2635; --blue: #2c4a7c; --dark: #162d4a;
+    --green: #2d6a4f;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #1e3a5f; font-family: 'DM Sans', sans-serif;
+    min-height: 100vh; padding: 32px 16px;
+    background-image: radial-gradient(ellipse at top left, #2a5080 0%, #1e3a5f 55%, #162d4a 100%);
+  }
+
+  .page-title { text-align: center; color: var(--gold); font-family: 'Playfair Display', serif; font-size: 13px; letter-spacing: 4px; text-transform: uppercase; margin-bottom: 8px; opacity: 0.9; }
+  .page-subtitle { text-align: center; color: rgba(255,255,255,0.45); font-size: 12px; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 32px; }
+
+  /* Stats bar */
+  .stats-bar {
+    max-width: 700px; margin: 0 auto 28px;
+    display: flex; gap: 12px; flex-wrap: wrap;
+  }
+  .stat-card {
+    flex: 1; min-width: 140px; background: var(--dark);
+    border-radius: 10px; border: 1px solid rgba(201,168,76,0.2);
+    padding: 16px 20px; text-align: center;
+  }
+  .stat-number { font-family: 'Playfair Display', serif; font-size: 36px; color: var(--gold); line-height: 1; margin-bottom: 4px; }
+  .stat-label { font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; color: rgba(255,255,255,0.4); }
+
+  /* Toolbar */
+  .toolbar {
+    max-width: 700px; margin: 0 auto 24px;
+    display: flex; gap: 10px; align-items: center; flex-wrap: wrap;
+  }
+  .toolbar-btn {
+    background: transparent; border: 1.5px solid var(--gold); color: var(--gold);
+    font-family: 'DM Sans', sans-serif; font-size: 12px; letter-spacing: 1.5px;
+    text-transform: uppercase; padding: 9px 18px; border-radius: 6px;
+    cursor: pointer; transition: all 0.2s;
+  }
+  .toolbar-btn:hover { background: var(--gold); color: var(--ink); }
+  .toolbar-btn.danger { border-color: rgba(139,38,53,0.5); color: #e07f8a; }
+  .toolbar-btn.danger:hover { background: rgba(139,38,53,0.3); color: #e07f8a; }
+  .filter-select {
+    background: var(--dark); border: 1px solid rgba(255,255,255,0.15);
+    color: rgba(255,255,255,0.7); font-family: 'DM Sans', sans-serif;
+    font-size: 13px; padding: 9px 14px; border-radius: 6px; outline: none;
+    cursor: pointer;
+  }
+
+  /* Empty state */
+  .empty-state {
+    max-width: 700px; margin: 40px auto; text-align: center;
+    color: rgba(255,255,255,0.35); font-style: italic;
+    font-family: 'Playfair Display', serif; font-size: 18px; line-height: 1.8;
+  }
+  .empty-state span { display: block; font-size: 13px; font-family: 'DM Sans', sans-serif; margin-top: 8px; letter-spacing: 0.5px; }
+
+  /* Scene group */
+  .scene-group { max-width: 700px; margin: 0 auto 32px; }
+  .scene-heading {
+    font-size: 11px; letter-spacing: 2.5px; text-transform: uppercase;
+    color: var(--gold); opacity: 0.8; margin-bottom: 12px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .scene-heading::after { content: ''; flex: 1; height: 1px; background: rgba(201,168,76,0.2); }
+  .scene-count { background: rgba(201,168,76,0.15); border: 1px solid rgba(201,168,76,0.3); border-radius: 10px; padding: 1px 8px; font-size: 10px; }
+
+  /* Mistake card */
+  .mistake-card {
+    background: var(--cream); border-radius: 10px; margin-bottom: 12px;
+    overflow: hidden; box-shadow: 0 8px 30px rgba(0,0,0,0.25);
+  }
+  .mistake-english {
+    background: var(--parchment); border-bottom: 1px solid var(--gold-light);
+    padding: 12px 20px; font-size: 13px; color: var(--muted); font-style: italic;
+    font-family: 'Playfair Display', serif;
+  }
+  .mistake-body { padding: 14px 20px; }
+  .mistake-row { display: flex; gap: 8px; align-items: baseline; margin-bottom: 6px; font-size: 14px; }
+  .mistake-row-label { font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); flex-shrink: 0; width: 80px; }
+  .wrote-text { font-family: 'Playfair Display', serif; font-style: italic; color: var(--red); text-decoration: line-through; }
+  .should-text { font-family: 'Playfair Display', serif; font-style: italic; color: var(--green); }
+  .mistake-explain { font-size: 13px; color: #555; line-height: 1.6; margin-top: 8px; padding-top: 8px; border-top: 1px solid rgba(0,0,0,0.06); }
+  .mistake-date { font-size: 11px; color: var(--muted); margin-top: 6px; }
+
+  /* Confirm modal */
+  .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 100; align-items: center; justify-content: center; }
+  .modal-overlay.visible { display: flex; }
+  .modal { background: var(--dark); border: 1px solid rgba(201,168,76,0.3); border-radius: 12px; padding: 28px 32px; max-width: 380px; width: 90%; text-align: center; }
+  .modal-title { font-family: 'Playfair Display', serif; font-size: 20px; color: white; margin-bottom: 12px; }
+  .modal-text { font-size: 14px; color: rgba(255,255,255,0.55); margin-bottom: 24px; line-height: 1.6; }
+  .modal-btns { display: flex; gap: 10px; justify-content: center; }
+  .modal-btn { padding: 10px 24px; border-radius: 6px; font-family: 'DM Sans', sans-serif; font-size: 13px; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; transition: all 0.2s; }
+  .modal-btn.cancel { background: transparent; border: 1px solid rgba(255,255,255,0.2); color: rgba(255,255,255,0.5); }
+  .modal-btn.cancel:hover { border-color: rgba(255,255,255,0.4); color: white; }
+  .modal-btn.confirm { background: rgba(139,38,53,0.4); border: 1px solid rgba(139,38,53,0.6); color: #e07f8a; }
+  .modal-btn.confirm:hover { background: rgba(139,38,53,0.6); }
+</style>
+</head>
+<body>
+
+<div class="page-title">Harry Potter et le Prince de Sang-Mêlé</div>
+<div class="page-subtitle">Chapter 1 · Mistakes Log</div>
+
+<div class="stats-bar" id="statsBar"></div>
+
+<div class="toolbar">
+  <button class="toolbar-btn" onclick="downloadMd()">↓ Download as Markdown</button>
+  <select class="filter-select" id="sceneFilter" onchange="render()">
+    <option value="all">All scenes</option>
+  </select>
+  <button class="toolbar-btn danger" onclick="confirmClear()">Clear all</button>
+</div>
+
+<div id="mistakesList"></div>
+
+<!-- Confirm clear modal -->
+<div class="modal-overlay" id="clearModal">
+  <div class="modal">
+    <div class="modal-title">Clear all mistakes?</div>
+    <div class="modal-text">This will permanently delete all stored mistakes for Chapter 1. This cannot be undone.</div>
+    <div class="modal-btns">
+      <button class="modal-btn cancel" onclick="document.getElementById('clearModal').classList.remove('visible')">Cancel</button>
+      <button class="modal-btn confirm" onclick="clearAll()">Yes, clear all</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const STORAGE_KEY = 'french_ch1_mistakes';
+
+function loadMistakes() {
+  try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); }
+  catch(e) { return []; }
+}
+
+function getScenes(mistakes) {
+  return [...new Set(mistakes.map(m => m.scene))].sort();
+}
+
+function populateFilter(mistakes) {
+  const sel = document.getElementById('sceneFilter');
+  const scenes = getScenes(mistakes);
+  // Clear existing options except "All"
+  while (sel.options.length > 1) sel.remove(1);
+  scenes.forEach(s => {
+    const opt = document.createElement('option');
+    opt.value = s; opt.textContent = s;
+    sel.appendChild(opt);
+  });
+}
+
+function render() {
+  const all = loadMistakes();
+  const filter = document.getElementById('sceneFilter').value;
+  const mistakes = filter === 'all' ? all : all.filter(m => m.scene === filter);
+
+  // Stats
+  const scenes = getScenes(all);
+  document.getElementById('statsBar').innerHTML = `
+    <div class="stat-card"><div class="stat-number">${all.length}</div><div class="stat-label">Total mistakes</div></div>
+    <div class="stat-card"><div class="stat-number">${scenes.length}</div><div class="stat-label">Scenes practiced</div></div>
+    <div class="stat-card"><div class="stat-number">${all.length > 0 ? Math.round(all.length / Math.max(scenes.length,1) * 10)/10 : 0}</div><div class="stat-label">Avg per scene</div></div>
+  `;
+
+  populateFilter(all);
+
+  const container = document.getElementById('mistakesList');
+
+  if (all.length === 0) {
+    container.innerHTML = `<div class="empty-state">No mistakes recorded yet.<span>Complete a practice exercise in any scene lesson to start building your log.</span></div>`;
+    return;
+  }
+
+  if (mistakes.length === 0) {
+    container.innerHTML = `<div class="empty-state">No mistakes for this scene.<span>Try another scene or select "All scenes".</span></div>`;
+    return;
+  }
+
+  // Group by scene
+  const byScene = {};
+  mistakes.forEach(m => { (byScene[m.scene] = byScene[m.scene] || []).push(m); });
+
+  let html = '';
+  Object.entries(byScene).forEach(([scene, list]) => {
+    html += `<div class="scene-group">
+      <div class="scene-heading">${scene} <span class="scene-count">${list.length} mistake${list.length !== 1 ? 's' : ''}</span></div>`;
+    list.forEach(m => {
+      html += `<div class="mistake-card">
+        <div class="mistake-english">${m.english || m.sentence || ''}</div>
+        <div class="mistake-body">
+          <div class="mistake-row"><span class="mistake-row-label">You wrote</span><span class="wrote-text">${m.wrote || m.studentWrote || ''}</span></div>
+          <div class="mistake-row"><span class="mistake-row-label">Should be</span><span class="should-text">${m.should || m.shouldBe || ''}</span></div>
+          <div class="mistake-explain">${m.explain || m.explanation || ''}</div>
+          ${m.date ? `<div class="mistake-date">${m.date}</div>` : ''}
+        </div>
+      </div>`;
+    });
+    html += '</div>';
+  });
+
+  container.innerHTML = html;
+}
+
+function downloadMd() {
+  const all = loadMistakes();
+  if (!all.length) return;
+
+  let md = '# 🔴 French Mistakes Log — Chapter 1\n';
+  md += '*Harry Potter et le Prince de Sang-Mêlé*\n\n---\n\n';
+
+  const byScene = {};
+  all.forEach(m => { (byScene[m.scene] = byScene[m.scene] || []).push(m); });
+
+  Object.entries(byScene).forEach(([scene, list]) => {
+    md += `## ${scene}\n\n`;
+    list.forEach((m, i) => {
+      md += `### Mistake ${i+1}\n`;
+      md += `**Sentence:** *${m.english || m.sentence || ''}*\n\n`;
+      md += `| | French |\n|---|---|\n`;
+      md += `| ❌ You wrote | *${m.wrote || m.studentWrote || ''}* |\n`;
+      md += `| ✅ Should be | *${m.should || m.shouldBe || ''}* |\n\n`;
+      md += `**Why:** ${(m.explain || m.explanation || '').replace(/<[^>]+>/g,'')}\n\n`;
+      if (m.date) md += `*${m.date}*\n\n`;
+      md += '---\n\n';
+    });
+  });
+
+  md += `*Downloaded: ${new Date().toLocaleDateString()}*\n`;
+
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([md], {type:'text/markdown'}));
+  a.download = 'french_mistakes_ch1.md';
+  a.click();
+}
+
+function confirmClear() {
+  document.getElementById('clearModal').classList.add('visible');
+}
+
+function clearAll() {
+  localStorage.removeItem(STORAGE_KEY);
+  document.getElementById('clearModal').classList.remove('visible');
+  render();
+}
+
+// Initial render
+render();
+</script>
+</body>
+</html>

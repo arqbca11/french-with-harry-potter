@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>French Lesson — Chapter 1, Scene 9</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1a2a3a; --parchment: #f5f0e8; --cream: #faf7f2;
+    --gold: #c9a84c; --gold-light: #e8d5a3; --muted: #7a7060;
+    --red: #8b2635; --blue: #2c4a7c; --dark: #162d4a;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #1e3a5f; font-family: 'DM Sans', sans-serif;
+    min-height: 100vh; padding: 32px 16px;
+    background-image: radial-gradient(ellipse at top left, #2a5080 0%, #1e3a5f 55%, #162d4a 100%);
+  }
+  .page-title { text-align: center; color: var(--gold); font-family: 'Playfair Display', serif; font-size: 13px; letter-spacing: 4px; text-transform: uppercase; margin-bottom: 8px; opacity: 0.9; }
+  .page-subtitle { text-align: center; color: rgba(255,255,255,0.45); font-size: 12px; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 8px; }
+  .scene-desc { text-align: center; color: rgba(255,255,255,0.55); font-size: 13px; font-style: italic; font-family: 'Playfair Display', serif; margin-bottom: 24px; max-width: 500px; margin-left: auto; margin-right: auto; line-height: 1.6; }
+
+  .voice-bar { max-width: 700px; margin: 0 auto 24px; background: var(--dark); border-radius: 10px; border: 1px solid rgba(201,168,76,0.2); padding: 12px 20px; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; display: none; }
+  .voice-bar-left { display: flex; align-items: center; gap: 10px; }
+  .voice-bar-text { font-size: 12px; color: rgba(255,255,255,0.5); }
+  .voice-bar-text strong { color: rgba(255,255,255,0.8); font-weight: 500; }
+  .voice-bar-link { font-size: 11px; color: var(--gold); opacity: 0.7; cursor: pointer; text-decoration: underline; background: none; border: none; font-family: inherit; white-space: nowrap; }
+  .voice-bar-link:hover { opacity: 1; }
+  .key-entry { display: none; max-width: 700px; margin: 0 auto 24px; background: var(--dark); border-radius: 12px; border: 1px solid rgba(201,168,76,0.3); padding: 18px 24px; }
+  .key-entry.visible { display: block; }
+  .key-entry-label { font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; color: rgba(255,255,255,0.4); margin-bottom: 10px; }
+  .key-entry-row { display: flex; gap: 8px; }
+  .key-input { flex: 1; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.15); border-radius: 8px; padding: 10px 14px; font-size: 14px; font-family: 'DM Sans', sans-serif; color: white; outline: none; transition: border-color 0.2s; }
+  .key-input:focus { border-color: var(--gold); }
+  .key-btn { background: var(--gold); border: none; color: var(--ink); font-family: 'DM Sans', sans-serif; font-size: 12px; letter-spacing: 1.5px; text-transform: uppercase; padding: 0 18px; border-radius: 8px; cursor: pointer; font-weight: 500; white-space: nowrap; }
+  .key-btn:hover { background: #e0bb5a; }
+  .key-msg { font-size: 12px; margin-top: 8px; color: #e07f8a; min-height: 16px; }
+  .voice-picker-panel { display: none; max-width: 700px; margin: 0 auto 24px; background: var(--dark); border-radius: 12px; border: 1px solid rgba(201,168,76,0.3); padding: 18px 24px; }
+  .voice-picker-panel.visible { display: block; animation: fadeIn 0.2s ease; }
+  .voice-picker-label { font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; color: rgba(255,255,255,0.4); margin-bottom: 12px; }
+  .voice-list-inner { display: flex; flex-direction: column; gap: 8px; max-height: 220px; overflow-y: auto; }
+  .voice-item { display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.07); background: rgba(255,255,255,0.03); cursor: pointer; transition: all 0.15s; }
+  .voice-item:hover { border-color: rgba(201,168,76,0.35); background: rgba(201,168,76,0.05); }
+  .voice-item.selected { border-color: var(--gold); background: rgba(201,168,76,0.1); }
+  .voice-dot { width: 14px; height: 14px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.2); flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+  .voice-item.selected .voice-dot { border-color: var(--gold); background: var(--gold); }
+  .voice-item.selected .voice-dot::after { content: ''; width: 5px; height: 5px; border-radius: 50%; background: var(--ink); }
+  .voice-item-info { flex: 1; }
+  .voice-item-name { font-size: 13px; color: rgba(255,255,255,0.8); font-weight: 500; }
+  .voice-item.selected .voice-item-name { color: var(--gold); }
+  .voice-item-desc { font-size: 11px; color: rgba(255,255,255,0.3); }
+  .vprev-btn { width: 28px; height: 28px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.15); background: transparent; color: rgba(255,255,255,0.4); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+  .vprev-btn:hover { border-color: var(--gold); color: var(--gold); }
+  .vprev-btn svg { width: 10px; height: 10px; }
+  .picker-msg { font-size: 12px; color: rgba(255,255,255,0.35); margin-top: 10px; font-style: italic; }
+
+  .lesson-card { background: var(--cream); border-radius: 12px; max-width: 700px; margin: 0 auto 28px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.3), 0 0 0 1px rgba(201,168,76,0.2); }
+  .card-header { background: var(--parchment); border-bottom: 1px solid var(--gold-light); padding: 20px 28px 16px; display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; }
+  .sentence-number { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); font-weight: 500; margin-bottom: 6px; }
+  .french-sentence { font-family: 'Playfair Display', serif; font-size: 22px; color: var(--ink); line-height: 1.3; font-style: italic; margin-bottom: 4px; }
+  .english-sentence { font-size: 14px; color: var(--muted); font-weight: 300; }
+  .play-btn { flex-shrink: 0; width: 44px; height: 44px; border-radius: 50%; border: 2px solid var(--gold); background: transparent; color: var(--gold); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; margin-top: 4px; }
+  .play-btn:hover { background: var(--gold); color: white; transform: scale(1.05); }
+  .play-btn.playing { background: var(--gold); color: white; }
+  .play-btn svg { width: 16px; height: 16px; }
+  .pronunciation-bar { background: var(--dark); padding: 10px 28px; display: flex; align-items: center; gap: 10px; }
+  .pronun-label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); opacity: 0.7; flex-shrink: 0; }
+  .pronun-text { font-size: 13px; color: rgba(255,255,255,0.75); font-style: italic; }
+  .card-body { padding: 20px 28px 24px; }
+  table { width: 100%; border-collapse: collapse; margin-bottom: 18px; }
+  thead tr { border-bottom: 1px solid var(--gold-light); }
+  thead th { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); padding: 0 0 8px; text-align: left; font-weight: 500; }
+  tbody tr { border-bottom: 1px solid rgba(0,0,0,0.06); }
+  tbody tr:last-child { border-bottom: none; }
+  td { padding: 9px 0; font-size: 14px; vertical-align: top; }
+  td:first-child { font-family: 'Playfair Display', serif; font-style: italic; color: var(--blue); width: 26%; font-size: 15px; }
+  td:nth-child(2) { color: var(--muted); font-size: 12px; font-style: italic; width: 22%; padding-right: 12px; }
+  td:nth-child(3) { font-weight: 500; color: var(--ink); width: 18%; }
+  td:nth-child(4) { color: #555; font-size: 13px; font-weight: 300; }
+  .insight { background: linear-gradient(135deg, #fffbf0, #fff8e8); border-left: 3px solid var(--gold); border-radius: 0 8px 8px 0; padding: 12px 16px; font-size: 13.5px; color: var(--ink); line-height: 1.6; }
+  .insight strong { color: var(--red); }
+  .word-highlight { background: rgba(44,74,124,0.1); border-radius: 3px; padding: 1px 4px; font-style: italic; color: var(--blue); font-family: 'Playfair Display', serif; }
+  .formal-tag { display: inline-block; font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; background: rgba(139,38,53,0.12); border: 1px solid rgba(139,38,53,0.3); color: #c07070; border-radius: 4px; padding: 1px 6px; margin-left: 6px; vertical-align: middle; }
+
+  .practice-card { background: var(--dark); border-radius: 12px; max-width: 700px; margin: 0 auto 40px; overflow: hidden; border: 1px solid rgba(201,168,76,0.35); box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
+  .practice-header { padding: 18px 28px 14px; border-bottom: 1px solid rgba(201,168,76,0.2); }
+  .practice-badge { font-size: 10px; letter-spacing: 2.5px; text-transform: uppercase; color: var(--gold); font-weight: 500; background: rgba(201,168,76,0.12); border: 1px solid rgba(201,168,76,0.3); border-radius: 20px; padding: 3px 10px; }
+  .practice-body { padding: 22px 28px 26px; }
+  .practice-prompt { font-size: 13px; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 10px; }
+  .practice-english { font-family: 'Playfair Display', serif; font-size: 22px; color: white; font-style: italic; margin-bottom: 22px; line-height: 1.35; }
+  .input-row { display: flex; gap: 10px; align-items: stretch; }
+  .practice-input { flex: 1; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.15); border-radius: 8px; padding: 13px 16px; font-size: 16px; font-family: 'Playfair Display', serif; font-style: italic; color: white; outline: none; transition: border-color 0.2s; }
+  .practice-input::placeholder { color: rgba(255,255,255,0.25); font-style: italic; }
+  .practice-input:focus { border-color: var(--gold); }
+  .practice-input:disabled { opacity: 0.6; }
+  .submit-btn { background: var(--gold); border: none; color: var(--ink); font-family: 'DM Sans', sans-serif; font-size: 13px; letter-spacing: 1.5px; text-transform: uppercase; padding: 0 22px; border-radius: 8px; cursor: pointer; transition: all 0.2s; font-weight: 500; white-space: nowrap; }
+  .submit-btn:hover { background: #e0bb5a; }
+  .submit-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+  .feedback-block { display: none; margin-top: 20px; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 20px; }
+  .feedback-block.visible { display: block; animation: fadeIn 0.3s ease; }
+  .feedback-loading { display: flex; align-items: center; gap: 10px; color: rgba(255,255,255,0.5); font-size: 14px; font-style: italic; }
+  .spinner { width: 18px; height: 18px; border-radius: 50%; border: 2px solid rgba(201,168,76,0.3); border-top-color: var(--gold); animation: spin 0.8s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .your-answer-block { margin-bottom: 16px; }
+  .your-answer-label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.35); margin-bottom: 6px; }
+  .your-answer-text { font-family: 'Playfair Display', serif; font-size: 18px; font-style: italic; color: rgba(255,255,255,0.75); line-height: 1.4; padding: 10px 14px; background: rgba(255,255,255,0.04); border-radius: 8px; border-left: 3px solid rgba(255,255,255,0.15); display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .your-answer-play { flex-shrink: 0; width: 30px; height: 30px; border-radius: 50%; border: 1.5px solid rgba(255,255,255,0.2); background: transparent; color: rgba(255,255,255,0.4); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+  .your-answer-play:hover, .your-answer-play.playing { border-color: var(--gold); color: var(--gold); }
+  .your-answer-play svg { width: 10px; height: 10px; }
+  .score-banner { display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-radius: 8px; margin-bottom: 16px; }
+  .score-banner.perfect { background: rgba(45,106,79,0.25); border: 1px solid rgba(45,106,79,0.5); }
+  .score-banner.mostly { background: rgba(201,168,76,0.15); border: 1px solid rgba(201,168,76,0.4); }
+  .score-banner.needs-work { background: rgba(139,38,53,0.2); border: 1px solid rgba(139,38,53,0.4); }
+  .score-icon { font-size: 20px; }
+  .score-text { font-size: 14px; font-weight: 500; }
+  .score-banner.perfect .score-text { color: #6ecf9a; }
+  .score-banner.mostly .score-text { color: var(--gold); }
+  .score-banner.needs-work .score-text { color: #e07f8a; }
+  .model-answer-block { margin-bottom: 16px; }
+  .model-label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.35); margin-bottom: 6px; }
+  .model-sentence { font-family: 'Playfair Display', serif; font-size: 20px; font-style: italic; color: var(--gold); display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .answer-play-btn { flex-shrink: 0; width: 34px; height: 34px; border-radius: 50%; border: 1.5px solid var(--gold); background: transparent; color: var(--gold); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+  .answer-play-btn:hover, .answer-play-btn.playing { background: var(--gold); color: var(--ink); }
+  .answer-play-btn svg { width: 12px; height: 12px; }
+  .mistakes-section { margin-top: 16px; }
+  .mistakes-label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.35); margin-bottom: 10px; }
+  .mistake-item { background: rgba(139,38,53,0.12); border: 1px solid rgba(139,38,53,0.3); border-radius: 8px; padding: 12px 14px; margin-bottom: 8px; }
+  .mistake-wrote { font-size: 13px; color: rgba(255,255,255,0.5); margin-bottom: 4px; }
+  .mistake-wrote span { font-family: 'Playfair Display', serif; font-style: italic; color: #e07f8a; text-decoration: line-through; }
+  .mistake-should { font-size: 13px; color: rgba(255,255,255,0.5); margin-bottom: 6px; }
+  .mistake-should span { font-family: 'Playfair Display', serif; font-style: italic; color: #6ecf9a; }
+  .mistake-explanation { font-size: 13px; color: rgba(255,255,255,0.7); line-height: 1.6; }
+  .overall-feedback { margin-top: 14px; padding: 12px 14px; background: rgba(255,255,255,0.04); border-radius: 8px; font-size: 13.5px; color: rgba(255,255,255,0.65); line-height: 1.6; font-style: italic; }
+  .download-btn { margin-top: 16px; background: transparent; border: 1px solid rgba(255,255,255,0.15); color: rgba(255,255,255,0.5); font-family: 'DM Sans', sans-serif; font-size: 12px; letter-spacing: 1px; text-transform: uppercase; padding: 8px 16px; border-radius: 6px; cursor: pointer; transition: all 0.2s; display: none; }
+  .download-btn:hover { border-color: var(--gold); color: var(--gold); }
+  .download-btn.visible { display: inline-block; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+</style>
+</head>
+<body>
+
+<div class="page-title">Harry Potter et le Prince de Sang-Mêlé</div>
+<div class="page-subtitle">Chapter 1 · Scene 9</div>
+<div class="scene-desc">Scrimgeour presses further. He makes clear what he expects — and what the consequences of silence will be. The chapter is drawing to a close, and the weight of a darker world is settling in.</div>
+
+<div class="voice-bar" id="voiceBar">
+  <div class="voice-bar-left">
+    <div style="width:8px;height:8px;border-radius:50%;background:#6ecf9a;flex-shrink:0"></div>
+    <span class="voice-bar-text">Voice: <strong id="voiceBarName">ElevenLabs</strong></span>
+  </div>
+  <button class="voice-bar-link" onclick="toggleVoicePicker()">Change voice</button>
+</div>
+<div class="key-entry" id="keyEntry">
+  <div class="key-entry-label">🎙 ElevenLabs API Key</div>
+  <div class="key-entry-row">
+    <input class="key-input" id="keyInput" type="password" placeholder="Paste your API key…" />
+    <button class="key-btn" onclick="saveKey()">Connect</button>
+  </div>
+  <div class="key-msg" id="keyMsg"></div>
+</div>
+<div class="voice-picker-panel" id="voicePickerPanel">
+  <div class="voice-picker-label">Select a voice</div>
+  <div class="voice-list-inner" id="voiceListInner"></div>
+  <div class="picker-msg" id="pickerMsg"></div>
+</div>
+
+<!-- SENTENCE 25 -->
+<div class="lesson-card">
+  <div class="card-header">
+    <div>
+      <div class="sentence-number">Sentence 25</div>
+      <div class="french-sentence">Si vous refusez de nous aider, les conséquences pourraient être graves.</div>
+      <div class="english-sentence">"If you refuse to help us, the consequences could be serious."</div>
+    </div>
+    <button class="play-btn" id="btn25" onclick="speak('btn25','Si vous refusez de nous aider, les conséquences pourraient être graves.')">
+      <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>
+    </button>
+  </div>
+  <div class="pronunciation-bar"><span class="pronun-label">Say it</span><span class="pronun-text">see voo ruh-fü-ZAY duh noo zeh-DAY — lay kon-say-KAHNS — poor-REH etr grahv</span></div>
+  <div class="card-body">
+    <table>
+      <thead><tr><th>French</th><th>Sounds like</th><th>Means</th><th>Note</th></tr></thead>
+      <tbody>
+        <tr><td>si vous refusez</td><td>see voo ruh-fü-ZAY</td><td>if you refuse</td><td><span class="word-highlight">si + present tense</span> = if clause — French uses present, not future here</td></tr>
+        <tr><td>refuser de</td><td>ruh-fü-ZAY duh</td><td>to refuse to</td><td><span class="word-highlight">refuser de + infinitive</span> — note the <span class="word-highlight">de</span> link</td></tr>
+        <tr><td>nous aider</td><td>noo zeh-DAY</td><td>to help us</td><td><span class="word-highlight">nous</span> is the object pronoun here — "help us"</td></tr>
+        <tr><td>les conséquences</td><td>lay kon-say-KAHNS</td><td>the consequences</td><td>Same as English — feminine plural</td></tr>
+        <tr><td>pourraient être</td><td>poor-REH etr</td><td>could be</td><td>Conditional of <span class="word-highlight">pouvoir</span> — "could / might"</td></tr>
+      </tbody>
+    </table>
+    <div class="insight">💡 <strong>The conditional tense</strong> — <em>pourraient</em> is the conditional of <em>pouvoir</em>. It expresses possibility or politeness. <span class="word-highlight">Ce serait bien</span> = That would be nice. <span class="word-highlight">Je voudrais</span> = I would like. <span class="word-highlight">On pourrait</span> = We could. You'll recognise it by the <strong>-rait/-raient</strong> ending. TEF/TCF writing loves the conditional for making polite arguments. <span class="formal-tag">formal</span></div>
+  </div>
+</div>
+
+<!-- SENTENCE 26 -->
+<div class="lesson-card">
+  <div class="card-header">
+    <div>
+      <div class="sentence-number">Sentence 26</div>
+      <div class="french-sentence">Le Premier Ministre se rendit compte qu'il n'avait pas d'autre option.</div>
+      <div class="english-sentence">"The Prime Minister realised that he had no other option."</div>
+    </div>
+    <button class="play-btn" id="btn26" onclick="speak('btn26','Le Premier Ministre se rendit compte qu\'il n\'avait pas d\'autre option.')">
+      <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>
+    </button>
+  </div>
+  <div class="pronunciation-bar"><span class="pronun-label">Say it</span><span class="pronun-text">luh pruh-MYAY mee-NEESTR — suh rahn-DEE CONT — keel nah-VEH pah DOTR op-SYON</span></div>
+  <div class="card-body">
+    <table>
+      <thead><tr><th>French</th><th>Sounds like</th><th>Means</th><th>Note</th></tr></thead>
+      <tbody>
+        <tr><td>se rendit compte</td><td>suh rahn-DEE CONT</td><td>realised</td><td>Fixed expression: <span class="word-highlight">se rendre compte (de)</span> = to realise</td></tr>
+        <tr><td>qu'il n'avait pas</td><td>keel nah-VEH pah</td><td>that he did not have</td><td>Imperfect — ongoing state in the past</td></tr>
+        <tr><td>d'autre option</td><td>DOTR op-SYON</td><td>any other option</td><td>After negation, <span class="word-highlight">une autre</span> → <span class="word-highlight">d'autre</span> — the article drops to <span class="word-highlight">de</span></td></tr>
+      </tbody>
+    </table>
+    <div class="insight">💡 <strong>se rendre compte (de/que)</strong> = "to realise" — one of the most useful fixed expressions in French. <span class="word-highlight">Je me rends compte que tu as raison</span> = I realise you are right. <span class="word-highlight">Il s'est rendu compte de son erreur</span> = He realised his mistake. It's reflexive, so the auxiliary in passé composé is <span class="word-highlight">être</span>.</div>
+  </div>
+</div>
+
+<!-- SENTENCE 27 -->
+<div class="lesson-card">
+  <div class="card-header">
+    <div>
+      <div class="sentence-number">Sentence 27</div>
+      <div class="french-sentence">— Très bien, dit-il enfin. Faites ce que vous avez à faire.</div>
+      <div class="english-sentence">"'Very well,' he said at last. 'Do what you have to do.'"</div>
+    </div>
+    <button class="play-btn" id="btn27" onclick="speak('btn27','Très bien, dit-il enfin. Faites ce que vous avez à faire.')">
+      <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>
+    </button>
+  </div>
+  <div class="pronunciation-bar"><span class="pronun-label">Say it</span><span class="pronun-text">treh BYAN — dee-TEEL ahn-FAN — feht suh kuh voo zah-VAY ah FEHR</span></div>
+  <div class="card-body">
+    <table>
+      <thead><tr><th>French</th><th>Sounds like</th><th>Means</th><th>Note</th></tr></thead>
+      <tbody>
+        <tr><td>Très bien</td><td>treh BYAN</td><td>Very well / Alright</td><td>Formal concession — also used in everyday speech</td></tr>
+        <tr><td>enfin</td><td>ahn-FAN</td><td>at last / finally</td><td>Also used as a filler: "well…" / "I mean…" in spoken French</td></tr>
+        <tr><td>Faites</td><td>feht</td><td>Do (imperative)</td><td>Imperative of <span class="word-highlight">faire</span> — giving an order to <em>vous</em></td></tr>
+        <tr><td>ce que vous avez à faire</td><td>suh kuh voo zah-VAY ah FEHR</td><td>what you have to do</td><td><span class="word-highlight">avoir à + infinitive</span> = to have to do something</td></tr>
+      </tbody>
+    </table>
+    <div class="insight">💡 <strong>avoir à + infinitive</strong> = another way to say "to have to / must." Slightly less forceful than <span class="word-highlight">devoir</span>. <span class="word-highlight">J'ai à faire</span> = I have things to do. <span class="word-highlight">Ce que vous avez à faire</span> = what you have to do. Also note the <strong>imperative</strong>: <span class="word-highlight">Faites !</span> = Do it! Imperatives drop the subject and use the verb directly — <span class="word-highlight">Partez</span> = Leave. <span class="word-highlight">Venez</span> = Come.</div>
+  </div>
+</div>
+
+<!-- PRACTICE -->
+<div class="practice-card">
+  <div class="practice-header"><span class="practice-badge">✦ Practice</span></div>
+  <div class="practice-body">
+    <div class="practice-prompt">Translate into French</div>
+    <div class="practice-english">"Very well. He finally realised that he had no other option but to cooperate."</div>
+    <div class="input-row">
+      <input class="practice-input" id="practiceInput" type="text" placeholder="Type your French translation…" />
+      <button class="submit-btn" id="submitBtn" onclick="checkAnswer()">Check</button>
+    </div>
+    <div class="feedback-block" id="feedbackBlock">
+      <div class="feedback-loading" id="loadingMsg"><div class="spinner"></div> Checking…</div>
+      <div id="feedbackContent" style="display:none"></div>
+    </div>
+    <button class="download-btn" id="downloadBtn" onclick="downloadMistakes()">↓ Download mistakes log</button>
+  </div>
+</div>
+
+<script>
+const KEY_APIKEY    = 'elevenlabs_api_key';
+const KEY_VOICE     = 'elevenlabs_voice_id';
+const KEY_VOICENAME = 'elevenlabs_voice_name';
+const KEY_MISTAKES  = 'french_ch1_mistakes';
+
+let voicePickerOpen = false;
+let allVoices = [];
+let currentAudio = null;
+let currentBtnId = null;
+
+const PLAY  = '<svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>';
+const PAUSE = '<svg viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>';
+const SPIN  = '<svg viewBox="0 0 24 24" fill="currentColor" style="animation:spin 0.8s linear infinite"><path d="M12 2a10 10 0 1 0 10 10" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>';
+
+window.addEventListener('load', () => {
+  const key = localStorage.getItem(KEY_APIKEY);
+  if (key) {
+    document.getElementById('voiceBar').style.display = 'flex';
+    const name = localStorage.getItem(KEY_VOICENAME);
+    if (name) document.getElementById('voiceBarName').textContent = name;
+    fetchVoices(key, false);
+  } else {
+    document.getElementById('keyEntry').classList.add('visible');
+  }
+  if (loadMistakes().length > 0) document.getElementById('downloadBtn').classList.add('visible');
+});
+
+async function saveKey() {
+  const key = document.getElementById('keyInput').value.trim().replace(/[\u200B-\u200D\uFEFF]/g,'');
+  if (!key) return;
+  document.getElementById('keyMsg').textContent = 'Connecting…';
+  const ok = await fetchVoices(key, true);
+  if (ok) {
+    localStorage.setItem(KEY_APIKEY, key);
+    document.getElementById('keyEntry').classList.remove('visible');
+    document.getElementById('voiceBar').style.display = 'flex';
+    document.getElementById('keyMsg').textContent = '';
+  } else {
+    document.getElementById('keyMsg').textContent = 'Could not connect — check your API key.';
+  }
+}
+
+async function fetchVoices(key, showPicker) {
+  try {
+    const res = await fetch('https://api.elevenlabs.io/v1/voices', { headers: { 'xi-api-key': key } });
+    if (!res.ok) return false;
+    const data = await res.json();
+    allVoices = data.voices || [];
+    if (showPicker) renderVoicePicker();
+    const savedId = localStorage.getItem(KEY_VOICE);
+    if (savedId) {
+      const v = allVoices.find(v => v.voice_id === savedId);
+      if (v) { document.getElementById('voiceBarName').textContent = v.name; localStorage.setItem(KEY_VOICENAME, v.name); }
+    } else if (allVoices.length) {
+      localStorage.setItem(KEY_VOICE, allVoices[0].voice_id);
+      localStorage.setItem(KEY_VOICENAME, allVoices[0].name);
+      document.getElementById('voiceBarName').textContent = allVoices[0].name;
+    }
+    return true;
+  } catch(e) { return false; }
+}
+
+function toggleVoicePicker() {
+  voicePickerOpen = !voicePickerOpen;
+  document.getElementById('voicePickerPanel').classList.toggle('visible', voicePickerOpen);
+  if (voicePickerOpen) {
+    if (allVoices.length) renderVoicePicker();
+    else { document.getElementById('pickerMsg').textContent = 'Loading…'; fetchVoices(localStorage.getItem(KEY_APIKEY), true); }
+  }
+}
+
+function renderVoicePicker() {
+  const c = document.getElementById('voiceListInner');
+  const saved = localStorage.getItem(KEY_VOICE);
+  c.innerHTML = '';
+  allVoices.forEach(v => {
+    const sel = v.voice_id === saved;
+    const d = document.createElement('div');
+    d.className = 'voice-item' + (sel ? ' selected' : '');
+    const desc = v.labels ? Object.values(v.labels).slice(0,2).join(' · ') : '';
+    d.innerHTML = `<div class="voice-dot"></div><div class="voice-item-info"><div class="voice-item-name">${v.name}</div>${desc?`<div class="voice-item-desc">${desc.slice(0,60)}</div>`:''}</div><button class="vprev-btn"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg></button>`;
+    d.querySelector('.voice-item-info').onclick = () => {
+      localStorage.setItem(KEY_VOICE, v.voice_id); localStorage.setItem(KEY_VOICENAME, v.name);
+      document.getElementById('voiceBarName').textContent = v.name;
+      document.querySelectorAll('.voice-item').forEach(i => i.classList.remove('selected')); d.classList.add('selected');
+      document.getElementById('pickerMsg').textContent = `Voice set to "${v.name}"`;
+    };
+    d.querySelector('.voice-dot').onclick = () => d.querySelector('.voice-item-info').click();
+    d.querySelector('.vprev-btn').onclick = async e => {
+      e.stopPropagation(); const btn = d.querySelector('.vprev-btn'); btn.innerHTML = PAUSE;
+      try {
+        const r = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${v.voice_id}`, { method:'POST', headers:{'xi-api-key':localStorage.getItem(KEY_APIKEY),'Content-Type':'application/json'}, body: JSON.stringify({text:"Bonjour, je suis ravi de vous rencontrer.",model_id:'eleven_multilingual_v2',voice_settings:{stability:0.5,similarity_boost:0.75}}) });
+        if (!r.ok) throw new Error();
+        const a = new Audio(URL.createObjectURL(await r.blob())); a.play();
+        a.onended = () => { btn.innerHTML = '<svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>'; };
+      } catch(e) { btn.innerHTML = '<svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>'; }
+    };
+    c.appendChild(d);
+  });
+  document.getElementById('pickerMsg').textContent = '';
+}
+
+function stopCurrent() {
+  if (currentAudio) { currentAudio.pause(); currentAudio = null; }
+  if (currentBtnId) { const el = document.getElementById(currentBtnId); if (el) { el.innerHTML = PLAY; el.classList.remove('playing'); } currentBtnId = null; }
+}
+
+async function speak(btnId, text) {
+  const btn = document.getElementById(btnId); if (!btn) return;
+  if (currentBtnId === btnId) { stopCurrent(); return; }
+  stopCurrent(); currentBtnId = btnId;
+  const key = localStorage.getItem(KEY_APIKEY);
+  const vid = localStorage.getItem(KEY_VOICE);
+  if (key && vid) {
+    btn.innerHTML = SPIN;
+    try {
+      const res = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${vid}`, { method:'POST', headers:{'xi-api-key':key,'Content-Type':'application/json'}, body:JSON.stringify({text,model_id:'eleven_multilingual_v2',voice_settings:{stability:0.5,similarity_boost:0.75}}) });
+      if (!res.ok) throw new Error();
+      const url = URL.createObjectURL(await res.blob());
+      const audio = new Audio(url); currentAudio = audio;
+      btn.innerHTML = PAUSE; btn.classList.add('playing'); audio.play();
+      audio.onended = () => { btn.innerHTML = PLAY; btn.classList.remove('playing'); URL.revokeObjectURL(url); currentBtnId = null; };
+      return;
+    } catch(e) { btn.innerHTML = PLAY; btn.classList.remove('playing'); currentBtnId = null; }
+  }
+  const voices = speechSynthesis.getVoices();
+  const fr = voices.find(v => v.lang.startsWith('fr') && v.localService) || voices.find(v => v.lang.startsWith('fr'));
+  const u = new SpeechSynthesisUtterance(text); u.lang = 'fr-FR'; if (fr) u.voice = fr; u.rate = 0.88;
+  btn.innerHTML = PAUSE; btn.classList.add('playing');
+  u.onend = () => { btn.innerHTML = PLAY; btn.classList.remove('playing'); currentBtnId = null; };
+  speechSynthesis.speak(u);
+}
+
+// ── MISTAKES ──
+function loadMistakes() { try { return JSON.parse(localStorage.getItem(KEY_MISTAKES)||'[]'); } catch(e) { return []; } }
+function saveMistake(m) { const a = loadMistakes(); a.push(m); localStorage.setItem(KEY_MISTAKES, JSON.stringify(a)); }
+
+// ── ANSWER CHECKING ──
+const MODEL_ANSWER = "Très bien. Il se rendit compte enfin qu'il n'avait pas d'autre option que de coopérer.";
+const ENGLISH = "Very well. He finally realised that he had no other option but to cooperate.";
+
+const CHECKS = [
+  {
+    test: s => /tres\s*bien/.test(s),
+    wrote: () => '(missing "Très bien")',
+    should: 'Très bien',
+    explain: '"Very well / Alright" = <em>Très bien</em>. This is a natural concession phrase in French — used both formally and in conversation when reluctantly agreeing to something.'
+  },
+  {
+    test: s => /se\s*rendit\s*compte|s[' ]?est\s*rendu\s*compte|se\s*rend\s*compte/.test(s),
+    wrote: s => s.match(/\b(a\s*realise|comprit|a\s*compris|realisa|realise)\b/)?.[0] || '(wrong "realised")',
+    should: 'se rendit compte',
+    explain: '"Realised" = <em>se rendit compte</em> (passé simple) or <em>s\'est rendu compte</em> (passé composé). This reflexive fixed expression is the natural French way to express realisation. <em>Comprendre</em> means to understand, not to realise.'
+  },
+  {
+    test: s => /enfin/.test(s),
+    wrote: s => s.match(/\b(finalement|a\s*la\s*fin|au\s*bout)\b/)?.[0] || '(missing "enfin")',
+    should: 'enfin',
+    explain: '"Finally / at last" = <em>enfin</em>. <em>Finalement</em> also works and is slightly more formal. <em>Enfin</em> carries a sense of relief or long-awaited conclusion — perfect for this moment in the scene.'
+  },
+  {
+    test: s => /n[' ]?avait\s*pas/.test(s),
+    wrote: s => s.match(/\b(n[' ]?a\s*pas|n[' ]?avait\s*\b(?!pas)|n[' ]?avait\s*aucune)\b/)?.[0] || '(wrong tense/negation for "had no")',
+    should: "n'avait pas",
+    explain: '"He did not have" = <em>il n\'avait pas</em> — imperfect, because this was an ongoing state (he was in this situation). Passé composé (<em>il n\'a pas eu</em>) would suggest a single event rather than a condition.'
+  },
+  {
+    test: s => /d[' ]?autre\s*option/.test(s),
+    wrote: s => s.match(/\b(une\s*autre\s*option|pas\s*une\s*option|aucune\s*option)\b/)?.[0] || '(missing "d\'autre option")',
+    should: "d'autre option",
+    explain: '"No other option" = <em>pas d\'autre option</em>. After negation, the article <em>une</em> drops to <em>de</em>/<em>d\'</em>. So: <em>pas <strong>d\'</strong>autre option</em>, not <em>pas <strong>une</strong> autre option</em>.'
+  },
+  {
+    test: s => /cooper|coopérer/.test(s),
+    wrote: s => s.match(/\b(aider|travailler|collaborate|collaborer)\b/)?.[0] || '(missing "coopérer")',
+    should: 'coopérer',
+    explain: '"To cooperate" = <em>coopérer</em>. Comes from <em>la coopération</em> — both are TEF/TCF-register vocabulary worth knowing. Formal contexts prefer <em>coopérer</em> over <em>aider</em> (to help).'
+  }
+];
+
+function norm(s) {
+  return s.toLowerCase()
+    .replace(/[àâä]/g,'a').replace(/[éèêë]/g,'e').replace(/[îï]/g,'i')
+    .replace(/[ôö]/g,'o').replace(/[ùûü]/g,'u').replace(/ç/g,'c')
+    .replace(/['']/g,"'").replace(/\s+/g,' ').trim();
+}
+
+function checkAnswer() {
+  const input = document.getElementById('practiceInput');
+  const raw = input.value.trim(); if (!raw) return;
+  document.getElementById('submitBtn').disabled = true; input.disabled = true;
+  document.getElementById('feedbackBlock').classList.add('visible');
+  document.getElementById('loadingMsg').style.display = 'flex';
+  document.getElementById('feedbackContent').style.display = 'none';
+
+  setTimeout(() => {
+    const n = norm(raw);
+    const mistakes = [];
+    CHECKS.forEach(c => {
+      if (!c.test(n)) {
+        const w = typeof c.wrote === 'function' ? (c.wrote(n)||'—') : c.wrote;
+        mistakes.push({ wrote: w, should: c.should, explain: c.explain });
+      }
+    });
+    mistakes.forEach(m => saveMistake({ scene:'Chapter 1, Scene 9', english:ENGLISH, wrote:m.wrote, should:m.should, explain:m.explain.replace(/<[^>]+>/g,''), date:new Date().toLocaleDateString() }));
+    if (mistakes.length > 0 || loadMistakes().length > 0) document.getElementById('downloadBtn').classList.add('visible');
+
+    const score = mistakes.length === 0 ? 'perfect' : mistakes.length <= 2 ? 'mostly' : 'needs-work';
+    const banners = { perfect:{cls:'perfect',icon:'✓',text:'Excellent! All elements correct.'}, mostly:{cls:'mostly',icon:'◑',text:'Good effort — a couple of things to refine.'}, 'needs-work':{cls:'needs-work',icon:'✗',text:"Keep going — here's what to work on."} };
+    const b = banners[score];
+    const safe = raw.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    const js = raw.replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+
+    let html = `<div class="your-answer-block"><div class="your-answer-label">Your answer</div>
+      <div class="your-answer-text"><span>${safe}</span>
+        <button class="your-answer-play" id="yapBtn" onclick="speak('yapBtn','${js}')">
+          <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>
+        </button></div></div>`;
+    html += `<div class="score-banner ${b.cls}"><span class="score-icon">${b.icon}</span><span class="score-text">${b.text}</span></div>`;
+    html += `<div class="model-answer-block"><div class="model-label">Model answer</div>
+      <div class="model-sentence">${MODEL_ANSWER}
+        <button class="answer-play-btn" id="mapBtn" onclick="speak('mapBtn','${MODEL_ANSWER.replace(/'/g,"\\'")}')">
+          <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>
+        </button></div></div>`;
+    if (mistakes.length > 0) {
+      html += `<div class="mistakes-section"><div class="mistakes-label">Things to review</div>`;
+      mistakes.forEach(m => { html += `<div class="mistake-item"><div class="mistake-wrote">You wrote: <span>${m.wrote}</span></div><div class="mistake-should">Should be: <span>${m.should}</span></div><div class="mistake-explanation">${m.explain}</div></div>`; });
+      html += '</div>';
+    } else {
+      html += `<div class="overall-feedback">All six elements correct — well done. Listen to the model and notice how <em>se rendit compte</em> and <em>d\'autre option</em> flow together.</div>`;
+    }
+    document.getElementById('loadingMsg').style.display = 'none';
+    const fc = document.getElementById('feedbackContent'); fc.innerHTML = html; fc.style.display = 'block';
+  }, 400);
+}
+
+function downloadMistakes() {
+  const all = loadMistakes(); if (!all.length) return;
+  let md = '# 🔴 French Mistakes Log\n*Harry Potter et le Prince de Sang-Mêlé*\n\n---\n\n';
+  const by = {};
+  all.forEach(m => { (by[m.scene] = by[m.scene]||[]).push(m); });
+  Object.entries(by).forEach(([scene,list]) => {
+    md += `## ${scene}\n\n`;
+    list.forEach((m,i) => { md += `### Mistake ${i+1}\n**Sentence:** *${m.english}*\n\n| | French |\n|---|---|\n| ❌ You wrote | *${m.wrote}* |\n| ✅ Should be | *${m.should}* |\n\n**Why:** ${m.explain}\n\n---\n\n`; });
+  });
+  md += `*Downloaded: ${new Date().toLocaleDateString()}*\n`;
+  const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([md],{type:'text/markdown'})); a.download = 'french_mistakes_ch1.md'; a.click();
+}
+
+document.getElementById('practiceInput').addEventListener('keydown', e => { if (e.key==='Enter') checkAnswer(); });
+</script>
+</body>
+</html>

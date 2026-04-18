@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>French Lesson — Chapter 2 Scene 2</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink:#1a2a3a;--parchment:#f5f0e8;--cream:#faf7f2;
+    --gold:#c9a84c;--gold-light:#e8d5a3;--muted:#7a7060;
+    --red:#8b2635;--blue:#2c4a7c;--dark:#162d4a;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{background:#1a4458;font-family:'DM Sans',sans-serif;min-height:100vh;padding:32px 16px;background-image:radial-gradient(ellipse at top left,#2a6580 0%,#1a4458 55%,#10283a 100%);}
+  .page-title{text-align:center;color:var(--gold);font-family:'Playfair Display',serif;font-size:13px;letter-spacing:4px;text-transform:uppercase;margin-bottom:8px;opacity:.9;}
+  .page-subtitle{text-align:center;color:rgba(255,255,255,.45);font-size:12px;letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;}
+  .scene-desc{text-align:center;color:rgba(255,255,255,.55);font-size:13px;font-style:italic;font-family:'Playfair Display',serif;margin-bottom:24px;max-width:500px;margin-left:auto;margin-right:auto;line-height:1.6;}
+
+  /* ── VOICE BAR ── */
+  .voice-bar{max-width:700px;margin:0 auto 24px;background:var(--dark);border-radius:10px;border:1px solid rgba(201,168,76,.2);padding:12px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;}
+  .vbar-left{display:flex;align-items:center;gap:10px;}
+  .vbar-dot{width:8px;height:8px;border-radius:50%;background:#6ecf9a;flex-shrink:0;}
+  .vbar-text{font-size:12px;color:rgba(255,255,255,.5);}
+  .vbar-text strong{color:rgba(255,255,255,.8);font-weight:500;}
+  .vbar-link{font-size:11px;color:var(--gold);opacity:.7;cursor:pointer;text-decoration:underline;background:none;border:none;font-family:inherit;white-space:nowrap;}
+  .vbar-link:hover{opacity:1;}
+  .key-entry{display:none;max-width:700px;margin:0 auto 24px;background:var(--dark);border-radius:12px;border:1px solid rgba(201,168,76,.3);padding:18px 24px;}
+  .key-entry.visible{display:block;}
+  .key-label{font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:10px;}
+  .key-row{display:flex;gap:8px;}
+  .key-input{flex:1;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.15);border-radius:8px;padding:10px 14px;font-size:14px;font-family:'DM Sans',sans-serif;color:white;outline:none;transition:border-color .2s;}
+  .key-input:focus{border-color:var(--gold);}
+  .key-btn{background:var(--gold);border:none;color:var(--ink);font-family:'DM Sans',sans-serif;font-size:12px;letter-spacing:1.5px;text-transform:uppercase;padding:0 18px;border-radius:8px;cursor:pointer;font-weight:500;white-space:nowrap;}
+  .key-btn:hover{background:#e0bb5a;}
+  .key-msg{font-size:12px;margin-top:8px;color:#e07f8a;min-height:16px;}
+  .voice-picker-panel{display:none;max-width:700px;margin:0 auto 24px;background:var(--dark);border-radius:12px;border:1px solid rgba(201,168,76,.3);padding:18px 24px;}
+  .voice-picker-panel.visible{display:block;animation:fadeIn .2s ease;}
+  .vpc-label{font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:12px;}
+  .vpc-list{display:flex;flex-direction:column;gap:8px;max-height:220px;overflow-y:auto;}
+  .vitem{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:8px;border:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.03);cursor:pointer;transition:all .15s;}
+  .vitem:hover{border-color:rgba(201,168,76,.35);background:rgba(201,168,76,.05);}
+  .vitem.selected{border-color:var(--gold);background:rgba(201,168,76,.1);}
+  .vdot{width:14px;height:14px;border-radius:50%;border:2px solid rgba(255,255,255,.2);flex-shrink:0;display:flex;align-items:center;justify-content:center;}
+  .vitem.selected .vdot{border-color:var(--gold);background:var(--gold);}
+  .vitem.selected .vdot::after{content:'';width:5px;height:5px;border-radius:50%;background:var(--ink);}
+  .vinfo{flex:1;}
+  .vname{font-size:13px;color:rgba(255,255,255,.8);font-weight:500;}
+  .vitem.selected .vname{color:var(--gold);}
+  .vmeta{font-size:11px;color:rgba(255,255,255,.3);}
+  .vprev{width:28px;height:28px;border-radius:50%;border:1px solid rgba(255,255,255,.15);background:transparent;color:rgba(255,255,255,.4);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;}
+  .vprev:hover{border-color:var(--gold);color:var(--gold);}
+  .vprev svg{width:10px;height:10px;}
+  .vpc-msg{font-size:12px;color:rgba(255,255,255,.35);margin-top:10px;font-style:italic;}
+
+  /* ── LESSON CARDS ── */
+  .lesson-card{background:var(--cream);border-radius:12px;max-width:700px;margin:0 auto 28px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.3),0 0 0 1px rgba(201,168,76,.2);}
+  .card-header{background:var(--parchment);border-bottom:1px solid var(--gold-light);padding:20px 28px 16px;display:flex;align-items:flex-start;justify-content:space-between;gap:16px;}
+  .sentence-number{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);font-weight:500;margin-bottom:6px;}
+  .french-sentence{font-family:'Playfair Display',serif;font-size:22px;color:var(--ink);line-height:1.3;font-style:italic;margin-bottom:4px;}
+  .english-sentence{font-size:14px;color:var(--muted);font-weight:300;}
+  .play-btn{flex-shrink:0;width:44px;height:44px;border-radius:50%;border:2px solid var(--gold);background:transparent;color:var(--gold);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s ease;margin-top:4px;}
+  .play-btn:hover{background:var(--gold);color:white;transform:scale(1.05);}
+  .play-btn.playing{background:var(--gold);color:white;}
+  .play-btn svg{width:16px;height:16px;}
+  .pronunciation-bar{background:var(--dark);padding:10px 28px;display:flex;align-items:center;gap:10px;}
+  .pronun-label{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);opacity:.7;flex-shrink:0;}
+  .pronun-text{font-size:13px;color:rgba(255,255,255,.75);font-style:italic;}
+  .card-body{padding:20px 28px 24px;}
+  table{width:100%;border-collapse:collapse;margin-bottom:18px;}
+  thead tr{border-bottom:1px solid var(--gold-light);}
+  thead th{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);padding:0 0 8px;text-align:left;font-weight:500;}
+  tbody tr{border-bottom:1px solid rgba(0,0,0,.06);}
+  tbody tr:last-child{border-bottom:none;}
+  td{padding:9px 0;font-size:14px;vertical-align:top;}
+  td:first-child{font-family:'Playfair Display',serif;font-style:italic;color:var(--blue);width:26%;font-size:15px;}
+  td:nth-child(2){color:var(--muted);font-size:12px;font-style:italic;width:22%;padding-right:12px;}
+  td:nth-child(3){font-weight:500;color:var(--ink);width:18%;}
+  td:nth-child(4){color:#555;font-size:13px;font-weight:300;}
+  .insight{background:linear-gradient(135deg,#fffbf0,#fff8e8);border-left:3px solid var(--gold);border-radius:0 8px 8px 0;padding:12px 16px;font-size:13.5px;color:var(--ink);line-height:1.6;}
+  .insight strong{color:var(--red);}
+  .word-highlight{background:rgba(44,74,124,.1);border-radius:3px;padding:1px 4px;font-style:italic;color:var(--blue);font-family:'Playfair Display',serif;}
+  .formal-tag{display:inline-block;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;background:rgba(139,38,53,.12);border:1px solid rgba(139,38,53,.3);color:#c07070;border-radius:4px;padding:1px 6px;margin-left:6px;vertical-align:middle;}
+
+  /* ── PRACTICE CARD ── */
+  .practice-card{background:var(--dark);border-radius:12px;max-width:700px;margin:0 auto 40px;overflow:hidden;border:1px solid rgba(201,168,76,.35);box-shadow:0 20px 60px rgba(0,0,0,.3);}
+  .practice-header{padding:18px 28px 14px;border-bottom:1px solid rgba(201,168,76,.2);}
+  .practice-badge{font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:var(--gold);font-weight:500;background:rgba(201,168,76,.12);border:1px solid rgba(201,168,76,.3);border-radius:20px;padding:3px 10px;}
+  .practice-body{padding:22px 28px 26px;}
+  .practice-prompt{font-size:13px;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:10px;}
+  .practice-english{font-family:'Playfair Display',serif;font-size:22px;color:white;font-style:italic;margin-bottom:22px;line-height:1.35;}
+  .input-row{display:flex;gap:10px;align-items:stretch;}
+  .practice-input{flex:1;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.15);border-radius:8px;padding:13px 16px;font-size:16px;font-family:'Playfair Display',serif;font-style:italic;color:white;outline:none;transition:border-color .2s;}
+  .practice-input::placeholder{color:rgba(255,255,255,.25);font-style:italic;}
+  .practice-input:focus{border-color:var(--gold);}
+  .practice-input:disabled{opacity:.6;}
+  .submit-btn{background:var(--gold);border:none;color:var(--ink);font-family:'DM Sans',sans-serif;font-size:13px;letter-spacing:1.5px;text-transform:uppercase;padding:0 22px;border-radius:8px;cursor:pointer;transition:all .2s;font-weight:500;white-space:nowrap;}
+  .submit-btn:hover{background:#e0bb5a;}
+  .submit-btn:disabled{opacity:.5;cursor:not-allowed;}
+  .feedback-block{display:none;margin-top:20px;border-top:1px solid rgba(255,255,255,.08);padding-top:20px;}
+  .feedback-block.visible{display:block;animation:fadeIn .3s ease;}
+  .feedback-loading{display:flex;align-items:center;gap:10px;color:rgba(255,255,255,.5);font-size:14px;font-style:italic;}
+  .spinner{width:18px;height:18px;border-radius:50%;border:2px solid rgba(201,168,76,.3);border-top-color:var(--gold);animation:spin .8s linear infinite;}
+  .your-answer-block{margin-bottom:16px;}
+  .your-answer-label{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.35);margin-bottom:6px;}
+  .your-answer-text{font-family:'Playfair Display',serif;font-size:18px;font-style:italic;color:rgba(255,255,255,.75);line-height:1.4;padding:10px 14px;background:rgba(255,255,255,.04);border-radius:8px;border-left:3px solid rgba(255,255,255,.15);display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+  .yap-btn{flex-shrink:0;width:30px;height:30px;border-radius:50%;border:1.5px solid rgba(255,255,255,.2);background:transparent;color:rgba(255,255,255,.4);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;}
+  .yap-btn:hover,.yap-btn.playing{border-color:var(--gold);color:var(--gold);}
+  .yap-btn svg{width:10px;height:10px;}
+  .score-banner{display:flex;align-items:center;gap:12px;padding:12px 16px;border-radius:8px;margin-bottom:16px;}
+  .score-banner.perfect{background:rgba(45,106,79,.25);border:1px solid rgba(45,106,79,.5);}
+  .score-banner.mostly{background:rgba(201,168,76,.15);border:1px solid rgba(201,168,76,.4);}
+  .score-banner.needs-work{background:rgba(139,38,53,.2);border:1px solid rgba(139,38,53,.4);}
+  .score-icon{font-size:20px;}
+  .score-text{font-size:14px;font-weight:500;}
+  .score-banner.perfect .score-text{color:#6ecf9a;}
+  .score-banner.mostly .score-text{color:var(--gold);}
+  .score-banner.needs-work .score-text{color:#e07f8a;}
+  .model-answer-block{margin-bottom:16px;}
+  .model-label{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.35);margin-bottom:6px;}
+  .model-sentence{font-family:'Playfair Display',serif;font-size:20px;font-style:italic;color:var(--gold);display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+  .answer-play-btn{flex-shrink:0;width:34px;height:34px;border-radius:50%;border:1.5px solid var(--gold);background:transparent;color:var(--gold);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;}
+  .answer-play-btn:hover,.answer-play-btn.playing{background:var(--gold);color:var(--ink);}
+  .answer-play-btn svg{width:12px;height:12px;}
+  .mistakes-section{margin-top:16px;}
+  .mistakes-label{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.35);margin-bottom:10px;}
+  .mistake-item{background:rgba(139,38,53,.12);border:1px solid rgba(139,38,53,.3);border-radius:8px;padding:12px 14px;margin-bottom:8px;}
+  .mistake-wrote{font-size:13px;color:rgba(255,255,255,.5);margin-bottom:4px;}
+  .mistake-wrote span{font-family:'Playfair Display',serif;font-style:italic;color:#e07f8a;text-decoration:line-through;}
+  .mistake-should{font-size:13px;color:rgba(255,255,255,.5);margin-bottom:6px;}
+  .mistake-should span{font-family:'Playfair Display',serif;font-style:italic;color:#6ecf9a;}
+  .mistake-explanation{font-size:13px;color:rgba(255,255,255,.7);line-height:1.6;}
+  .overall-feedback{margin-top:14px;padding:12px 14px;background:rgba(255,255,255,.04);border-radius:8px;font-size:13.5px;color:rgba(255,255,255,.65);line-height:1.6;font-style:italic;}
+  .download-btn{margin-top:16px;background:transparent;border:1px solid rgba(255,255,255,.15);color:rgba(255,255,255,.5);font-family:'DM Sans',sans-serif;font-size:12px;letter-spacing:1px;text-transform:uppercase;padding:8px 16px;border-radius:6px;cursor:pointer;transition:all .2s;display:none;}
+  .download-btn:hover{border-color:var(--gold);color:var(--gold);}
+  .download-btn.visible{display:inline-block;}
+  @keyframes spin{to{transform:rotate(360deg);}}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+</style>
+</head>
+<body>
+
+<div class="page-title">Harry Potter et le Prince de Sang-Mêlé</div>
+<div class="page-subtitle">Chapter 2 · Scene 2</div>
+<div class="scene-desc">The two sisters cross the threshold. Inside, a cramped sitting room lined with books from floor to ceiling. The master of the house stays calm. The younger of the two can hardly stand.</div>
+
+<!-- VOICE BAR (auto-shows when key saved) -->
+<div class="voice-bar" id="voiceBar">
+  <div class="vbar-left">
+    <div class="vbar-dot" id="vbarDot"></div>
+    <span class="vbar-text">Voice: <strong id="voiceBarName">ElevenLabs</strong></span>
+  </div>
+  <button class="vbar-link" onclick="toggleVoicePicker()">Change voice</button>
+</div>
+<div class="key-entry" id="keyEntry">
+  <div class="key-label">🎙 ElevenLabs API Key</div>
+  <div class="key-row">
+    <input class="key-input" id="keyInput" type="password" placeholder="Paste your API key…"/>
+    <button class="key-btn" onclick="saveKey()">Connect</button>
+  </div>
+  <div class="key-msg" id="keyMsg"></div>
+</div>
+<div class="voice-picker-panel" id="voicePickerPanel">
+  <div class="vpc-label">Select a voice</div>
+  <div class="vpc-list" id="vpcList"></div>
+  <div class="vpc-msg" id="vpcMsg"></div>
+</div>
+
+<!-- SENTENCE 31 -->
+<div class="lesson-card">
+  <div class="card-header">
+    <div>
+      <div class="sentence-number">Sentence 31</div>
+      <div class="french-sentence">Il les fit entrer dans un petit salon aux murs couverts de livres.</div>
+      <div class="english-sentence">"He showed them into a small sitting room with walls covered in books."</div>
+    </div>
+    <button class="play-btn" id="btn31" data-tts="Il les fit entrer dans un petit salon aux murs couverts de livres." onclick="speak(this.id)">
+      <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>
+    </button>
+  </div>
+  <div class="pronunciation-bar">
+    <span class="pronun-label">Say it</span>
+    <span class="pronun-text">eel lay fee ahn-TRAY — dahn-zuhn puh-TEE sah-LON — oh mür koo-VEHR duh LEE-vruh</span>
+  </div>
+  <div class="card-body">
+    <table>
+      <thead><tr><th>French</th><th>Sounds like</th><th>Means</th><th>Note</th></tr></thead>
+      <tbody>
+        <tr><td>il les fit entrer</td><td>eel lay fee ahn-TRAY</td><td>he showed them in / made them enter</td><td><span class="word-highlight">faire + infinitif</span> — causative; <span class="word-highlight">les</span> = direct object "them"</td></tr>
+        <tr><td>un salon</td><td>uhn sah-LON</td><td>a sitting room / lounge</td><td>Masculine. Same word as English "salon" but in a home means living room</td></tr>
+        <tr><td>aux murs</td><td>oh mür</td><td>with walls / on the walls</td><td><span class="word-highlight">à + les → aux</span>; here expresses description ("with…")</td></tr>
+        <tr><td>couverts de</td><td>koo-VEHR duh</td><td>covered with / in</td><td>Past participle <span class="word-highlight">couvert</span> + <span class="word-highlight">de</span>; agrees with <span class="word-highlight">murs</span> (masc. plural)</td></tr>
+        <tr><td>un livre</td><td>uhn LEE-vruh</td><td>a book</td><td>Masculine. Plural: <span class="word-highlight">des livres</span></td></tr>
+      </tbody>
+    </table>
+    <div class="insight">💡 <strong>faire + infinitif</strong> (the causative) is essential. It means "to have/make someone do something," or to cause an action. <span class="word-highlight">Il les fit entrer</span> = He had them enter (showed them in). <span class="word-highlight">Je fais réparer ma voiture</span> = I'm having my car repaired. <span class="word-highlight">Elle me fait rire</span> = She makes me laugh. Notice how <strong>les</strong> (direct object pronoun = "them") sits <em>before</em> the verb — this is how French handles "him/her/it/them" when they're objects: <span class="word-highlight">je le vois</span> (I see him/it), <span class="word-highlight">elle les connaît</span> (she knows them).</div>
+  </div>
+</div>
+
+<!-- SENTENCE 32 -->
+<div class="lesson-card">
+  <div class="card-header">
+    <div>
+      <div class="sentence-number">Sentence 32</div>
+      <div class="french-sentence">« Je ne m'attendais pas à votre visite », dit-il d'une voix calme et posée.</div>
+      <div class="english-sentence">"'I wasn't expecting your visit,' he said in a calm, measured voice."</div>
+    </div>
+    <button class="play-btn" id="btn32" data-tts="Je ne m'attendais pas à votre visite, dit-il d'une voix calme et posée." onclick="speak(this.id)">
+      <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>
+    </button>
+  </div>
+  <div class="pronunciation-bar">
+    <span class="pronun-label">Say it</span>
+    <span class="pronun-text">zhuh nuh mah-tahn-DAY pah — ah voh-truh vee-ZEET — DEE-teel dün vwah KAHLM ay po-ZAY</span>
+  </div>
+  <div class="card-body">
+    <table>
+      <thead><tr><th>French</th><th>Sounds like</th><th>Means</th><th>Note</th></tr></thead>
+      <tbody>
+        <tr><td>je ne m'attendais pas</td><td>zhuh nuh mah-tahn-DAY pah</td><td>I wasn't expecting</td><td>Reflexive <span class="word-highlight">s'attendre à</span> (imperfect) = to expect</td></tr>
+        <tr><td>à votre visite</td><td>ah voh-truh vee-ZEET</td><td>your visit</td><td><span class="word-highlight">votre</span> = formal/plural "your"; <span class="word-highlight">la visite</span> is feminine</td></tr>
+        <tr><td>dit-il</td><td>DEE-teel</td><td>he said</td><td>Inversion for dialogue tags — <span class="word-highlight">verb-subject</span> with hyphen</td></tr>
+        <tr><td>d'une voix</td><td>dün vwah</td><td>in a … voice</td><td>Fixed manner pattern: <span class="word-highlight">d'une voix + adjective</span></td></tr>
+        <tr><td>calme et posée</td><td>KAHLM ay po-ZAY</td><td>calm and measured</td><td>Both adjectives take feminine form — agreeing with <span class="word-highlight">la voix</span></td></tr>
+      </tbody>
+    </table>
+    <div class="insight">💡 Two key patterns here. First, <strong>dit-il / dit-elle</strong> — French inverts the subject and verb in dialogue tags, always with a hyphen: <span class="word-highlight">dit-il</span> (he said), <span class="word-highlight">demanda-t-elle</span> (she asked — note the <em>-t-</em> buffer when the verb ends in a vowel and the pronoun begins with one). Second, <strong>d'une voix + adjectif</strong> is the standard French way to describe <em>how</em> something is said: <span class="word-highlight">d'une voix tremblante</span> (in a trembling voice), <span class="word-highlight">d'une voix basse</span> (in a low voice), <span class="word-highlight">d'une voix claire</span> (in a clear voice). Also note <strong>s'attendre à</strong> = to expect — a reflexive verb taking <em>à</em>, not a direct object. <span class="formal-tag">formal</span></div>
+  </div>
+</div>
+
+<!-- SENTENCE 33 -->
+<div class="lesson-card">
+  <div class="card-header">
+    <div>
+      <div class="sentence-number">Sentence 33</div>
+      <div class="french-sentence">Narcissa se laissa tomber sur le fauteuil le plus proche, les mains tremblantes.</div>
+      <div class="english-sentence">"Narcissa let herself fall into the nearest armchair, her hands trembling."</div>
+    </div>
+    <button class="play-btn" id="btn33" data-tts="Narcissa se laissa tomber sur le fauteuil le plus proche, les mains tremblantes." onclick="speak(this.id)">
+      <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>
+    </button>
+  </div>
+  <div class="pronunciation-bar">
+    <span class="pronun-label">Say it</span>
+    <span class="pronun-text">nar-see-SAH suh lay-SAH tom-BAY — sür luh foh-TUHY luh plü PROSH — lay mahn trahn-BLAHNT</span>
+  </div>
+  <div class="card-body">
+    <table>
+      <thead><tr><th>French</th><th>Sounds like</th><th>Means</th><th>Note</th></tr></thead>
+      <tbody>
+        <tr><td>se laissa tomber</td><td>suh lay-SAH tom-BAY</td><td>let herself fall / sank</td><td><span class="word-highlight">se laisser + infinitif</span> = to let oneself (do); passé simple here</td></tr>
+        <tr><td>un fauteuil</td><td>uhn foh-TUHY</td><td>an armchair</td><td>Masculine. Note <span class="word-highlight">eui</span> sounds roughly like English "uhy"</td></tr>
+        <tr><td>le plus proche</td><td>luh plü PROSH</td><td>the nearest</td><td>Superlative: <span class="word-highlight">le/la/les plus + adjectif</span> = "the most …"</td></tr>
+        <tr><td>les mains</td><td>lay mahn</td><td>the hands</td><td>Feminine plural. Singular: <span class="word-highlight">la main</span></td></tr>
+        <tr><td>tremblantes</td><td>trahn-BLAHNT</td><td>trembling</td><td>Present participle used as adjective — agrees with <span class="word-highlight">mains</span> (fem. pl.)</td></tr>
+      </tbody>
+    </table>
+    <div class="insight">💡 <strong>se laisser + infinitif</strong> = to let oneself (do something) — a common and expressive structure. <span class="word-highlight">se laisser tomber</span> (to sink / drop into), <span class="word-highlight">se laisser aller</span> (to let oneself go), <span class="word-highlight">se laisser convaincre</span> (to let oneself be convinced). The subject is passive in intent but still does the action. Also note the <strong>superlative</strong>: <span class="word-highlight">le plus + adjectif</span> = "the most …" — <span class="word-highlight">le plus proche</span> (the nearest), <span class="word-highlight">la plus belle</span> (the most beautiful), <span class="word-highlight">les plus fort(e)s</span> (the strongest). The article (<em>le/la/les</em>) agrees with the noun. Finally, <strong>les mains tremblantes</strong> is another body-language set phrase — same pattern as <em>les bras croisés</em> from Scene 1.</div>
+  </div>
+</div>
+
+<!-- PRACTICE CARD -->
+<div class="practice-card">
+  <div class="practice-header"><span class="practice-badge">✦ Practice</span></div>
+  <div class="practice-body">
+    <div class="practice-prompt">Translate into French</div>
+    <div class="practice-english">"She let herself fall into the nearest armchair and said in a trembling voice that she wasn't expecting this visit."</div>
+    <div class="input-row">
+      <input class="practice-input" id="practiceInput" type="text" placeholder="Type your French translation…"/>
+      <button class="submit-btn" id="submitBtn" onclick="checkAnswer()">Check</button>
+    </div>
+    <div class="feedback-block" id="feedbackBlock">
+      <div class="feedback-loading" id="loadingMsg"><div class="spinner"></div> Checking…</div>
+      <div id="feedbackContent" style="display:none"></div>
+    </div>
+    <button class="download-btn" id="downloadBtn" onclick="downloadMistakes()">↓ Download mistakes log</button>
+  </div>
+</div>
+
+<script>
+// ── STORAGE KEYS ──
+const KEY_API    = 'elevenlabs_api_key';
+const KEY_VOICE  = 'elevenlabs_voice_id';
+const KEY_VNAME  = 'elevenlabs_voice_name';
+const KEY_MISTAKES = 'french_ch2_mistakes';
+
+// ── ICONS ──
+const PLAY  = '<svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>';
+const PAUSE = '<svg viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>';
+const SPIN  = '<svg viewBox="0 0 24 24" fill="currentColor" style="animation:spin .8s linear infinite"><path d="M12 2a10 10 0 1 0 10 10" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>';
+
+// ── VOICE SETUP ──
+let voicePickerOpen = false, allVoices = [], currentAudio = null, currentBtnId = null;
+
+window.addEventListener('load', () => {
+  const key = localStorage.getItem(KEY_API);
+  if (key) {
+    const name = localStorage.getItem(KEY_VNAME);
+    if (name) document.getElementById('voiceBarName').textContent = name;
+    fetchVoices(key, false);
+  } else {
+    document.getElementById('keyEntry').classList.add('visible');
+    document.getElementById('voiceBarName').textContent = 'Browser voice (fallback)';
+    document.getElementById('vbarDot').style.background = 'rgba(255,255,255,0.25)';
+  }
+  if (loadMistakes().length > 0) document.getElementById('downloadBtn').classList.add('visible');
+});
+
+async function saveKey() {
+  const key = document.getElementById('keyInput').value.trim().replace(/[\u200B-\u200D\uFEFF]/g,'');
+  if (!key) return;
+  document.getElementById('keyMsg').textContent = 'Connecting…';
+  const ok = await fetchVoices(key, true);
+  if (ok) {
+    localStorage.setItem(KEY_API, key);
+    document.getElementById('keyEntry').classList.remove('visible');
+    document.getElementById('voiceBar').style.display = 'flex';
+    document.getElementById('keyMsg').textContent = '';
+  } else {
+    document.getElementById('keyMsg').textContent = 'Could not connect — check your API key.';
+  }
+}
+
+async function fetchVoices(key, showPicker) {
+  try {
+    const res = await fetch('https://api.elevenlabs.io/v1/voices', { headers: { 'xi-api-key': key } });
+    if (!res.ok) return false;
+    const data = await res.json();
+    allVoices = data.voices || [];
+    if (showPicker) renderVoicePicker();
+    const savedId = localStorage.getItem(KEY_VOICE);
+    if (savedId) {
+      const v = allVoices.find(v => v.voice_id === savedId);
+      if (v) { document.getElementById('voiceBarName').textContent = v.name; localStorage.setItem(KEY_VNAME, v.name); }
+    } else if (allVoices.length) {
+      localStorage.setItem(KEY_VOICE, allVoices[0].voice_id);
+      localStorage.setItem(KEY_VNAME, allVoices[0].name);
+      document.getElementById('voiceBarName').textContent = allVoices[0].name;
+    }
+    return true;
+  } catch(e) { return false; }
+}
+
+function toggleVoicePicker() {
+  voicePickerOpen = !voicePickerOpen;
+  document.getElementById('voicePickerPanel').classList.toggle('visible', voicePickerOpen);
+  if (voicePickerOpen) {
+    if (allVoices.length) renderVoicePicker();
+    else { document.getElementById('vpcMsg').textContent = 'Loading…'; fetchVoices(localStorage.getItem(KEY_API), true); }
+  }
+}
+
+function renderVoicePicker() {
+  const c = document.getElementById('vpcList'), saved = localStorage.getItem(KEY_VOICE);
+  c.innerHTML = '';
+  allVoices.forEach(v => {
+    const sel = v.voice_id === saved;
+    const d = document.createElement('div');
+    d.className = 'vitem' + (sel ? ' selected' : '');
+    const desc = v.labels ? Object.values(v.labels).slice(0,2).join(' · ') : '';
+    d.innerHTML = `<div class="vdot"></div><div class="vinfo"><div class="vname">${v.name}</div>${desc?`<div class="vmeta">${desc.slice(0,60)}</div>`:''}</div><button class="vprev"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg></button>`;
+    d.querySelector('.vinfo').onclick = () => {
+      localStorage.setItem(KEY_VOICE, v.voice_id); localStorage.setItem(KEY_VNAME, v.name);
+      document.getElementById('voiceBarName').textContent = v.name;
+      document.querySelectorAll('.vitem').forEach(i => i.classList.remove('selected')); d.classList.add('selected');
+      document.getElementById('vpcMsg').textContent = `Voice set to "${v.name}"`;
+    };
+    d.querySelector('.vdot').onclick = () => d.querySelector('.vinfo').click();
+    d.querySelector('.vprev').onclick = async e => {
+      e.stopPropagation(); const btn = d.querySelector('.vprev'); btn.innerHTML = PAUSE;
+      try {
+        const r = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${v.voice_id}`,{method:'POST',headers:{'xi-api-key':localStorage.getItem(KEY_API),'Content-Type':'application/json'},body:JSON.stringify({text:"Bonjour, je suis ravi de vous rencontrer.",model_id:'eleven_multilingual_v2',voice_settings:{stability:.5,similarity_boost:.75}})});
+        if (!r.ok) throw new Error();
+        const a = new Audio(URL.createObjectURL(await r.blob())); a.play();
+        a.onended = () => { btn.innerHTML = '<svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>'; };
+      } catch(e) { btn.innerHTML = '<svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>'; }
+    };
+    c.appendChild(d);
+  });
+  document.getElementById('vpcMsg').textContent = '';
+}
+
+// ── TTS ──
+function stopCurrent() {
+  if (currentAudio) { currentAudio.pause(); currentAudio = null; }
+  if (currentBtnId) { const el = document.getElementById(currentBtnId); if (el) { el.innerHTML = PLAY; el.classList.remove('playing'); } currentBtnId = null; }
+}
+
+async function speak(btnId, text) {
+  const btn = document.getElementById(btnId); if (!btn) return;
+  if (!text) text = btn.dataset.tts || '';
+  if (!text) return;
+  if (currentBtnId === btnId) { stopCurrent(); return; }
+  stopCurrent(); currentBtnId = btnId;
+  const key = localStorage.getItem(KEY_API), vid = localStorage.getItem(KEY_VOICE);
+  if (key && vid) {
+    btn.innerHTML = SPIN;
+    try {
+      const res = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${vid}`,{method:'POST',headers:{'xi-api-key':key,'Content-Type':'application/json'},body:JSON.stringify({text,model_id:'eleven_multilingual_v2',voice_settings:{stability:.5,similarity_boost:.75}})});
+      if (!res.ok) throw new Error();
+      const url = URL.createObjectURL(await res.blob());
+      const audio = new Audio(url); currentAudio = audio;
+      btn.innerHTML = PAUSE; btn.classList.add('playing'); audio.play();
+      audio.onended = () => { btn.innerHTML = PLAY; btn.classList.remove('playing'); URL.revokeObjectURL(url); currentBtnId = null; };
+      return;
+    } catch(e) { btn.innerHTML = PLAY; btn.classList.remove('playing'); currentBtnId = null; }
+  }
+  // Fallback Web Speech
+  const voices = speechSynthesis.getVoices();
+  const fr = voices.find(v => v.lang.startsWith('fr') && v.localService) || voices.find(v => v.lang.startsWith('fr'));
+  const u = new SpeechSynthesisUtterance(text); u.lang = 'fr-FR'; if (fr) u.voice = fr; u.rate = .88;
+  btn.innerHTML = PAUSE; btn.classList.add('playing');
+  u.onend = () => { btn.innerHTML = PLAY; btn.classList.remove('playing'); currentBtnId = null; };
+  speechSynthesis.speak(u);
+}
+
+// ── PERSISTENT MISTAKES ──
+function loadMistakes() { try { return JSON.parse(localStorage.getItem(KEY_MISTAKES)||'[]'); } catch(e) { return []; } }
+function saveMistake(m) { const a = loadMistakes(); a.push(m); localStorage.setItem(KEY_MISTAKES, JSON.stringify(a)); }
+
+// ── ANSWER CHECKING ──
+const MODEL_ANSWER = "Elle se laissa tomber sur le fauteuil le plus proche et dit d'une voix tremblante qu'elle ne s'attendait pas à cette visite.";
+const ENGLISH = "She let herself fall into the nearest armchair and said in a trembling voice that she wasn't expecting this visit.";
+
+const CHECKS = [
+  {
+    test: s => /\bse\s+laissa(\s+tomber)?|\bse\s+laisser\s+tomber|laissa\s+tomber\b/.test(s),
+    wrote: s => s.match(/\b(tomba|est tombee|s'effondra|tombait)\b/)?.[0] || '(missing "se laissa tomber")',
+    should: 'se laissa tomber',
+    explain: "\"Let herself fall\" = <em>se laissa tomber</em> — the <em>se laisser + infinitif</em> pattern. The reflexive <em>se</em> is essential; plain <em>tomba</em> means \"fell\" without the deliberate, yielding sense."
+  },
+  {
+    test: s => /fauteuil/.test(s),
+    wrote: () => '(missing "fauteuil")',
+    should: 'le fauteuil',
+    explain: "\"Armchair\" = <em>le fauteuil</em> (masculine). Do not confuse with <em>la chaise</em> (ordinary chair) or <em>le canapé</em> (sofa)."
+  },
+  {
+    test: s => /le\s+plus\s+proche/.test(s),
+    wrote: s => s.match(/\b(plus proche|le plus pres|proche)\b/)?.[0] || '(missing "le plus proche")',
+    should: 'le plus proche',
+    explain: "\"The nearest\" = <em>le plus proche</em> — superlative pattern <em>le/la/les plus + adjectif</em>. The article <em>le</em> agrees with the masculine <em>fauteuil</em>."
+  },
+  {
+    test: s => /d'une\s+voix\s+tremblante/.test(s),
+    wrote: s => s.match(/\b(avec une voix|en tremblant|d'une voix tremblant\b)\b/)?.[0] || '(missing "d\u2019une voix tremblante")',
+    should: "d'une voix tremblante",
+    explain: "\"In a trembling voice\" = <em>d'une voix tremblante</em>. The pattern is always <em>d'une voix + adjectif</em>, and the adjective agrees feminine with <em>voix</em> — hence <em>tremblante</em>, not <em>tremblant</em>."
+  },
+  {
+    test: s => /\bdit\b/.test(s),
+    wrote: () => '(missing "dit")',
+    should: 'dit',
+    explain: "\"Said\" = <em>dit</em> (passé simple of <em>dire</em>) or <em>a dit</em> (passé composé). Either works in this sentence."
+  },
+  {
+    test: s => /qu'elle/.test(s),
+    wrote: s => s.match(/\b(que elle|que il|qu'il)\b/)?.[0] || '(missing "qu\u2019elle")',
+    should: "qu'elle",
+    explain: "\"That she\" = <em>qu'elle</em> — <em>que</em> always contracts before a vowel. <em>Que elle</em> is never correct."
+  },
+  {
+    test: s => /s'attendait|ne\s+s'attendait\s+pas/.test(s),
+    wrote: s => s.match(/\b(attendait|n'attendait pas|ne s'attendait|ne attendait)\b/)?.[0] || '(missing "ne s\u2019attendait pas")',
+    should: "ne s'attendait pas",
+    explain: "\"Wasn't expecting\" = <em>ne s'attendait pas</em> — reflexive <em>s'attendre à</em> in the imperfect. The <em>se</em> is required; <em>attendait</em> alone means \"was waiting for,\" which is a different verb."
+  },
+  {
+    test: s => /a\s+cette\s+visite|a\s+cela|a\s+ca/.test(s),
+    wrote: s => s.match(/\b(cette visite|visite|cela|ca)\b/)?.[0] || '(missing "\u00e0 cette visite")',
+    should: "à cette visite",
+    explain: "<em>S'attendre</em> always takes <em>à</em>, not a direct object: <em>s'attendre à quelque chose</em>. Here: <em>à cette visite</em> (to this visit) — or more loosely <em>à cela</em> / <em>à ça</em> (to this)."
+  },
+];
+
+function norm(s) {
+  return s.toLowerCase()
+    .replace(/[àâä]/g,'a').replace(/[éèêë]/g,'e').replace(/[îï]/g,'i')
+    .replace(/[ôö]/g,'o').replace(/[ùûü]/g,'u').replace(/ç/g,'c')
+    .replace(/['']/g,"'").replace(/\s+/g,' ').trim();
+}
+
+function checkAnswer() {
+  const input = document.getElementById('practiceInput');
+  const raw = input.value.trim(); if (!raw) return;
+  document.getElementById('submitBtn').disabled = true; input.disabled = true;
+  document.getElementById('feedbackBlock').classList.add('visible');
+  document.getElementById('loadingMsg').style.display = 'flex';
+  document.getElementById('feedbackContent').style.display = 'none';
+
+  setTimeout(() => {
+    const n = norm(raw), mistakes = [];
+    CHECKS.forEach(c => {
+      if (!c.test(n)) {
+        const w = typeof c.wrote === 'function' ? (c.wrote(n)||'—') : c.wrote;
+        mistakes.push({ wrote:w, should:c.should, explain:c.explain });
+      }
+    });
+    mistakes.forEach(m => saveMistake({
+      scene:'Chapter 2, Scene 2', english:ENGLISH,
+      wrote:m.wrote, should:m.should,
+      explain:m.explain.replace(/<[^>]+>/g,''),
+      date:new Date().toLocaleDateString()
+    }));
+    if (mistakes.length > 0 || loadMistakes().length > 0) document.getElementById('downloadBtn').classList.add('visible');
+
+    const score = mistakes.length===0?'perfect':mistakes.length<=2?'mostly':'needs-work';
+    const banners = {
+      perfect:     {cls:'perfect',    icon:'✓', text:'Excellent! All elements correct.'},
+      mostly:      {cls:'mostly',     icon:'◑', text:'Good effort — just a couple of things to refine.'},
+      'needs-work':{cls:'needs-work', icon:'✗', text:"Keep going — here's what to work on."}
+    };
+    const b = banners[score];
+    const safe = raw.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    const js   = raw.replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+
+    let html = `<div class="your-answer-block"><div class="your-answer-label">Your answer</div>
+      <div class="your-answer-text"><span>${safe}</span>
+        <button class="yap-btn" id="yapBtn" onclick="speak('yapBtn','${js}')">
+          <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>
+        </button></div></div>`;
+    html += `<div class="score-banner ${b.cls}"><span class="score-icon">${b.icon}</span><span class="score-text">${b.text}</span></div>`;
+    html += `<div class="model-answer-block"><div class="model-label">Model answer</div>
+      <div class="model-sentence">${MODEL_ANSWER}
+        <button class="answer-play-btn" id="mapBtn" onclick="speak('mapBtn','${MODEL_ANSWER.replace(/'/g,"\\'")}')">
+          <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>
+        </button></div></div>`;
+    if (mistakes.length > 0) {
+      html += `<div class="mistakes-section"><div class="mistakes-label">Things to review</div>`;
+      mistakes.forEach(m => {
+        html += `<div class="mistake-item">
+          <div class="mistake-wrote">You wrote: <span>${m.wrote}</span></div>
+          <div class="mistake-should">Should be: <span>${m.should}</span></div>
+          <div class="mistake-explanation">${m.explain}</div>
+        </div>`;
+      });
+      html += '</div>';
+    } else {
+      html += `<div class="overall-feedback">Beautifully done — the whole sentence came together. Listen to how <em>se laissa tomber</em> and <em>d'une voix tremblante</em> flow in the model. These manner-and-motion patterns will come up again and again.</div>`;
+    }
+    document.getElementById('loadingMsg').style.display = 'none';
+    const fc = document.getElementById('feedbackContent'); fc.innerHTML = html; fc.style.display = 'block';
+  }, 400);
+}
+
+function downloadMistakes() {
+  const all = loadMistakes(); if (!all.length) return;
+  let md = '# 🔴 French Mistakes Log\n*Harry Potter et le Prince de Sang-Mêlé*\n\n---\n\n';
+  const by = {};
+  all.forEach(m => { (by[m.scene]=by[m.scene]||[]).push(m); });
+  Object.entries(by).forEach(([scene,list]) => {
+    md += `## ${scene}\n\n`;
+    list.forEach((m,i) => {
+      md += `### Mistake ${i+1}\n**Sentence:** *${m.english}*\n\n`;
+      md += `| | French |\n|---|---|\n| ❌ You wrote | *${m.wrote}* |\n| ✅ Should be | *${m.should}* |\n\n`;
+      md += `**Why:** ${m.explain}\n\n---\n\n`;
+    });
+  });
+  md += `*Downloaded: ${new Date().toLocaleDateString()}*\n`;
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([md],{type:'text/markdown'}));
+  a.download = 'french_mistakes_ch2.md'; a.click();
+}
+
+document.getElementById('practiceInput').addEventListener('keydown', e => { if (e.key==='Enter') checkAnswer(); });
+</script>
+</body>
+</html>
