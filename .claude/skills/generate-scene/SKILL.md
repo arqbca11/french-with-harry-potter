@@ -123,6 +123,20 @@ French sentences contain apostrophes (`d'une`, `l'homme`, `qu'elle`, `c'est`) th
 
 ### Rule B — Always use DOUBLE quotes for `explain` strings in CHECKS
 
+The same rule applies to success-banner text inside `banners.perfect`, `banners.mostly`, and `banners['needs-work']`. If your banner text contains an apostrophe (*j'étais*, *avoir l'air*, *c'est*), the surrounding string must be double-quoted:
+
+```js
+// ✅ CORRECT
+perfect: { cls:'perfect', icon:'✓', text:"Excellent — avoir l'air landed cleanly." }
+
+// ❌ WRONG — single quote + apostrophe silently crashes checkAnswer2
+perfect: { cls:'perfect', icon:'✓', text:'Excellent — avoir l\'air landed cleanly.' }
+```
+
+When in doubt, default all banner text to double quotes.
+
+
+
 ```js
 // ✅ CORRECT
 { explain: "Don't confuse <em>venir de</em> with <em>revenir</em>." }
