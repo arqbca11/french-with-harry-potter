@@ -135,7 +135,7 @@ Without Claude Code, every HTML file is self-contained and can be copied and mod
 - **Fonts:** [Google Fonts](https://fonts.google.com) — Playfair Display + DM Sans.
 - **Built collaboratively with** [Claude Code](https://claude.com/claude-code).
 
-This is a personal learning project. Not affiliated with J.K. Rowling, Warner Bros, Bloomsbury, or Pottermore.
+This is a personal learning project. Not affiliated with J.K. Rowling, Warner Bros, Disney, Bloomsbury, or Pottermore.
 
 ---
 
