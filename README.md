@@ -11,6 +11,7 @@ A self-guided French learning app that teaches through original sentences inspir
 - **Example-first, never drill-first.** You meet grammar through real sentences, not flashcard quizzes of isolated rules.
 - **Story-shaped.** Each lesson stays inside a scene from the book. Vocabulary and grammar build around the narrative — which means they stick.
 - **Original French, not reproductions.** Every sentence is written fresh, inspired by the events of the scene. The copyrighted text is never reproduced.
+- **Two practice modes per scene.** After the three sentences, one practice translates a story-themed sentence; a second **Everyday Practice** card drills one core grammar pattern from the scene in a daily-life sentence (*"My father makes me wash the dishes every Sunday"*). The second card is where recognition becomes production.
 - **Spaced repetition baked in.** Progress trackers, revision sessions, flashcard decks, and a mistakes log all work together.
 - **Polished audio.** Play buttons speak every sentence. Works out of the box with your browser's French voices, and upgrades to ElevenLabs (natural-sounding neural TTS) if you have an API key.
 
@@ -43,7 +44,7 @@ mistakes/     Mistakes dashboard; your downloaded mistakes log also lives here
 
 | Pattern | What it is |
 |---|---|
-| `chapter[N]/french_lesson_ch[N]_scene[M].html` | A lesson. Three French sentences, each with a pronunciation guide, vocabulary table, and grammar insight. One translation practice at the bottom with per-element feedback. |
+| `chapter[N]/french_lesson_ch[N]_scene[M].html` | A lesson. Three French sentences, each with a pronunciation guide, vocabulary table, and grammar insight. Two translation practices at the bottom — the first a story-themed sentence, the second an **Everyday Practice** card drilling one core grammar pattern in a daily-life context. Both have per-element feedback. |
 | `revisions/french_revision_s[X]-[Y].html` | A revision session covering 6 consecutive scenes (counted globally across chapters). Four new sentences that recombine grammar and vocab you've already met, with scene tags showing where each pattern comes from. |
 | `flashcards/french_flashcards_ch[N].html` | A full vocabulary flashcard deck for a chapter. Space to flip, 1/2 to mark still-learning / got-it, ← → to navigate, P to play the example sentence. |
 | `progress/french_progress_ch[N].md` | A running catalogue of every word, grammar rule, and fixed expression introduced in that chapter. Updated after every scene. Useful as a reference and a table of contents. |

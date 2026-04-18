@@ -48,9 +48,11 @@ README.md     Public-facing docs for learners using the app
 
 ## How to generate a new lesson
 
-1. **Invoke the `/generate-scene` skill** — it handles the full workflow end-to-end (state check, template copy, content design, progress-tracker update)
+1. **Invoke the `/generate-scene` skill** — it handles the full workflow end-to-end (state check, template copy, content design, both practice cards, progress-tracker update)
 2. If generating by hand: copy the **latest existing scene HTML file** from its `chapter[N]/` directory as the canonical template (not `lesson_template.html`, which is legacy) and only edit the content slots
 3. Do NOT regenerate the boilerplate from scratch
+
+Every scene has **two practice cards**: the main (story-themed) Practice card and an Everyday Practice card drilling one core grammar pattern from the scene in a daily-life context. The second card is what builds production fluency — recognition is easy; production is where learners plateau.
 
 ### Placeholder table
 

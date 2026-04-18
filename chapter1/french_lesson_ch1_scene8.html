@@ -101,6 +101,8 @@
   .practice-card { background: var(--dark); border-radius: 12px; max-width: 700px; margin: 0 auto 40px; overflow: hidden; border: 1px solid rgba(201,168,76,0.35); box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
   .practice-header { padding: 18px 28px 14px; border-bottom: 1px solid rgba(201,168,76,0.2); }
   .practice-badge { font-size: 10px; letter-spacing: 2.5px; text-transform: uppercase; color: var(--gold); font-weight: 500; background: rgba(201,168,76,0.12); border: 1px solid rgba(201,168,76,0.3); border-radius: 20px; padding: 3px 10px; }
+  .practice-badge-daily{color:#6ecf9a;background:rgba(110,207,154,.12);border-color:rgba(110,207,154,.35);}
+  .practice-prompt em{font-style:italic;color:rgba(255,255,255,.75);text-transform:none;letter-spacing:normal;font-family:'Playfair Display',serif;}
   .practice-body { padding: 22px 28px 26px; }
   .practice-prompt { font-size: 13px; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 10px; }
   .practice-english { font-family: 'Playfair Display', serif; font-size: 22px; color: white; font-style: italic; margin-bottom: 22px; line-height: 1.35; }
@@ -284,6 +286,24 @@
       <div id="feedbackContent" style="display:none"></div>
     </div>
     <button class="download-btn" id="downloadBtn" onclick="downloadMistakes()">↓ Download mistakes log</button>
+  </div>
+</div>
+
+
+<!-- EVERYDAY PRACTICE CARD — daily-life sentence exercising a core pattern from this scene -->
+<div class="practice-card">
+  <div class="practice-header"><span class="practice-badge practice-badge-daily">✦ Everyday Practice</span></div>
+  <div class="practice-body">
+    <div class="practice-prompt">Use <em>avoir besoin de + infinitif</em> — translate into French</div>
+    <div class="practice-english">"I need to buy some coffee."</div>
+    <div class="input-row">
+      <input class="practice-input" id="practiceInput2" type="text" placeholder="Type your French translation…"/>
+      <button class="submit-btn" id="submitBtn2" onclick="checkAnswer2()">Check</button>
+    </div>
+    <div class="feedback-block" id="feedbackBlock2">
+      <div class="feedback-loading" id="loadingMsg2"><div class="spinner"></div> Checking…</div>
+      <div id="feedbackContent2" style="display:none"></div>
+    </div>
   </div>
 </div>
 
@@ -620,6 +640,91 @@ function downloadMistakes() {
 }
 
 document.getElementById('practiceInput').addEventListener('keydown', e => { if (e.key === 'Enter') checkAnswer(); });
+
+
+// ── EVERYDAY PRACTICE — drill a core pattern from this scene in a daily-life context ──
+const MODEL_ANSWER_2 = "J'ai besoin d'acheter du café.";
+const ENGLISH_2 = "I need to buy some coffee.";
+
+const CHECKS_2 = [
+  {
+    test: s => /j'ai\s+besoin\s+d'acheter|j ai besoin d'acheter/.test(s),
+    wrote: s => s.match(/\b(je besoin|j'ai besoin acheter|j'ai besoin de acheter|je dois acheter|j'ai besoin pour acheter)\b/)?.[0] || "(missing \"j\u2019ai besoin d\u2019acheter\")",
+    should: "j'ai besoin d'acheter",
+    explain: "\"I need to buy\" = <em>j'ai besoin d'acheter</em> — <em>avoir besoin de + infinitif</em>. The <em>de</em> contracts to <em>d'</em> before the vowel of <em>acheter</em>."
+  },
+  {
+    test: s => /du\s+cafe/.test(s),
+    wrote: s => s.match(/\b(le cafe|de cafe|un cafe|la cafe)\b/)?.[0] || "(missing \"du café\")",
+    should: "du café",
+    explain: "\"Some coffee\" = <em>du café</em> — partitive article <em>du</em> (= de + le). You're buying some coffee, not all of it."
+  }
+];
+
+function checkAnswer2() {
+  const input = document.getElementById('practiceInput2');
+  const raw = input.value.trim(); if (!raw) return;
+  document.getElementById('submitBtn2').disabled = true; input.disabled = true;
+  document.getElementById('feedbackBlock2').classList.add('visible');
+  document.getElementById('loadingMsg2').style.display = 'flex';
+  document.getElementById('feedbackContent2').style.display = 'none';
+
+  setTimeout(() => {
+    const n = norm(raw), mistakes = [];
+    CHECKS_2.forEach(c => {
+      if (!c.test(n)) {
+        const w = typeof c.wrote === 'function' ? (c.wrote(n)||'—') : c.wrote;
+        mistakes.push({ wrote:w, should:c.should, explain:c.explain });
+      }
+    });
+    mistakes.forEach(m => saveMistake({
+      scene:'Chapter 1, Scene 8 (Everyday)', english:ENGLISH_2,
+      wrote:m.wrote, should:m.should,
+      explain:m.explain.replace(/<[^>]+>/g,''),
+      date:new Date().toLocaleDateString()
+    }));
+    if (mistakes.length > 0 || loadMistakes().length > 0) { const db = document.getElementById('downloadBtn'); if (db) db.classList.add('visible'); }
+
+    const score = mistakes.length===0?'perfect':mistakes.length<=2?'mostly':'needs-work';
+    const banners = {
+      perfect:     {cls:'perfect',    icon:'✓', text:'Excellent — avoir besoin de landed cleanly.'},
+      mostly:      {cls:'mostly',     icon:'◑', text:'Close — a couple of things to refine.'},
+      'needs-work':{cls:'needs-work', icon:'✗', text:"Keep going — here's what to work on."}
+    };
+    const b = banners[score];
+    const safe = raw.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    const js   = raw.replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+
+    let html = `<div class="your-answer-block"><div class="your-answer-label">Your answer</div>
+      <div class="your-answer-text"><span>${safe}</span>
+        <button class="yap-btn" id="yapBtn2" onclick="speak('yapBtn2','${js}')">
+          <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>
+        </button></div></div>`;
+    html += `<div class="score-banner ${b.cls}"><span class="score-icon">${b.icon}</span><span class="score-text">${b.text}</span></div>`;
+    html += `<div class="model-answer-block"><div class="model-label">Model answer</div>
+      <div class="model-sentence">${MODEL_ANSWER_2}
+        <button class="answer-play-btn" id="mapBtn2" onclick="speak('mapBtn2','${MODEL_ANSWER_2.replace(/'/g,"\\'")}')">
+          <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>
+        </button></div></div>`;
+    if (mistakes.length > 0) {
+      html += `<div class="mistakes-section"><div class="mistakes-label">Things to review</div>`;
+      mistakes.forEach(m => {
+        html += `<div class="mistake-item">
+          <div class="mistake-wrote">You wrote: <span>${m.wrote}</span></div>
+          <div class="mistake-should">Should be: <span>${m.should}</span></div>
+          <div class="mistake-explanation">${m.explain}</div>
+        </div>`;
+      });
+      html += '</div>';
+    } else {
+      html += `<div class="overall-feedback">Nicely done — <em>avoir besoin de</em> is the most natural way to express "need" in daily French. Much more common than <em>nécessiter</em> or even <em>devoir</em> for everyday contexts.</div>`;
+    }
+    document.getElementById('loadingMsg2').style.display = 'none';
+    const fc = document.getElementById('feedbackContent2'); fc.innerHTML = html; fc.style.display = 'block';
+  }, 400);
+}
+
+document.getElementById('practiceInput2').addEventListener('keydown', e => { if (e.key==='Enter') checkAnswer2(); });
 </script>
 </body>
 </html>
